@@ -1,0 +1,61 @@
+# ═══════════════════════════════════════════════════════════
+# SIPILCALC - GITIGNORE UNTUK GITHUB & VERCEL DEPLOYMENT
+# ═══════════════════════════════════════════════════════════
+
+# 1. Dependency Directories
+node_modules/
+jspm_packages/
+.pnpm-store/
+
+# 2. Desktop App Build & Heavy Binary Outputs (Penting: Mencegah Error GitHub Limit 100MB)
+dist/
+dist-electron/
+out/
+build/
+*.exe
+*.dmg
+*.deb
+*.rpm
+*.AppImage
+
+# 3. Vercel Deployment & Build Cache
+.vercel/
+.next/
+.cache/
+
+# 4. Environment Variables & Secret Credentials
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.pem
+
+# 5. Logs & Temporary Debugging Files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+scratch/
+
+# 6. Operating System Generated Metadata
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# 7. IDE & Editor Workspace Settings
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

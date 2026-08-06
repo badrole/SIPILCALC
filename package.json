@@ -1,0 +1,19 @@
+{
+  "name": "sipilcalc-engineering-system",
+  "version": "2.5.0",
+  "description": "SIPILCALC Engineering System (Structural Concrete Estimation)",
+  "main": "main.js",
+  "scripts": {
+    "start": "npx electron .",
+    "dev": "npx electron .",
+    "build:exe": "npx electron-packager . SIPILCALC-Desktop --platform=win32 --arch=x64 --out=dist --overwrite"
+  },
+  "keywords": [
+    "sipilcalc",
+    "kalkulator-beton",
+    "rebar-calculator",
+    "civil-engineering"
+  ],
+  "author": "SIPILCALC Team",
+  "license": "MIT"
+}

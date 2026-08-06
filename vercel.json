@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "name": "sipilcalc-app",
+  "cleanUrls": true,
+  "outputDirectory": "sipilcalc",
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/sipilcalc/$1"
+    }
+  ]
+}

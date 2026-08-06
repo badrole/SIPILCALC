@@ -1,0 +1,3498 @@
+<!DOCTYPE html>
+<html lang="id" class="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIPILCALC - Engineering System</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet" />
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    input[type="number"] {
+      -moz-appearance: textfield;
+      appearance: textfield;
+    }
+
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "secondary": "#505f76",
+            "surface-container-high": "#dee8ff",
+            "surface-container-low": "#f0f3ff",
+            "on-error-container": "#93000a",
+            "on-background": "#111c2d",
+            "on-tertiary": "#ffffff",
+            "background": "#f9f9ff",
+            "on-surface-variant": "#434655",
+            "surface-container": "#e7eeff",
+            "secondary-fixed": "#d3e4fe",
+            "primary-fixed": "#dbe1ff",
+            "surface-bright": "#f9f9ff",
+            "surface-container-lowest": "#ffffff",
+            "inverse-primary": "#b4c5ff",
+            "surface-tint": "#0053db",
+            "on-primary-fixed": "#00174b",
+            "tertiary": "#525657",
+            "on-secondary-fixed-variant": "#38485d",
+            "primary-fixed-dim": "#b4c5ff",
+            "inverse-on-surface": "#ecf1ff",
+            "surface": "#f9f9ff",
+            "on-primary-container": "#eeefff",
+            "secondary-container": "#d0e1fb",
+            "on-secondary-container": "#54647a",
+            "on-error": "#ffffff",
+            "on-secondary-fixed": "#0b1c30",
+            "on-tertiary-fixed": "#191c1e",
+            "tertiary-fixed": "#e0e3e5",
+            "outline-variant": "#c3c6d7",
+            "error": "#ba1a1a",
+            "tertiary-fixed-dim": "#c4c7c9",
+            "on-primary": "#ffffff",
+            "surface-dim": "#cfdaf2",
+            "inverse-surface": "#263143",
+            "on-surface": "#111c2d",
+            "error-container": "#ffdad6",
+            "secondary-fixed-dim": "#b7c8e1",
+            "primary-container": "#2563eb",
+            "outline": "#737686",
+            "on-secondary": "#ffffff",
+            "surface-container-highest": "#d8e3fb",
+            "primary": "#004ac6",
+            "surface-variant": "#d8e3fb",
+            "tertiary-container": "#6b6e70",
+            "on-tertiary-container": "#eff1f3",
+            "on-tertiary-fixed-variant": "#444749",
+            "on-primary-fixed-variant": "#003ea8"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "base": "4px",
+            "sidebar-width": "260px",
+            "sm": "8px",
+            "gutter": "16px",
+            "lg": "24px",
+            "xl": "40px",
+            "md": "16px",
+            "xs": "4px",
+            "sidebar-collapsed": "64px"
+          },
+          "fontFamily": {
+            "mono-data": ["JetBrains Mono", "monospace"],
+            "label-md": ["Inter"],
+            "headline-md": ["Inter"],
+            "display": ["Inter"],
+            "label-sm": ["Inter"],
+            "body-md": ["Inter"],
+            "headline-lg": ["Inter"],
+            "body-lg": ["Inter"]
+          },
+          "fontSize": {
+            "mono-data": ["13px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "label-md": ["13px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+            "display": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "label-sm": ["11px", { "lineHeight": "16px", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+
+  <style id="pdf-print-styles">
+    /* ═══════════════════════════════════════════════════════════
+       PROFESSIONAL ENGINEERING PDF REPORT STYLES (WEBSITE THEME)
+       ═══════════════════════════════════════════════════════════ */
+    .print-page {
+      position: relative;
+      width: 210mm;
+      min-height: 297mm;
+      padding: 20mm 20mm 20mm 30mm; /* Margin: Kiri 3cm (30mm), Atas/Kanan/Bawah 2cm (20mm) */
+      margin: 0 auto 20px auto;
+      background: #ffffff;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      box-sizing: border-box;
+      overflow: hidden;
+      color: #111c2d;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+    .cover-page { padding: 20mm 20mm 20mm 30mm; }
+    .cover-border {
+      height: 257mm;
+      border: 3px double #004ac6;
+      padding: 25mm 15mm 15mm 15mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      text-align: center;
+      box-sizing: border-box;
+    }
+    .cover-header { margin-top: 10mm; display: flex; flex-direction: column; align-items: center; }
+    .cover-logo { height: 120px; width: auto; margin-bottom: 25px; object-fit: contain; }
+    .cover-system-title { font-size: 13px; font-weight: 800; letter-spacing: 3.5px; color: #004ac6; text-transform: uppercase; margin-bottom: 15px; }
+    .cover-main-title { font-size: 26px; font-weight: 800; color: #111c2d; margin: 0 0 15px 0; line-height: 1.35; max-width: 540px; }
+    .cover-sub-title { font-size: 12.5px; color: #434655; margin: 0 auto; max-width: 500px; line-height: 1.6; }
+    .cover-footer { font-size: 10.5px; color: #737686; line-height: 1.6; margin-bottom: 5mm; border-top: 1px solid #e7eeff; padding-top: 15px; width: 85%; }
+
+    .watermark-bg { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 380px; opacity: 0.05; pointer-events: none; z-index: 0; }
+    .page-content-wrapper { position: relative; z-index: 1; }
+    .page-header-title { border-bottom: 2px solid #004ac6; padding-bottom: 6px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: flex-end; }
+    .page-header-title h2 { font-size: 15px; font-weight: 800; color: #004ac6; margin: 0; letter-spacing: 0.5px; }
+    .page-num-tag { font-size: 10px; color: #737686; font-weight: 600; }
+    .section-desc { font-size: 10.5px; line-height: 1.6; color: #434655; margin-bottom: 12px; }
+    
+    .formula-box { background: #f9f9ff; border: 1px solid #c3c6d7; border-left: 4px solid #004ac6; border-radius: 6px; padding: 10px 14px; margin-bottom: 12px; font-size: 10.5px; }
+    .box-title { font-weight: 800; font-size: 11.5px; margin-bottom: 6px; color: #111c2d; }
+    .formula-item-label { margin-bottom: 3px; font-weight: 600; color: #111c2d; }
+    .formula-code-block { background: #ffffff; padding: 6px 10px; border-radius: 4px; border: 1px solid #c3c6d7; font-family: monospace; font-weight: 700; color: #004ac6; margin-bottom: 6px; font-size: 10px; }
+    .formula-sub { margin-bottom: 3px; font-size: 10px; color: #434655; }
+
+    .table-group-title { font-weight: 800; font-size: 11.5px; margin: 12px 0 6px 0; color: #004ac6; border-bottom: 1px solid #d8e3fb; padding-bottom: 3px; }
+    .report-table { width: 100%; border-collapse: collapse; font-size: 9px; margin-bottom: 14px; }
+    .report-table th, .report-table td { padding: 5.5px 7px; border: 1px solid #c3c6d7; }
+    .report-table th { background: #004ac6; color: #ffffff; font-weight: 700; text-align: left; }
+    .report-table th.text-center, .report-table td.text-center { text-align: center; }
+    .report-table th.text-right, .report-table td.text-right { text-align: right; }
+    .report-table tr.bg-sub { background: #f0f3ff; font-weight: 600; }
+    .report-table tr.bg-total { background: #d8e3fb; font-weight: 800; color: #004ac6; }
+
+    @media print {
+      body > *:not(#pdf-print-wrapper) {
+        display: none !important;
+      }
+      #pdf-print-wrapper {
+        display: block !important;
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100% !important;
+        background: #ffffff !important;
+      }
+      .print-page {
+        margin: 0 !important;
+        box-shadow: none !important;
+        page-break-after: always !important;
+        break-after: page !important;
+      }
+      @page {
+        size: A4 portrait;
+        margin: 0;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-background text-on-surface font-body-md h-screen flex overflow-hidden antialiased">
+
+  <!-- SideNavBar -->
+  <aside
+    class="h-screen w-sidebar-width sticky left-0 top-0 bg-surface-container-lowest border-r border-outline-variant shadow-sm flex flex-col py-lg z-20 shrink-0">
+    <!-- Brand Header -->
+    <div class="px-md mb-lg">
+      <div class="flex items-center gap-sm">
+        <img src="screen.png" alt="SipilCalc Logo"
+          class="w-10 h-10 object-contain rounded-lg border border-outline-variant bg-white p-0.5 shadow-sm" />
+        <div>
+          <h1 class="font-headline-md text-headline-md font-bold text-primary">SIPILCALC</h1>
+          <p class="font-label-sm text-label-sm text-secondary">Engineering System</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <nav class="flex-1 px-sm space-y-1">
+      <button id="nav-btn-kolom" onclick="switchTab('kolom', this)"
+        class="tab-btn w-full flex items-center gap-md bg-primary-container text-on-primary-container border-l-4 border-primary px-md py-sm rounded-r-lg shadow-sm font-label-md text-label-md text-left transition-all">
+        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">square</span>
+        <span>Kolom</span>
+      </button>
+
+      <button id="nav-btn-balok" onclick="switchTab('balok', this)"
+        class="tab-btn w-full flex items-center gap-md text-secondary px-md py-sm rounded-lg hover:bg-surface-container-high transition-all font-label-md text-label-md text-left">
+        <span class="material-symbols-outlined">horizontal_rule</span>
+        <span>Balok</span>
+      </button>
+
+      <button id="nav-btn-pelat" onclick="switchTab('pelat', this)"
+        class="tab-btn w-full flex items-center gap-md text-secondary px-md py-sm rounded-lg hover:bg-surface-container-high transition-all font-label-md text-label-md text-left">
+        <span class="material-symbols-outlined">grid_view</span>
+        <span>Pelat</span>
+      </button>
+
+      <button id="nav-btn-rekap" onclick="switchTab('rekap', this)"
+        class="tab-btn w-full flex items-center gap-md text-secondary px-md py-sm rounded-lg hover:bg-surface-container-high transition-all font-label-md text-label-md text-left">
+        <span class="material-symbols-outlined">summarize</span>
+        <span>Rekapitulasi</span>
+      </button>
+
+      <div class="pt-sm mt-md border-t border-outline-variant/60">
+        <button onclick="openProjectModal()"
+          class="w-full flex items-center gap-sm bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 px-md py-2 rounded-lg font-label-md text-left transition-all">
+          <span class="material-symbols-outlined text-[20px]">folder_managed</span>
+          <span>Simpan & Restore</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Footer -->
+    <div class="px-md mt-auto pt-lg border-t border-outline-variant">
+      <div class="text-xs text-secondary text-center">
+        Precision Engineering<br>
+        <span class="font-semibold text-primary">SIPILCALC v2.5</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="flex-1 flex flex-col h-screen overflow-hidden">
+    <!-- TopNavBar -->
+    <header class="w-full top-0 sticky bg-surface-container-lowest border-b border-outline-variant shadow-sm z-10">
+      <div class="flex justify-between items-center px-lg h-16 w-full">
+        <div class="flex items-center gap-md">
+          <img src="screen.png" alt="SipilCalc Logo"
+            class="w-9 h-9 object-contain rounded-md border border-outline-variant bg-white p-0.5 shadow-sm" />
+          <div class="font-headline-lg text-headline-lg font-bold text-primary">SIPILCALC</div>
+        </div>
+        <div class="flex items-center gap-sm">
+          <button onclick="resetSemua()"
+            class="flex items-center gap-xs px-3 py-1.5 bg-error-container text-on-error-container rounded-lg font-label-md hover:opacity-90 transition-opacity">
+            <span class="material-symbols-outlined text-[18px]">delete_sweep</span>
+            <span>Reset Semua</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content Canvas -->
+    <div class="flex-1 overflow-y-auto p-lg lg:p-xl bg-surface-bright">
+
+      <!-- ╔══════════════ PANEL KOLOM ══════════════╗ -->
+      <div id="panel-kolom" class="panel">
+        <div class="mb-lg flex justify-between items-end">
+          <div>
+            <h2 class="font-display text-display text-on-background mb-xs">Perhitungan Kolom Beton</h2>
+            <p class="font-body-lg text-body-lg text-secondary">Estimasi otomatis volume cor, bekisting, tulangan utama,
+              sengkang, dan crosstie.</p>
+          </div>
+        </div>
+
+        <!-- Bento Grid Layout -->
+        <div class="grid grid-cols-1 xl:grid-cols-12 gap-lg">
+
+          <!-- Left Panel: Input Form (Spans 7 cols) -->
+          <div class="xl:col-span-7 space-y-lg">
+
+            <!-- Section: Dimensi Kolom -->
+            <div class="bg-surface-container-lowest rounded-lg border border-outline-variant shadow-sm overflow-hidden">
+              <div
+                class="px-md py-sm bg-surface-container-low border-b border-outline-variant flex items-center gap-sm">
+                <span class="material-symbols-outlined text-primary text-[20px]">straighten</span>
+                <h3 class="font-headline-md text-headline-md text-on-surface">Dimensi & Geometri Kolom</h3>
+              </div>
+              <datalist id="lantai-list">
+                <option value="Lantai 1"></option>
+                <option value="Lantai 2"></option>
+                <option value="Lantai 3"></option>
+                <option value="Lantai 4"></option>
+                <option value="Lantai Atap"></option>
+                <option value="Basement"></option>
+              </datalist>
+              <div class="p-lg grid grid-cols-1 md:grid-cols-2 gap-md">
+                <div>
+                  <label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs">Nama / ID Kolom</label>
+                  <input type="text" id="kol-nama" placeholder="K1"
+                    class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" />
+                </div>
+                <div>
+                  <label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs">Lantai /
+                    Elevasi</label>
+                  <input type="text" id="kol-lantai" list="lantai-list" placeholder="Lantai 1" value="Lantai 1"
+                    class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" />
+                </div>
+                <div>
+                  <label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs">Lebar Kolom b
+                    (mm)</label>
+                  <div class="relative">
+                    <input type="number" id="kol-b" placeholder="400" oninput="drawKolomSVG()"
+                      class="w-full bg-surface-bright border border-outline-variant border-l-2 border-l-primary rounded-DEFAULT pl-3 pr-10 py-2 font-mono-data text-on-surface text-right focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" />
+                    <span class="absolute right-3 top-1/2 -translate-y-1/2 font-label-md text-secondary">mm</span>
+                  </div>
+                </div>
+                <div>
+                  <label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs">Panjang Kolom h
+                    (mm)</label>
+                  <div class="relative">
+                    <input type="number" id="kol-h" placeholder="400" oninput="drawKolomSVG()"
+                      class="w-full bg-surface-bright border border-outline-variant border-l-2 border-l-primary rounded-DEFAULT pl-3 pr-10 py-2 font-mono-data text-on-surface text-right focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" />
+                    <span class="absolute right-3 top-1/2 -translate-y-1/2 font-label-md text-secondary">mm</span>
+                  </div>
+                </div>
+                <div>
+                  <label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs">Tebal Pelat Netto t
+                    (mm)</label>
+                  <div class="relative">
+                    <input type="number" id="kol-t-pelat" value="120" placeholder="120" oninput="drawKolomSVG()"
+                      class="w-full bg-surface-bright border border-outline-variant border-l-2 border-l-primary rounded-DEFAULT pl-3 pr-10 py-2 font-mono-data text-on-surface text-right focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" />
+                    <span class="absolute right-3 top-1/2 -translate-y-1/2 font-label-md text-secondary">mm</span>
+                  </div>
+                </div>
+                <div class="md:col-span-2">
+                  <label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs">Selimut Beton cc
+                    (mm)</label>
+                  <div class="relative">
+                    <input type="number" id="kol-cc" value="40" oninput="drawKolomSVG()"
+                      class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT pl-3 pr-10 py-2 font-mono-data text-on-surface text-right focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" />
+                    <span class="absolute right-3 top-1/2 -translate-y-1/2 font-label-md text-secondary">mm</span>
+                  </div>
+                </div>
+                <!-- Dynamic Bentang/Tinggi Container -->
+                <div class="md:col-span-2 space-y-sm">
+                  <label class="block font-label-sm text-label-sm text-on-surface-variant">Variasi Tinggi Kolom &
+                    Jumlah</label>
+                  <div id="kol-bentang-container" class="space-y-sm"></div>
+                  <button type="button" onclick="addBentangRow('kolom')"
+                    class="flex items-center gap-xs text-primary font-label-md hover:bg-primary-container/20 px-3 py-1.5 rounded transition-colors">
+                    <span class="material-symbols-outlined text-[18px]">add_circle</span> + Tambah Variasi Tinggi
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Section: Tulangan Utama -->
+            <div class="bg-surface-container-lowest rounded-lg border border-outline-variant shadow-sm overflow-hidden">
+              <div
+                class="px-md py-sm bg-surface-container-low border-b border-outline-variant flex items-center gap-sm">
+                <span class="material-symbols-outlined text-primary text-[20px]">layers</span>
+                <h3 class="font-headline-md text-headline-md text-on-surface">Tulangan Utama (Longitudinal)</h3>
+              </div>
+              <div class="p-lg grid grid-cols-1 md:grid-cols-2 gap-md">
+                <div>
+                  <label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs">Diameter Utama</label>
+                  <select id="kol-d-utm" onchange="drawKolomSVG()"
+                    class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data text-on-surface focus:outline-none focus:border-primary">
+                    <option value="10">D10</option>
+                    <option value="13">D13</option>
+                    <option value="16">D16</option>
+                    <option value="19" selected>D19</option>
+                    <option value="22">D22</option>
+                    <option value="25">D25</option>
+                    <option value="29">D29</option>
+                    <option value="32">D32</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs">Jumlah Batang per
+                    Kolom</label>
+                  <input type="number" id="kol-n-utm" value="8" min="1" oninput="drawKolomSVG()"
+                    class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data text-on-surface text-right focus:outline-none focus:border-primary" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Section: Sengkang & Crosstie -->
+            <div class="bg-surface-container-lowest rounded-lg border border-outline-variant shadow-sm overflow-hidden">
+              <div
+                class="px-md py-sm bg-surface-container-low border-b border-outline-variant flex items-center gap-sm">
+                <span class="material-symbols-outlined text-primary text-[20px]">architecture</span>
+                <h3 class="font-headline-md text-headline-md text-on-surface">Tulangan Sengkang & Crosstie</h3>
+              </div>
+              <div class="p-lg space-y-md">
+                <!-- Sengkang -->
+                <div>
+                  <h4 class="font-label-md text-label-md font-bold text-primary mb-sm flex items-center gap-xs">
+                    <span class="w-2 h-2 rounded-full bg-primary"></span> Sengkang (Stirrups)
+                  </h4>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+                    <div>
+                      <label class="block font-label-sm text-label-sm text-secondary mb-xs">Diameter Sengkang</label>
+                      <select id="kol-d-sgk" onchange="drawKolomSVG()"
+                        class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data text-on-surface focus:outline-none focus:border-primary">
+                        <option value="6">D6</option>
+                        <option value="8">D8</option>
+                        <option value="10" selected>D10</option>
+                        <option value="12">D12</option>
+                        <option value="13">D13</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="block font-label-sm text-label-sm text-secondary mb-xs">Spasi Sengkang (mm)</label>
+                      <input type="number" id="kol-s-sgk" value="150"
+                        class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data text-on-surface text-right focus:outline-none focus:border-primary" />
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Crosstie -->
+                <div class="pt-md border-t border-outline-variant/60">
+                  <h4 class="font-label-md text-label-md font-bold text-error mb-sm flex items-center gap-xs">
+                    <span class="w-2 h-2 rounded-full bg-error"></span> Crosstie / Ikat Silang
+                  </h4>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+                    <div>
+                      <label class="block font-label-sm text-label-sm text-secondary mb-xs">Diameter Crosstie</label>
+                      <select id="kol-d-cross"
+                        class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data text-on-surface focus:outline-none focus:border-primary">
+                        <option value="0">Tanpa Crosstie</option>
+                        <option value="6">D6</option>
+                        <option value="8">D8</option>
+                        <option value="10" selected>D10</option>
+                        <option value="12">D12</option>
+                        <option value="13">D13</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="block font-label-sm text-label-sm text-secondary mb-xs">Spasi Crosstie (mm)</label>
+                      <input type="number" id="kol-s-cross" value="150" min="1"
+                        class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data text-on-surface text-right focus:outline-none focus:border-primary" />
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Panjang Kait -->
+                <div class="pt-md border-t border-outline-variant/60 grid grid-cols-1 md:grid-cols-2 gap-md">
+                  <div>
+                    <label class="block font-label-sm text-label-sm text-secondary mb-xs">Metode Panjang Kait</label>
+                    <select id="kol-kait-mode"
+                      class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-body-md text-on-surface focus:outline-none focus:border-primary">
+                      <option value="excel" selected>Default Excel (75 mm / 0,075 m)</option>
+                      <option value="formula">Hitung 7.5 × d (ROUNDUP ke 2 desimal)</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block font-label-sm text-label-sm text-secondary mb-xs">Panjang Batang Standar</label>
+                    <input type="number" id="kol-stock-len" value="12" readonly
+                      class="w-full bg-surface-container border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data text-secondary text-right" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex gap-md">
+              <button onclick="hitungKolom()"
+                class="flex-1 bg-primary text-on-primary py-3 rounded-lg font-headline-md shadow-sm hover:opacity-90 transition-all flex items-center justify-center gap-sm">
+                <span class="material-symbols-outlined">bolt</span> Hitung & Tambahkan
+              </button>
+              <button onclick="resetForm('kolom')"
+                class="px-6 bg-surface-container border border-outline-variant text-secondary rounded-lg font-headline-md hover:bg-surface-container-high transition-colors flex items-center justify-center gap-xs">
+                <span class="material-symbols-outlined">restart_alt</span> Reset
+              </button>
+            </div>
+
+          </div> <!-- End Left Panel -->
+
+          <!-- Right Panel: Live SVG Preview & Results (Spans 5 cols) -->
+          <div class="xl:col-span-5 space-y-lg flex flex-col">
+            <!-- Visualization Canvas -->
+            <div
+              class="bg-surface-container-lowest rounded-lg border border-outline-variant shadow-sm flex-1 flex flex-col min-h-[350px]">
+              <div
+                class="px-md py-sm border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+                <h3 class="font-headline-md text-headline-md text-on-surface flex items-center gap-sm">
+                  <span class="material-symbols-outlined text-primary text-[20px]">visibility</span> Visual Penampang
+                </h3>
+                <span
+                  class="font-label-sm text-label-sm text-secondary bg-surface-container-high px-2 py-1 rounded">Skala
+                  Proporsional</span>
+              </div>
+              <div class="flex-1 bg-surface-bright p-md flex items-center justify-center relative overflow-hidden">
+                <div class="absolute inset-0"
+                  style="background-image: radial-gradient(#c3c6d7 1px, transparent 1px); background-size: 20px 20px; opacity: 0.3;">
+                </div>
+                <svg id="kol-svg-canvas" class="relative z-10 drop-shadow-md" width="240" height="240"
+                  viewBox="0 0 240 240"></svg>
+              </div>
+            </div>
+
+            <!-- Result Cards Container -->
+            <div id="kol-result" style="display:none" class="space-y-md">
+              <div class="grid grid-cols-3 gap-sm" id="kol-res-sum"></div>
+              <div id="kol-res-det"
+                class="bg-surface-container-lowest rounded-lg border border-outline-variant p-md text-body-md"></div>
+            </div>
+          </div> <!-- End Right Panel -->
+
+        </div> <!-- End Bento Grid -->
+
+        <!-- Daftar Kolom Table -->
+        <div class="mt-lg bg-surface-container-lowest rounded-lg border border-outline-variant shadow-sm p-lg">
+          <div class="flex items-center justify-between mb-md flex-wrap gap-sm">
+            <h3 class="font-headline-md text-headline-md text-on-surface flex items-center gap-sm">
+              <span class="material-symbols-outlined text-primary">list_alt</span> Daftar Kolom Terhitung
+            </h3>
+            <select id="filter-lantai-kolom" onchange="renderList('kolom')"
+              class="bg-surface-bright border border-outline-variant rounded px-3 py-1.5 font-label-md text-on-surface text-sm">
+              <option value="ALL">Semua Lantai</option>
+            </select>
+          </div>
+          <div id="kol-list"></div>
+        </div>
+
+      </div> <!-- ╚══════════════ END PANEL KOLOM ══════════════╝ -->
+
+      <!-- ╔══════════════ PANEL BALOK ══════════════╗ -->
+      <div id="panel-balok" class="panel hidden">
+        <div class="mb-lg">
+          <h2 class="font-display text-display text-on-background mb-xs">Perhitungan Balok Beton</h2>
+          <p class="font-body-lg text-body-lg text-secondary">Analisis volume cor, bekisting, dan pembesian balok.</p>
+        </div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-12 gap-lg">
+          <div class="xl:col-span-7 space-y-lg">
+            <!-- Dimensi Balok -->
+            <div class="bg-surface-container-lowest rounded-lg border border-outline-variant shadow-sm overflow-hidden">
+              <div
+                class="px-md py-sm bg-surface-container-low border-b border-outline-variant flex items-center gap-sm">
+                <span class="material-symbols-outlined text-primary text-[20px]">straighten</span>
+                <h3 class="font-headline-md text-headline-md text-on-surface">Dimensi & Geometri Balok</h3>
+              </div>
+              <div class="p-lg grid grid-cols-1 md:grid-cols-2 gap-md">
+                <div><label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs">Nama / ID
+                    Balok</label><input type="text" id="blk-nama" placeholder="B1"
+                    class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-body-md text-on-surface" />
+                </div>
+                <div><label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs">Lantai /
+                    Elevasi</label><input type="text" id="blk-lantai" list="lantai-list" placeholder="Lantai 1"
+                    value="Lantai 1"
+                    class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-body-md text-on-surface" />
+                </div>
+                <div><label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs">Lebar b
+                    (mm)</label><input type="number" id="blk-b" placeholder="300" oninput="drawBalokSVG()"
+                    class="w-full bg-surface-bright border border-outline-variant border-l-2 border-l-primary rounded-DEFAULT px-3 py-2 font-mono-data text-on-surface text-right" />
+                </div>
+                <div><label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs">Tinggi h
+                    (mm)</label><input type="number" id="blk-h" placeholder="550" oninput="drawBalokSVG()"
+                    class="w-full bg-surface-bright border border-outline-variant border-l-2 border-l-primary rounded-DEFAULT px-3 py-2 font-mono-data text-on-surface text-right" />
+                </div>
+                <div><label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs">Selimut Beton cc
+                    (mm)</label><input type="number" id="blk-cc" value="30" oninput="drawBalokSVG()"
+                    class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data text-on-surface text-right" />
+                </div>
+                <div><label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs">Penopang / Lebar
+                    Kolom (mm)</label><input type="number" id="blk-penopang" placeholder="600" oninput="drawBalokSVG()"
+                    class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data text-on-surface text-right" />
+                </div>
+                <!-- Dynamic Bentang Container -->
+                <div class="md:col-span-2 space-y-sm">
+                  <label class="block font-label-sm text-label-sm text-on-surface-variant">Variasi Panjang Bentang &
+                    Jumlah</label>
+                  <div id="blk-bentang-container" class="space-y-sm"></div>
+                  <button type="button" onclick="addBentangRow('balok')"
+                    class="flex items-center gap-xs text-primary font-label-md hover:bg-primary-container/20 px-3 py-1.5 rounded transition-colors">
+                    <span class="material-symbols-outlined text-[18px]">add_circle</span> + Tambah Variasi Bentang
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Penulangan Balok -->
+            <div
+              class="bg-surface-container-lowest rounded-lg border border-outline-variant shadow-sm overflow-hidden p-lg space-y-md">
+              <h3 class="font-headline-md text-headline-md text-on-surface border-b pb-sm">Detail Penulangan Balok</h3>
+
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-md">
+                <div>
+                  <label class="block font-label-sm text-label-sm text-secondary mb-xs">Diameter Utama</label>
+                  <select id="blk-d-utm" onchange="drawBalokSVG()"
+                    class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data">
+                    <option value="13">D13</option>
+                    <option value="16">D16</option>
+                    <option value="19" selected>D19</option>
+                    <option value="22">D22</option>
+                    <option value="25">D25</option>
+                  </select>
+                </div>
+                <div><label class="block font-label-sm text-label-sm text-secondary mb-xs">Atas Menerus
+                    (btg)</label><input type="number" id="blk-n-atas-men" value="4" min="2" oninput="drawBalokSVG()"
+                    class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data text-right" />
+                </div>
+                <div><label class="block font-label-sm text-label-sm text-secondary mb-xs">Bawah Menerus
+                    (btg)</label><input type="number" id="blk-n-bawah-men" value="4" min="2" oninput="drawBalokSVG()"
+                    class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data text-right" />
+                </div>
+                <div><label class="block font-label-sm text-label-sm text-secondary mb-xs">Tumpuan Extra
+                    (btg)</label><input type="number" id="blk-n-tump" value="2" min="0" oninput="drawBalokSVG()"
+                    class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data text-right" />
+                </div>
+                <div><label class="block font-label-sm text-label-sm text-secondary mb-xs">Lapangan Extra
+                    (btg)</label><input type="number" id="blk-n-lap-extra" value="2" min="0" oninput="drawBalokSVG()"
+                    class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data text-right" />
+                </div>
+              </div>
+
+              <!-- Pinggang & Sengkang -->
+              <div class="pt-md border-t border-outline-variant/60 grid grid-cols-1 md:grid-cols-2 gap-md">
+                <div>
+                  <label class="block font-label-sm text-label-sm text-secondary mb-xs">Diameter Pinggang (mm)</label>
+                  <select id="blk-d-pgng" onchange="drawBalokSVG()"
+                    class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data">
+                    <option value="0">Tanpa Pinggang</option>
+                    <option value="10">D10</option>
+                    <option value="12">D12</option>
+                    <option value="13" selected>D13</option>
+                  </select>
+                </div>
+                <div><label class="block font-label-sm text-label-sm text-secondary mb-xs">Jumlah Pinggang
+                    (btg)</label><input type="number" id="blk-n-pgng" value="2" min="0" oninput="drawBalokSVG()"
+                    class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data text-right" />
+                </div>
+              </div>
+
+              <div class="pt-md border-t border-outline-variant/60 grid grid-cols-1 md:grid-cols-3 gap-md">
+                <div>
+                  <label class="block font-label-sm text-label-sm text-secondary mb-xs">Diameter Sengkang (mm)</label>
+                  <select id="blk-d-sgk" onchange="drawBalokSVG()"
+                    class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data">
+                    <option value="8">D8</option>
+                    <option value="10" selected>D10</option>
+                    <option value="12">D12</option>
+                    <option value="13">D13</option>
+                  </select>
+                </div>
+                <div><label class="block font-label-sm text-label-sm text-secondary mb-xs">Spasi Tumpuan
+                    (mm)</label><input type="number" id="blk-s-tump" value="100" oninput="drawBalokSVG()"
+                    class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data text-right" />
+                </div>
+                <div><label class="block font-label-sm text-label-sm text-secondary mb-xs">Spasi Lapangan
+                    (mm)</label><input type="number" id="blk-s-lap" value="200" oninput="drawBalokSVG()"
+                    class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data text-right" />
+                </div>
+              </div>
+
+              <!-- Bekisting -->
+              <div class="pt-md border-t border-outline-variant/60 grid grid-cols-1 md:grid-cols-2 gap-md">
+                <div>
+                  <label class="block font-label-sm text-label-sm text-secondary mb-xs">Metode Bekisting</label>
+                  <select id="blk-formwork" onchange="drawBalokSVG()"
+                    class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-body-md">
+                    <option value="gross" selected>Brutto (3 Sisi)</option>
+                    <option value="net">Netto (−Tebal Pelat)</option>
+                  </select>
+                </div>
+                <div><label class="block font-label-sm text-label-sm text-secondary mb-xs">Tebal Pelat Netto
+                    (mm)</label><input type="number" id="blk-t-pelat" value="120" oninput="drawBalokSVG()"
+                    class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data text-right" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex gap-md">
+              <button onclick="hitungBalok()"
+                class="flex-1 bg-primary text-on-primary py-3 rounded-lg font-headline-md hover:opacity-90 transition-all flex items-center justify-center gap-sm">
+                <span class="material-symbols-outlined">bolt</span> Hitung & Tambahkan
+              </button>
+              <button onclick="resetForm('balok')"
+                class="px-6 bg-surface-container border text-secondary rounded-lg font-headline-md hover:bg-surface-container-high transition-colors">Reset</button>
+            </div>
+          </div>
+
+          <div class="xl:col-span-5 space-y-lg flex flex-col">
+            <!-- Visualization Canvas Balok -->
+            <div
+              class="bg-surface-container-lowest rounded-lg border border-outline-variant shadow-sm flex-1 flex flex-col min-h-[350px]">
+              <div
+                class="px-md py-sm border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+                <h3 class="font-headline-md text-headline-md text-on-surface flex items-center gap-sm">
+                  <span class="material-symbols-outlined text-primary text-[20px]">visibility</span> Visual Penampang
+                  Balok
+                </h3>
+                <span
+                  class="font-label-sm text-label-sm text-secondary bg-surface-container-high px-2 py-1 rounded">Skala
+                  Proporsional</span>
+              </div>
+              <div class="flex-1 bg-surface-bright p-md flex items-center justify-center relative overflow-hidden">
+                <div class="absolute inset-0"
+                  style="background-image: radial-gradient(#c3c6d7 1px, transparent 1px); background-size: 20px 20px; opacity: 0.3;">
+                </div>
+                <svg id="blk-svg-canvas" class="relative z-10 drop-shadow-md" width="240" height="240"
+                  viewBox="0 0 240 240"></svg>
+              </div>
+            </div>
+
+            <!-- Result Cards Container -->
+            <div id="blk-result" style="display:none" class="space-y-md">
+              <div class="grid grid-cols-3 gap-sm" id="blk-res-sum"></div>
+              <div id="blk-res-det"
+                class="bg-surface-container-lowest rounded-lg border border-outline-variant p-md text-body-md"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-lg bg-surface-container-lowest rounded-lg border border-outline-variant shadow-sm p-lg">
+          <div class="flex items-center justify-between mb-md flex-wrap gap-sm">
+            <h3 class="font-headline-md text-headline-md text-on-surface flex items-center gap-sm">
+              <span class="material-symbols-outlined text-primary">list_alt</span> Daftar Balok Terhitung
+            </h3>
+            <select id="filter-lantai-balok" onchange="renderList('balok')"
+              class="bg-surface-bright border border-outline-variant rounded px-3 py-1.5 font-label-md text-on-surface text-sm">
+              <option value="ALL">Semua Lantai</option>
+            </select>
+          </div>
+          <div id="blk-list"></div>
+        </div>
+      </div> <!-- ╚══════════════ END PANEL BALOK ══════════════╝ -->
+
+      <!-- ╔══════════════ PANEL PELAT ══════════════╗ -->
+      <div id="panel-pelat" class="panel hidden">
+        <div class="mb-lg">
+          <h2 class="font-display text-display text-on-background mb-xs">Perhitungan Pelat Beton</h2>
+          <p class="font-body-lg text-body-lg text-secondary">Volume cor, bekisting, dan tulangan dua arah pelat lantai.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-12 gap-lg">
+          <div class="xl:col-span-7 space-y-lg">
+            <!-- Dimensi Pelat -->
+            <div
+              class="bg-surface-container-lowest rounded-lg border border-outline-variant shadow-sm overflow-hidden p-lg">
+              <h3 class="font-headline-md text-headline-md text-on-surface mb-md border-b pb-sm">Dimensi & Geometri
+                Pelat</h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+                <div><label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs">Nama / ID
+                    Pelat</label><input type="text" id="plt-nama" placeholder="S1"
+                    class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-body-md" />
+                </div>
+                <div><label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs">Lantai /
+                    Elevasi</label><input type="text" id="plt-lantai" list="lantai-list" placeholder="Lantai 1"
+                    value="Lantai 1"
+                    class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-body-md text-on-surface" />
+                </div>
+                <div><label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs">Tebal Pelat t
+                    (mm)</label><input type="number" id="plt-t" placeholder="120" oninput="drawPelatSVG()"
+                    class="w-full bg-surface-bright border border-outline-variant border-l-2 border-l-primary rounded-DEFAULT px-3 py-2 font-mono-data text-right" />
+                </div>
+                <div><label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs">Selimut Beton cc
+                    (mm)</label><input type="number" id="plt-cc" value="20" oninput="drawPelatSVG()"
+                    class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data text-right" />
+                </div>
+                <!-- Dynamic Bentang Container -->
+                <div class="md:col-span-2 space-y-sm">
+                  <label class="block font-label-sm text-label-sm text-on-surface-variant">Variasi Dimensi Pelat (ly ×
+                    lx) & Jumlah</label>
+                  <div id="plt-bentang-container" class="space-y-sm"></div>
+                  <button type="button" onclick="addBentangRow('pelat')"
+                    class="flex items-center gap-xs text-primary font-label-md hover:bg-primary-container/20 px-3 py-1.5 rounded transition-colors">
+                    <span class="material-symbols-outlined text-[18px]">add_circle</span> + Tambah Variasi Dimensi
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tulangan Arah X & Y -->
+            <div
+              class="bg-surface-container-lowest rounded-lg border border-outline-variant shadow-sm overflow-hidden p-lg space-y-md">
+              <h3 class="font-headline-md text-headline-md text-on-surface border-b pb-sm">Tulangan Arah-X
+                (Utama/Pendek)</h3>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-md">
+                <div>
+                  <label class="block font-label-sm text-label-sm text-secondary mb-xs">Diameter X</label>
+                  <select id="plt-d-x" onchange="drawPelatSVG()"
+                    class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data">
+                    <option value="8">D8</option>
+                    <option value="10" selected>D10</option>
+                    <option value="12">D12</option>
+                    <option value="13">D13</option>
+                  </select>
+                </div>
+                <div><label class="block font-label-sm text-label-sm text-secondary mb-xs">Spasi Tumpuan X
+                    (mm)</label><input type="number" id="plt-sx-tump" value="150" oninput="drawPelatSVG()"
+                    class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data text-right" />
+                </div>
+                <div><label class="block font-label-sm text-label-sm text-secondary mb-xs">Spasi Lapangan X
+                    (mm)</label><input type="number" id="plt-sx-lap" value="200" oninput="drawPelatSVG()"
+                    class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data text-right" />
+                </div>
+              </div>
+
+              <h3 class="font-headline-md text-headline-md text-on-surface border-b pt-md pb-sm">Tulangan Arah-Y
+                (Sekunder/Panjang)</h3>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-md">
+                <div>
+                  <label class="block font-label-sm text-label-sm text-secondary mb-xs">Diameter Y</label>
+                  <select id="plt-d-y" onchange="drawPelatSVG()"
+                    class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data">
+                    <option value="8" selected>D8</option>
+                    <option value="10">D10</option>
+                    <option value="12">D12</option>
+                    <option value="13">D13</option>
+                  </select>
+                </div>
+                <div><label class="block font-label-sm text-label-sm text-secondary mb-xs">Spasi Tumpuan Y
+                    (mm)</label><input type="number" id="plt-sy-tump" value="200" oninput="drawPelatSVG()"
+                    class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data text-right" />
+                </div>
+                <div><label class="block font-label-sm text-label-sm text-secondary mb-xs">Spasi Lapangan Y
+                    (mm)</label><input type="number" id="plt-sy-lap" value="250" oninput="drawPelatSVG()"
+                    class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data text-right" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex gap-md">
+              <button onclick="hitungPelat()"
+                class="flex-1 bg-primary text-on-primary py-3 rounded-lg font-headline-md hover:opacity-90 transition-all flex items-center justify-center gap-sm">
+                <span class="material-symbols-outlined">bolt</span> Hitung & Tambahkan
+              </button>
+              <button onclick="resetForm('pelat')"
+                class="px-6 bg-surface-container border text-secondary rounded-lg font-headline-md hover:bg-surface-container-high transition-colors">Reset</button>
+            </div>
+          </div>
+
+          <div class="xl:col-span-5 space-y-lg flex flex-col">
+            <!-- Visualization Canvas Pelat -->
+            <div
+              class="bg-surface-container-lowest rounded-lg border border-outline-variant shadow-sm flex-1 flex flex-col min-h-[350px]">
+              <div
+                class="px-md py-sm border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+                <h3 class="font-headline-md text-headline-md text-on-surface flex items-center gap-sm">
+                  <span class="material-symbols-outlined text-primary text-[20px]">visibility</span> Visual Potongan
+                  Pelat
+                </h3>
+                <span
+                  class="font-label-sm text-label-sm text-secondary bg-surface-container-high px-2 py-1 rounded">Skala
+                  Proporsional</span>
+              </div>
+              <div class="flex-1 bg-surface-bright p-md flex items-center justify-center relative overflow-hidden">
+                <div class="absolute inset-0"
+                  style="background-image: radial-gradient(#c3c6d7 1px, transparent 1px); background-size: 20px 20px; opacity: 0.3;">
+                </div>
+                <svg id="plt-svg-canvas" class="relative z-10 drop-shadow-md" width="240" height="240"
+                  viewBox="0 0 240 240"></svg>
+              </div>
+            </div>
+
+            <!-- Result Cards Container -->
+            <div id="plt-result" style="display:none" class="space-y-md">
+              <div class="grid grid-cols-3 gap-sm" id="plt-res-sum"></div>
+              <div id="plt-res-det"
+                class="bg-surface-container-lowest rounded-lg border border-outline-variant p-md text-body-md"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-lg bg-surface-container-lowest rounded-lg border border-outline-variant shadow-sm p-lg">
+          <div class="flex items-center justify-between mb-md flex-wrap gap-sm">
+            <h3 class="font-headline-md text-headline-md text-on-surface flex items-center gap-sm">
+              <span class="material-symbols-outlined text-primary">list_alt</span> Daftar Pelat Terhitung
+            </h3>
+            <select id="filter-lantai-pelat" onchange="renderList('pelat')"
+              class="bg-surface-bright border border-outline-variant rounded px-3 py-1.5 font-label-md text-on-surface text-sm">
+              <option value="ALL">Semua Lantai</option>
+            </select>
+          </div>
+          <div id="plt-list"></div>
+        </div>
+      </div> <!-- ╚══════════════ END PANEL PELAT ══════════════╝ -->
+
+      <!-- ╔══════════════ PANEL REKAP ══════════════╗ -->
+      <div id="panel-rekap" class="panel hidden">
+        <div class="mb-lg">
+          <h2 class="font-display text-display text-on-background mb-xs">Rekapitulasi Total Proyek</h2>
+          <p class="font-body-lg text-body-lg text-secondary">Ringkasan akumulasi seluruh elemen struktur (Kolom, Balok,
+            Pelat).</p>
+        </div>
+
+        <div class="space-y-lg">
+          <!-- Card Total -->
+          <div class="bg-surface-container-lowest rounded-lg border border-outline-variant p-lg shadow-sm">
+            <div class="flex items-center justify-between mb-md flex-wrap gap-sm">
+              <h3 class="font-headline-md text-headline-md text-on-surface">Total Seluruh Elemen</h3>
+              <div class="flex items-center gap-2 flex-wrap">
+                <select id="rekap-filter-lantai" onchange="renderRekap()"
+                  class="bg-surface-bright border border-outline-variant rounded px-3 py-1.5 font-label-md text-on-surface text-sm">
+                  <option value="ALL">Semua Lantai (Total Proyek)</option>
+                </select>
+                <button onclick="exportToExcel()"
+                  class="flex items-center gap-xs px-3.5 py-1.5 bg-[#166534] text-white rounded-lg font-label-md hover:bg-[#15803d] shadow-sm transition-all">
+                  <span class="material-symbols-outlined text-[18px]">table_view</span>
+                  <span>Export Excel (.xlsx)</span>
+                </button>
+                <button onclick="exportToPDF()"
+                  class="flex items-center gap-xs px-3.5 py-1.5 bg-[#b91c1c] text-white rounded-lg font-label-md hover:bg-[#991b1b] shadow-sm transition-all">
+                  <span class="material-symbols-outlined text-[18px]">picture_as_pdf</span>
+                  <span>Export Laporan PDF</span>
+                </button>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-md" id="rekap-totals"></div>
+          </div>
+
+          <!-- Volume Cor -->
+          <div class="bg-surface-container-lowest rounded-lg border border-outline-variant p-lg shadow-sm">
+            <h3 class="font-headline-md text-headline-md text-on-surface mb-md flex items-center gap-xs">
+              <span class="material-symbols-outlined text-primary">invert_colors</span> Volume Cor Beton
+            </h3>
+            <div id="rekap-cor"></div>
+          </div>
+
+          <!-- Bekisting -->
+          <div class="bg-surface-container-lowest rounded-lg border border-outline-variant p-lg shadow-sm">
+            <h3 class="font-headline-md text-headline-md text-on-surface mb-md flex items-center gap-xs">
+              <span class="material-symbols-outlined text-[#166534]">foundation</span> Luas Bekisting
+            </h3>
+            <div id="rekap-bek"></div>
+          </div>
+
+          <!-- Pembesian -->
+          <div class="bg-surface-container-lowest rounded-lg border border-outline-variant p-lg shadow-sm">
+            <h3 class="font-headline-md text-headline-md text-on-surface mb-md flex items-center gap-xs">
+              <span class="material-symbols-outlined text-[#b45309]">reorder</span> Pembesian Per Diameter
+            </h3>
+            <div id="rekap-besi"></div>
+          </div>
+        </div>
+      </div> <!-- ╚══════════════ END PANEL REKAP ══════════════╝ -->
+
+    </div>
+  </main>
+
+  <!-- Modal Manajemen Progress Proyek -->
+  <div id="project-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-md hidden">
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-xl w-full max-w-lg overflow-hidden">
+      <div class="px-lg py-md bg-surface-container-low border-b border-outline-variant flex justify-between items-center">
+        <h3 class="font-headline-md font-bold text-primary flex items-center gap-xs">
+          <span class="material-symbols-outlined text-[22px]">folder_managed</span> Simpan & Restore Progress
+        </h3>
+        <button onclick="closeProjectModal()" class="text-secondary hover:text-on-surface p-1 rounded-md transition-colors">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <div class="p-lg space-y-md">
+        
+        <!-- 1. Simpan Ke File Proyek (.json) -->
+        <div class="bg-surface-bright border border-outline-variant rounded-lg p-md space-y-sm">
+          <h4 class="font-label-md font-bold text-on-surface flex items-center gap-xs">
+            <span class="material-symbols-outlined text-primary text-[18px]">download</span> Simpan Progress Ke File (.json)
+          </h4>
+          <p class="text-xs text-secondary">Unduh seluruh data perhitungan saat ini sebagai file .json.</p>
+          <div class="flex gap-sm items-center">
+            <input type="text" id="project-save-name" placeholder="Nama Proyek (misal: Gedung A)" value="Proyek_Struktur"
+              class="flex-1 bg-surface-container-lowest border border-outline-variant rounded px-3 py-1.5 font-body-md text-sm text-on-surface" />
+            <button onclick="exportProjectFile()" class="bg-primary text-on-primary px-4 py-1.5 rounded-lg font-label-md hover:opacity-90 flex items-center gap-xs transition-opacity shrink-0">
+              <span class="material-symbols-outlined text-[18px]">save</span> Simpan .json
+            </button>
+          </div>
+        </div>
+
+        <!-- 2. Buka / Restore Dari File Proyek (.json) -->
+        <div class="bg-surface-bright border border-outline-variant rounded-lg p-md space-y-sm">
+          <h4 class="font-label-md font-bold text-on-surface flex items-center gap-xs">
+            <span class="material-symbols-outlined text-[#166534] text-[18px]">upload_file</span> Buka / Restore File (.json)
+          </h4>
+          <p class="text-xs text-secondary">Pilih file progress .json yang pernah disimpan untuk melanjutkan perhitungan.</p>
+          <input type="file" id="import-project-file-input" accept=".json,.sipil" onchange="importProjectFile(event)" class="hidden" />
+          <button onclick="document.getElementById('import-project-file-input').click()" class="w-full bg-[#166534] text-white px-4 py-2 rounded-lg font-label-md hover:bg-[#15803d] flex items-center justify-center gap-xs transition-colors">
+            <span class="material-symbols-outlined text-[18px]">folder_open</span> Buka File Proyek (.json)
+          </button>
+        </div>
+
+        <!-- 3. Download Laporan Excel (.xlsx) -->
+        <div class="bg-surface-bright border border-outline-variant rounded-lg p-md space-y-sm">
+          <h4 class="font-label-md font-bold text-on-surface flex items-center gap-xs">
+            <span class="material-symbols-outlined text-[#b45309] text-[18px]">table_view</span> Laporan Excel (.xlsx)
+          </h4>
+          <p class="text-xs text-secondary">Unduh laporan lengkap dengan rumus terhubung otomatis dalam format Excel.</p>
+          <button onclick="exportToExcel()" class="w-full bg-[#b45309] text-white px-4 py-2 rounded-lg font-label-md hover:opacity-90 flex items-center justify-center gap-xs transition-opacity">
+            <span class="material-symbols-outlined text-[18px]">file_download</span> Download Laporan Excel (.xlsx)
+          </button>
+        </div>
+
+        <!-- 4. Download Laporan PDF (.pdf) -->
+        <div class="bg-surface-bright border border-outline-variant rounded-lg p-md space-y-sm">
+          <h4 class="font-label-md font-bold text-on-surface flex items-center gap-xs">
+            <span class="material-symbols-outlined text-[#b91c1c] text-[18px]">picture_as_pdf</span> Laporan PDF (.pdf)
+          </h4>
+          <p class="text-xs text-secondary">Unduh laporan resmi profesional lengkap dengan Sampul, Watermark, & Penjabaran Rumus.</p>
+          <button onclick="exportToPDF()" class="w-full bg-[#b91c1c] text-white px-4 py-2 rounded-lg font-label-md hover:bg-[#991b1b] flex items-center justify-center gap-xs transition-colors">
+            <span class="material-symbols-outlined text-[18px]">picture_as_pdf</span> Download Laporan PDF (.pdf)
+          </button>
+        </div>
+
+        <div class="pt-xs flex justify-end">
+          <button onclick="closeProjectModal()" class="px-4 py-1.5 bg-surface-container border border-outline-variant text-secondary hover:bg-surface-container-high rounded-lg font-label-md transition-colors">Tutup</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Live Preview & Export PDF -->
+  <div id="pdf-preview-modal" class="fixed inset-0 bg-black/75 backdrop-blur-xs z-50 flex flex-col items-center justify-center p-xs md:p-md hidden">
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-2xl w-full max-w-5xl h-[94vh] flex flex-col overflow-hidden">
+      <!-- Modal Header -->
+      <div class="px-lg py-md bg-surface-container-low border-b border-outline-variant flex flex-wrap justify-between items-center gap-sm shrink-0">
+        <div>
+          <h3 class="font-headline-md font-bold text-primary flex items-center gap-xs">
+            <span class="material-symbols-outlined text-[#b91c1c] text-[24px]">picture_as_pdf</span> Live Preview Laporan PDF
+          </h3>
+          <p class="text-xs text-secondary">Tinjau seluruh halaman laporan eksekutif resmi sebelum disimpan/dicetak.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="triggerPrintPDF()" class="bg-[#b91c1c] text-white px-5 py-2 rounded-lg font-label-md font-bold hover:bg-[#991b1b] shadow-md flex items-center gap-xs transition-all cursor-pointer">
+            <span class="material-symbols-outlined text-[20px]">print</span> Simpan Sebagai PDF / Cetak Laporan
+          </button>
+          <button onclick="closePDFPreviewModal()" class="bg-surface-container border border-outline-variant text-secondary hover:text-on-surface px-4 py-2 rounded-lg font-label-md transition-colors flex items-center gap-xs cursor-pointer">
+            <span class="material-symbols-outlined text-[18px]">close</span> Tutup
+          </button>
+        </div>
+      </div>
+
+      <!-- Live PDF Viewport Container (Scrollable) -->
+      <div class="flex-1 overflow-y-auto p-md bg-slate-300/60 flex justify-center" id="pdf-preview-viewport">
+        <div id="pdf-preview-content" class="w-full flex flex-col items-center"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden Container for Native Browser Vector Print Engine -->
+  <div id="pdf-print-wrapper" class="hidden"></div>
+
+  <script>
+    // ═══════════════════════════════════════════════════════════
+    //  ENGINEERING SYSTEM DATA & ENGINE
+    // ═══════════════════════════════════════════════════════════
+    const RB = {
+      6: { db: 6, Ab: 28.27, W: 0.222 }, 8: { db: 8, Ab: 50.27, W: 0.395 },
+      10: { db: 10, Ab: 78.54, W: 0.617 }, 12: { db: 12, Ab: 113.10, W: 0.888 },
+      13: { db: 13, Ab: 132.73, W: 1.042 }, 16: { db: 16, Ab: 201.06, W: 1.579 },
+      19: { db: 19, Ab: 283.53, W: 2.226 }, 22: { db: 22, Ab: 380.13, W: 2.984 },
+      25: { db: 25, Ab: 490.87, W: 3.853 }, 29: { db: 29, Ab: 660.52, W: 5.040 },
+      32: { db: 32, Ab: 804.25, W: 6.310 }, 36: { db: 36, Ab: 1017.88, W: 7.990 },
+      41: { db: 41, Ab: 1320.25, W: 10.380 }
+    };
+    const WASTE_C = 0.03, WASTE_F = 0.05, WASTE_R = 0.05, STOCK = 12.0;
+
+    // ── KAIT: ceil(7.5 × d / 10) × 10 (bulatkan ke atas kelipatan 10mm)
+    function kait(d) { return Math.ceil(7.5 * d / 10) * 10; }
+
+    // ── Panjang Penyaluran ld (Ps 25.4.2.3)
+    function calcLd(db, fy = 420, fc = 25) {
+      const ps = db <= 19 ? 0.8 : 1.0;
+      const cbKtr = Math.min(2.5, (40 + db / 2) / db);
+      return Math.max((fy / (1.1 * Math.sqrt(fc))) * (ps / cbKtr) * db, 300);
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  STORE & HELPERS
+    // ═══════════════════════════════════════════════════════════
+    let store = { kolom: [], balok: [], pelat: [] };
+    const V = id => parseFloat(document.getElementById(id).value) || 0;
+    const S = id => document.getElementById(id).value || '';
+    const f2 = n => n.toFixed(2);
+    const f3 = n => n.toFixed(3);
+    const f1 = n => n.toFixed(1);
+    const stk = len => Math.ceil(len / STOCK);
+
+    function switchTab(name, btn) {
+      document.querySelectorAll('.tab-btn').forEach(b => {
+        b.classList.remove('bg-primary-container', 'text-on-primary-container', 'border-l-4', 'border-primary', 'shadow-sm');
+        b.classList.add('text-secondary', 'hover:bg-surface-container-high');
+      });
+      document.querySelectorAll('.panel').forEach(p => p.classList.add('hidden'));
+
+      if (btn) {
+        btn.classList.remove('text-secondary', 'hover:bg-surface-container-high');
+        btn.classList.add('bg-primary-container', 'text-on-primary-container', 'border-l-4', 'border-primary', 'shadow-sm');
+      }
+
+      const panel = document.getElementById('panel-' + name);
+      if (panel) panel.classList.remove('hidden');
+      if (name === 'kolom') drawKolomSVG();
+      if (name === 'balok') drawBalokSVG();
+      if (name === 'pelat') drawPelatSVG();
+      if (name === 'rekap') renderRekap();
+    }
+
+    function rebarTableHTML(items) {
+      let tL = 0, tW = 0, tB = 0;
+      const byDia = {};
+
+      const rows = items.map(r => {
+        const b12 = stk(r.totalLen);
+        tL += r.totalLen; tW += r.weight; tB += b12;
+
+        if (!byDia[r.dia]) {
+          byDia[r.dia] = { len: 0, w: 0 };
+        }
+        byDia[r.dia].len += r.totalLen;
+        byDia[r.dia].w += r.weight;
+
+        const badgeClass = r.label.includes('Utama') ? 'bg-primary-fixed text-on-primary-fixed' : 'bg-error-container text-on-error-container';
+        return `<tr class="hover:bg-surface-container-low transition-colors border-b border-outline-variant/40">
+          <td class="py-2.5 px-4"><span class="inline-block px-2 py-0.5 rounded ${badgeClass} font-label-sm">${r.label}</span></td>
+          <td class="py-2.5 px-4 text-center font-bold text-primary">D${r.dia}</td>
+          <td class="py-2.5 px-4 text-right">${r.pcs}</td>
+          <td class="py-2.5 px-4 text-right">${f2(r.lenPc)}</td>
+          <td class="py-2.5 px-4 text-right font-semibold">${f2(r.totalLen)}</td>
+          <td class="py-2.5 px-4 text-right font-semibold text-on-surface">${f1(r.weight)}</td>
+          <td class="py-2.5 px-4 text-right font-bold text-primary">${b12}</td>
+        </tr>`;
+      }).join('');
+
+      const sortedDias = Object.keys(byDia).sort((a, b) => Number(a) - Number(b));
+
+      const diaSummaryRows = sortedDias.map(d => {
+        const totalLenD = byDia[d].len;
+        const totalWD = byDia[d].w;
+        const totalBtgD = stk(totalLenD);
+        return `<tr class="bg-surface-container-low font-semibold border-b border-outline-variant/30 hover:bg-surface-container-high transition-colors">
+          <td colspan="2" class="py-2.5 px-4 font-bold text-primary">TOTAL BESI D${d}</td>
+          <td colspan="2" class="py-2.5 px-4 text-right text-secondary text-label-md">(${f1(RB[d]?.W || 0)} kg/m)</td>
+          <td class="py-2.5 px-4 text-right font-bold text-on-surface">${f2(totalLenD)} m</td>
+          <td class="py-2.5 px-4 text-right font-bold text-[#b45309]">${f1(totalWD)} kg</td>
+          <td class="py-2.5 px-4 text-right font-bold text-primary">${totalBtgD} btg (12m)</td>
+        </tr>`;
+      }).join('');
+
+      return `<div class="overflow-x-auto rounded-lg border border-outline-variant mt-md shadow-sm">
+        <table class="w-full text-left border-collapse font-mono-data text-mono-data">
+          <thead>
+            <tr class="bg-surface-variant border-b border-outline-variant font-label-sm text-label-sm text-on-surface uppercase">
+              <th class="py-2.5 px-4">Kode/Uraian</th>
+              <th class="py-2.5 px-4 text-center">Dia</th>
+              <th class="py-2.5 px-4 text-right">Jml</th>
+              <th class="py-2.5 px-4 text-right">Pjg/btg (m)</th>
+              <th class="py-2.5 px-4 text-right">Total Pjg (m)</th>
+              <th class="py-2.5 px-4 text-right">Berat (kg)</th>
+              <th class="py-2.5 px-4 text-right">Btg 12m</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-outline-variant/40 bg-surface-container-lowest">
+            ${rows}
+            <tr class="bg-surface-container font-bold border-t-2 border-primary">
+              <td colspan="4" class="py-3 px-4 text-on-surface font-label-md">SUBTOTAL SEMUA TULANGAN</td>
+              <td class="py-3 px-4 text-right text-primary">${f2(tL)} m</td>
+              <td class="py-3 px-4 text-right text-primary">${f1(tW)} kg</td>
+              <td class="py-3 px-4 text-right text-primary">${tB} btg</td>
+            </tr>
+            <tr class="bg-surface-variant/80 font-bold border-t border-outline-variant text-secondary font-label-sm">
+              <td colspan="7" class="py-2 px-4 uppercase tracking-wider text-primary">📌 Rekapitulasi Kebutuhan Besi Per Diameter (Sub-Elemen)</td>
+            </tr>
+            ${diaSummaryRows}
+          </tbody>
+        </table>
+      </div>`;
+    }
+
+    function resultCards(vol, fw, w) {
+      return `<div class="bg-surface-container-lowest p-md rounded-lg border border-outline-variant text-center shadow-sm">
+        <div class="font-label-sm text-label-sm text-secondary uppercase tracking-wider mb-1">Vol. Beton</div>
+        <div class="font-mono-data text-headline-lg font-bold text-primary">${f3(vol)}</div>
+        <div class="font-label-sm text-label-sm text-secondary">m³</div>
+      </div>
+      <div class="bg-surface-container-lowest p-md rounded-lg border border-outline-variant text-center shadow-sm">
+        <div class="font-label-sm text-label-sm text-secondary uppercase tracking-wider mb-1">Bekisting</div>
+        <div class="font-mono-data text-headline-lg font-bold text-[#166534]">${f2(fw)}</div>
+        <div class="font-label-sm text-label-sm text-secondary">m²</div>
+      </div>
+      <div class="bg-surface-container-lowest p-md rounded-lg border border-outline-variant text-center shadow-sm">
+        <div class="font-label-sm text-label-sm text-secondary uppercase tracking-wider mb-1">Berat Besi</div>
+        <div class="font-mono-data text-headline-lg font-bold text-[#b45309]">${f1(w)}</div>
+        <div class="font-label-sm text-label-sm text-secondary">kg</div>
+      </div>`;
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  DYNAMIC BENTANG / DIMENSI ROW HELPERS
+    // ═══════════════════════════════════════════════════════════
+    function addBentangRow(type, defaultL = '', defaultQty = 1, defaultLy = '', defaultLx = '') {
+      const pfx = { kolom: 'kol', balok: 'blk', pelat: 'plt' }[type] || type;
+      const container = document.getElementById(pfx + '-bentang-container');
+      if (!container) return;
+      const div = document.createElement('div');
+      div.className = 'bentang-row flex items-center gap-md bg-surface-bright p-2 rounded border border-outline-variant';
+
+      if (type === 'balok') {
+        div.innerHTML = `
+          <div class="flex-1">
+            <label class="block text-[11px] font-semibold text-secondary mb-1">Panjang Bentang L (mm)</label>
+            <input type="number" class="blk-L-val w-full bg-surface-bright border border-outline-variant border-l-2 border-l-primary rounded px-2.5 py-1.5 font-mono-data text-right text-sm" placeholder="5500" value="${defaultL !== undefined && defaultL !== '' ? defaultL : ''}" oninput="drawBalokSVG()" />
+          </div>
+          <div class="w-32">
+            <label class="block text-[11px] font-semibold text-secondary mb-1">Jumlah (buah)</label>
+            <input type="number" class="blk-qty-val w-full bg-surface-bright border border-outline-variant rounded px-2.5 py-1.5 font-mono-data text-right text-sm" placeholder="1" value="${defaultQty || 1}" min="1" />
+          </div>
+          <button type="button" onclick="removeBentangRow(this, 'balok')" class="self-end mb-1 text-error hover:bg-error-container/30 p-1.5 rounded transition-colors" title="Hapus Baris">
+            <span class="material-symbols-outlined text-[18px]">close</span>
+          </button>`;
+      } else if (type === 'kolom') {
+        div.innerHTML = `
+          <div class="flex-1">
+            <label class="block text-[11px] font-semibold text-secondary mb-1">Tinggi Kolom L (mm)</label>
+            <input type="number" class="kol-L-val w-full bg-surface-bright border border-outline-variant border-l-2 border-l-primary rounded px-2.5 py-1.5 font-mono-data text-right text-sm" placeholder="4000" value="${defaultL !== undefined && defaultL !== '' ? defaultL : ''}" oninput="drawKolomSVG()" />
+          </div>
+          <div class="w-32">
+            <label class="block text-[11px] font-semibold text-secondary mb-1">Jumlah (unit)</label>
+            <input type="number" class="kol-qty-val w-full bg-surface-bright border border-outline-variant rounded px-2.5 py-1.5 font-mono-data text-right text-sm" placeholder="1" value="${defaultQty || 1}" min="1" />
+          </div>
+          <button type="button" onclick="removeBentangRow(this, 'kolom')" class="self-end mb-1 text-error hover:bg-error-container/30 p-1.5 rounded transition-colors" title="Hapus Baris">
+            <span class="material-symbols-outlined text-[18px]">close</span>
+          </button>`;
+      } else if (type === 'pelat') {
+        div.innerHTML = `
+          <div class="flex-1 grid grid-cols-2 gap-sm">
+            <div>
+              <label class="block text-[11px] font-semibold text-secondary mb-1">Panjang ly (mm)</label>
+              <input type="number" class="plt-ly-val w-full bg-surface-bright border border-outline-variant border-l-2 border-l-primary rounded px-2.5 py-1.5 font-mono-data text-right text-sm" placeholder="5000" value="${defaultLy !== undefined && defaultLy !== '' ? defaultLy : ''}" oninput="drawPelatSVG()" />
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-secondary mb-1">Lebar lx (mm)</label>
+              <input type="number" class="plt-lx-val w-full bg-surface-bright border border-outline-variant border-l-2 border-l-primary rounded px-2.5 py-1.5 font-mono-data text-right text-sm" placeholder="4000" value="${defaultLx !== undefined && defaultLx !== '' ? defaultLx : ''}" oninput="drawPelatSVG()" />
+            </div>
+          </div>
+          <div class="w-28">
+            <label class="block text-[11px] font-semibold text-secondary mb-1">Jumlah (unit)</label>
+            <input type="number" class="plt-qty-val w-full bg-surface-bright border border-outline-variant rounded px-2.5 py-1.5 font-mono-data text-right text-sm" placeholder="1" value="${defaultQty || 1}" min="1" />
+          </div>
+          <button type="button" onclick="removeBentangRow(this, 'pelat')" class="self-end mb-1 text-error hover:bg-error-container/30 p-1.5 rounded transition-colors" title="Hapus Baris">
+            <span class="material-symbols-outlined text-[18px]">close</span>
+          </button>`;
+      }
+      container.appendChild(div);
+    }
+
+    function removeBentangRow(btn, type) {
+      const pfx = { kolom: 'kol', balok: 'blk', pelat: 'plt' }[type] || type;
+      const container = document.getElementById(pfx + '-bentang-container');
+      if (!container) return;
+      if (container.querySelectorAll('.bentang-row').length <= 1) {
+        alert('Minimal harus ada 1 baris dimensi/bentang!');
+        return;
+      }
+      btn.closest('.bentang-row').remove();
+      if (type === 'kolom') drawKolomSVG();
+      if (type === 'balok') drawBalokSVG();
+      if (type === 'pelat') drawPelatSVG();
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  DUPLICATE FEATURE (1-CLICK SALIN DATA KE FORM)
+    // ═══════════════════════════════════════════════════════════
+    function duplicateItem(type, idx) {
+      const item = store[type][idx];
+      if (!item) return;
+
+      if (type === 'kolom') {
+        document.getElementById('kol-nama').value = item.nama;
+        document.getElementById('kol-lantai').value = item.lantai || 'Lantai 1';
+        document.getElementById('kol-b').value = item.b;
+        document.getElementById('kol-h').value = item.h;
+        if (document.getElementById('kol-t-pelat')) document.getElementById('kol-t-pelat').value = item.tPlt || 120;
+
+        const container = document.getElementById('kol-bentang-container');
+        container.innerHTML = '';
+        addBentangRow('kolom', item.L, item.qty);
+
+        drawKolomSVG();
+      } else if (type === 'balok') {
+        document.getElementById('blk-nama').value = item.nama;
+        document.getElementById('blk-lantai').value = item.lantai || 'Lantai 1';
+        document.getElementById('blk-b').value = item.b;
+        document.getElementById('blk-h').value = item.h;
+        if (document.getElementById('blk-penopang')) document.getElementById('blk-penopang').value = item.penopang || '';
+        if (document.getElementById('blk-t-pelat')) document.getElementById('blk-t-pelat').value = item.tPlt || 120;
+
+        const container = document.getElementById('blk-bentang-container');
+        container.innerHTML = '';
+        addBentangRow('balok', item.L, item.qty);
+
+        drawBalokSVG();
+      } else if (type === 'pelat') {
+        document.getElementById('plt-nama').value = item.nama;
+        document.getElementById('plt-lantai').value = item.lantai || 'Lantai 1';
+        if (document.getElementById('plt-t')) document.getElementById('plt-t').value = item.t;
+
+        const container = document.getElementById('plt-bentang-container');
+        container.innerHTML = '';
+        addBentangRow('pelat', '', item.qty, item.ly, item.lx);
+
+        drawPelatSVG();
+      }
+
+      document.getElementById('panel-' + type).scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  KOLOM CALCULATION (REVISI PROYEK FINAL)
+    // ═══════════════════════════════════════════════════════════
+    function hitungKolom() {
+      const nama = S('kol-nama') || 'K' + (store.kolom.length + 1);
+      const lantai = S('kol-lantai') || 'Lantai 1';
+      const b = V('kol-b'), h = V('kol-h'), cc = V('kol-cc') || 40;
+      if (!b || !h) return alert('Lengkapi dimensi kolom (Lebar Kolom b, Panjang Kolom h)!');
+
+      const dU = V('kol-d-utm'), nU = V('kol-n-utm');
+      const dS = V('kol-d-sgk'), sS = V('kol-s-sgk');
+      const dCross = V('kol-d-cross'), sCross = V('kol-s-cross') || sS;
+      if (!sS || sS <= 0) return alert('Masukkan Spasi Sengkang yang valid!');
+
+      const rows = document.querySelectorAll('#kol-bentang-container .bentang-row');
+      let batchVol = 0, batchFw = 0, batchW = 0;
+      let addedEntries = [];
+
+      rows.forEach(r => {
+        const L = parseFloat(r.querySelector('.kol-L-val')?.value) || 0;
+        const qty = parseFloat(r.querySelector('.kol-qty-val')?.value) || 1;
+        if (!L || L <= 0) return;
+
+        const tPlt = V('kol-t-pelat') || 0;
+        const L_cor = Math.max(0, L - tPlt); // Tinggi bersih kolom (dikurangi tebal pelat)
+
+        const volTotal = (b / 1000) * (h / 1000) * (L_cor / 1000) * qty;
+        const fwTotal = (2 * (b / 1000 + h / 1000)) * (L_cor / 1000) * qty;
+
+        const nUTotal = nU * qty;
+        const pjgU = L / 1000;
+        const tLenU = nUTotal * pjgU;
+        const wU = tLenU * (RB[dU] ? RB[dU].W : 0);
+
+        const nS_perKolom = Math.ceil(L / sS);
+        const nS_Total = nS_perKolom * qty;
+        const pjgKaitS = Math.ceil((7.5 * dS / 1000) * 100) / 100;
+        const bBersihS = (b - 2 * cc) / 1000;
+        const hBersihS = (h - 2 * cc) / 1000;
+        const pjgS = (2 * pjgKaitS) + (2 * bBersihS) + (2 * hBersihS);
+        const tLenS = nS_Total * pjgS;
+        const wS = tLenS * (RB[dS] ? RB[dS].W : 0);
+
+        let nCross_Total = 0, pjgCross = 0, tLenCross = 0, wCross = 0;
+        if (dCross > 0 && sCross > 0) {
+          const nCross_perKolom = Math.ceil(L / sCross);
+          nCross_Total = nCross_perKolom * qty;
+          const pjgKaitCross = 0.075;
+          const bBersihCross = (b - 2 * cc - dCross) / 1000;
+          pjgCross = bBersihCross + (2 * pjgKaitCross);
+          tLenCross = nCross_Total * pjgCross;
+          wCross = tLenCross * (RB[dCross] ? RB[dCross].W : 0);
+        }
+
+        const totalW = wU + wS + wCross;
+        const items = [
+          { label: 'Tulangan Utama', dia: dU, pcs: nUTotal, lenPc: pjgU, totalLen: tLenU, weight: wU },
+          { label: 'Sengkang', dia: dS, pcs: nS_Total, lenPc: pjgS, totalLen: tLenS, weight: wS }
+        ];
+        if (dCross > 0 && sCross > 0) {
+          items.push({ label: 'Crosstie / Ikat Silang', dia: dCross, pcs: nCross_Total, lenPc: pjgCross, totalLen: tLenCross, weight: wCross });
+        }
+
+        const entry = { nama, lantai, qty, b, h, L, cc, sS, sCross, tPlt: V('kol-t-pelat') || 120, volTotal, fwTotal, totalW, rebarItems: items };
+        if (editState.type === 'kolom' && editState.index !== null && editState.index >= 0) {
+          store.kolom[editState.index] = entry;
+        } else {
+          store.kolom.push(entry);
+        }
+        addedEntries.push(entry);
+        batchVol += volTotal; batchFw += fwTotal; batchW += totalW;
+      });
+
+      if (editState.type === 'kolom') {
+        editState = { type: null, index: null };
+        updateSubmitBtn('kolom', false);
+      }
+
+      if (!addedEntries.length) return alert('Masukkan setidaknya 1 Tinggi Kolom (L) yang valid!');
+
+      const lastEntry = addedEntries[addedEntries.length - 1];
+      const L_cor_last = Math.max(0, lastEntry.L - lastEntry.tPlt);
+
+      document.getElementById('kol-res-sum').innerHTML = resultCards(batchVol, batchFw, batchW);
+      document.getElementById('kol-res-det').innerHTML = `<div class="space-y-sm text-body-md text-on-surface">
+        <div class="font-headline-md text-primary font-bold border-b pb-1">📐 Hasil Perhitungan Kolom ${nama} (${lantai})</div>
+        <div>Telah berhasil dihitung dan ditambahkan <b>${addedEntries.length} variasi tinggi</b> ke daftar terhitung.</div>
+        
+        <div class="bg-surface-container-low p-3 rounded-lg border border-outline-variant/60 my-2 space-y-1 text-xs font-mono-data">
+          <div class="font-bold text-primary text-sm flex items-center gap-1">📊 Breakdown Perhitungan Cor & Bekisting Net:</div>
+          <div>• Tinggi Kolom Net ($L_{\\text{cor}}$) = ${lastEntry.L}mm − ${lastEntry.tPlt}mm = <b>${L_cor_last}mm (${L_cor_last/1000}m)</b></div>
+          <div>• Rumus Vol. Cor Net = (${lastEntry.b}/1000) × (${lastEntry.h}/1000) × (${L_cor_last}/1000) × ${lastEntry.qty} unit = <b class="text-primary">${f3(lastEntry.volTotal)} m³</b></div>
+          <div>• Rumus Bekisting Net = 2 × [(${lastEntry.b}/1000) + (${lastEntry.h}/1000)] × (${L_cor_last}/1000) × ${lastEntry.qty} unit = <b class="text-[#166534]">${f2(lastEntry.fwTotal)} m²</b></div>
+        </div>
+      </div>` + rebarTableHTML(lastEntry.rebarItems);
+
+      document.getElementById('kol-result').style.display = 'block';
+      renderList('kolom');
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  BALOK CALCULATION — RUMUS PROYEK REVISI
+    // ═══════════════════════════════════════════════════════════
+    function hitungBalok() {
+      // 1. Parameter Input Geometri & Penulangan Balok
+      const nama = S('blk-nama') || 'B' + (store.balok.length + 1);
+      const lantai = S('blk-lantai') || 'Lantai 1';
+      const b = V('blk-b'), h = V('blk-h');
+      const cc = V('blk-cc') || 30;
+      const penopang = parseFloat(document.getElementById('blk-penopang')?.value) || 0;
+      const tPlt = V('blk-t-pelat') || 0;
+
+      const dU = V('blk-d-utm') || 16, dS = V('blk-d-sgk') || 8, dP = V('blk-d-pgng') || 10;
+      const nB = V('blk-n-atas-men') || 2, nC = V('blk-n-tump') || 0, nD = V('blk-n-lap-extra') || 0, nE = V('blk-n-bawah-men') || 2, nF = V('blk-n-pgng') || 0;
+      const sT = V('blk-s-tump') || 100, sLp = V('blk-s-lap') || 200;
+
+      if (!b || !h) return alert('Isi Dimensi Balok (Lebar b & Tinggi h) terlebih dahulu!');
+
+      // 2. Panjang Kait Excel: ROUNDUP(7,5 × Diameter / 1000, 2)
+      function getKaitExcel(d) { return Math.ceil((7.5 * d / 1000) * 100) / 100; }
+      
+      const k_sgk = getKaitExcel(dS);
+      const k_utm = getKaitExcel(dU);
+
+      // Panjang Penyaluran Tumpuan (15d) & Lapangan (20d) dalam meter
+      const l_dev_tump = (15 * dU) / 1000;
+      const l_dev_lap = (20 * dU) / 1000;
+
+      const rows = document.querySelectorAll('#blk-bentang-container .bentang-row');
+      let batchVol = 0, batchFw = 0, batchW = 0;
+      let totalSpanNetMm = 0;
+      let addedEntries = [];
+
+      rows.forEach(r => {
+        const L = parseFloat(r.querySelector('.blk-L-val')?.value) || 0; // Panjang Bentang (mm)
+        const qty = parseFloat(r.querySelector('.blk-qty-val')?.value) || 1; // Jumlah Balok (buah)
+        if (!L || L <= 0) return;
+
+        // -------------------------------------------------------
+        // a. Sengkang (Kode A)
+        // Rumus Excel: =ROUNDUP(((((BENTANG-PENOPANG)*0,5)/JARAK SENGKANG TUMPUAN)+(((BENTANG-PENOPANG)*0,5)/JARAK SENGKANG LAPANGAN));0)
+        const netSpan = Math.max(0, L - penopang);
+        const nA = (sT > 0 && sLp > 0)
+          ? Math.ceil(( (netSpan * 0.5) / sT ) + ( (netSpan * 0.5) / sLp ))
+          : 0;
+        
+        // Panjang Satu Sengkang = (2 × Kait) + (2 × (Lebar − 2×cc)) + (2 × (Tinggi − 2×cc))
+        const bBersihS = (b - 2 * cc) / 1000;
+        const hBersihS = (h - 2 * cc) / 1000;
+        const pjgA = (2 * k_sgk) + (2 * bBersihS) + (2 * hBersihS);
+        const tA = nA * pjgA;
+        const wA = tA * (RB[dS] ? RB[dS].W : 0);
+
+        // -------------------------------------------------------
+        // b. Tulangan Atas Menerus (Kode B)
+        // Rumus Excel: =2*(ROUNDUP(7,5*d/1000;2)+(0,5*L_total))
+        const pjgB = 2 * (k_utm + (0.5 * (L / 1000)));
+        const tB = nB * pjgB;
+        const wB = tB * (RB[dU] ? RB[dU].W : 0);
+
+        // -------------------------------------------------------
+        // c. Tulangan Tumpuan Extra (Kode C - Excel Exact)
+        // Rumus Excel: =2*(ROUNDUP(7,5*d/1000;2)+(0,25*L-penopang)+(15*d/1000)+ROUNDUP(7,5*d/1000;2))
+        const len_tump_clean = Math.max(0, (0.25 * L - penopang) / 1000);
+        const pjgC = 2 * (k_utm + len_tump_clean + l_dev_tump + k_utm);
+        const tC = nC * pjgC;
+        const wC = tC * (RB[dU] ? RB[dU].W : 0);
+
+        // -------------------------------------------------------
+        // d. Tulangan Lapangan Extra (Kode D - Excel Exact)
+        // Rumus Excel: =2*(ROUNDUP(7,5*d/1000;2)+(20*d/1000))+(0,25*L-penopang)
+        const len_lap_clean = Math.max(0, (0.25 * L - penopang) / 1000);
+        const pjgD = 2 * (k_utm + l_dev_lap) + len_lap_clean;
+        const tD = nD * pjgD;
+        const wD = tD * (RB[dU] ? RB[dU].W : 0);
+
+        // -------------------------------------------------------
+        // e. Tulangan Bawah Menerus (Kode E)
+        // Rumus Excel: =2*(ROUNDUP(7,5*d/1000;2)+(0,5*L_total))
+        const pjgE = 2 * (k_utm + (0.5 * (L / 1000)));
+        const tE = nE * pjgE;
+        const wE = tE * (RB[dU] ? RB[dU].W : 0);
+
+        // -------------------------------------------------------
+        // f. Tulangan Pinggang (Kode F)
+        // Panjang Tulangan = Panjang Bentang (L_total)
+        const pjgF = L / 1000;
+        const tF = (dP > 0 && nF > 0) ? nF * pjgF : 0;
+        const wF = (dP > 0 && nF > 0) ? tF * (RB[dP] ? RB[dP].W : 0) : 0;
+
+        // Total Berat Besi 1 Balok (kg)
+        const w1_balok = wA + wB + wC + wD + wE + wF;
+
+        // Volume Cor Net & Bekisting Net (Tinggi Balok dikurangi Tebal Pelat, Bentang dikurangi Penopang)
+        const h_cor = Math.max(0, h - tPlt);
+        const L_cor = Math.max(0, L - penopang);
+        totalSpanNetMm += L_cor * qty;
+        
+        const vol1 = (b / 1000) * (h_cor / 1000) * (L_cor / 1000);
+        const fw1 = (2 * (h_cor / 1000) + (b / 1000)) * (L_cor / 1000);
+
+        // Sub-items dikalikan kuantitas balok (qty)
+        const items = [
+          { label: 'Sengkang', dia: dS, pcs: nA * qty, lenPc: pjgA, totalLen: tA * qty, weight: wA * qty },
+          { label: 'Tulangan Atas Menerus', dia: dU, pcs: nB * qty, lenPc: pjgB, totalLen: tB * qty, weight: wB * qty },
+        ];
+        if (nC > 0) items.push({ label: 'Tulangan Tumpuan Extra', dia: dU, pcs: nC * qty, lenPc: pjgC, totalLen: tC * qty, weight: wC * qty });
+        if (nD > 0) items.push({ label: 'Tulangan Lapangan Extra', dia: dU, pcs: nD * qty, lenPc: pjgD, totalLen: tD * qty, weight: wD * qty });
+        items.push({ label: 'Tulangan Bawah Menerus', dia: dU, pcs: nE * qty, lenPc: pjgE, totalLen: tE * qty, weight: wE * qty });
+        if (dP > 0 && nF > 0) items.push({ label: 'Tulangan Pinggang', dia: dP, pcs: nF * qty, lenPc: pjgF, totalLen: tF * qty, weight: wF * qty });
+
+        const entry = {
+          nama, lantai, qty, b, h, L, cc, penopang, sT, sLp, tPlt,
+          volTotal: vol1 * qty, fwTotal: fw1 * qty, totalW: w1_balok * qty,
+          rebarItems: items
+        };
+        if (editState.type === 'balok' && editState.index !== null && editState.index >= 0) {
+          store.balok[editState.index] = entry;
+        } else {
+          store.balok.push(entry);
+        }
+        addedEntries.push(entry);
+        batchVol += entry.volTotal; batchFw += entry.fwTotal; batchW += entry.totalW;
+      });
+
+      if (editState.type === 'balok') {
+        editState = { type: null, index: null };
+        updateSubmitBtn('balok', false);
+      }
+
+      if (!addedEntries.length) return alert('Masukkan setidaknya 1 Panjang Bentang (L) yang valid!');
+
+      const lastEntry = addedEntries[addedEntries.length - 1];
+      const h_cor_last = Math.max(0, lastEntry.h - lastEntry.tPlt);
+      const totalSpanNetMeter = totalSpanNetMm / 1000;
+
+      document.getElementById('blk-res-sum').innerHTML = resultCards(batchVol, batchFw, batchW);
+      document.getElementById('blk-res-det').innerHTML = `<div class="space-y-sm text-body-md text-on-surface">
+        <div class="font-headline-md text-primary font-bold border-b pb-1">📐 Hasil Perhitungan Balok ${nama} (${lantai})</div>
+        <div>Telah berhasil dihitung dan ditambahkan <b>${addedEntries.length} variasi bentang</b> ke daftar terhitung.</div>
+        
+        <div class="bg-surface-container-low p-3 rounded-lg border border-outline-variant/60 my-2 space-y-1 text-xs font-mono-data">
+          <div class="font-bold text-primary text-sm flex items-center gap-1">📊 Breakdown Perhitungan Cor & Bekisting Net Balok:</div>
+          <div>• Tinggi Balok Net ($h_{\\text{cor}}$) = ${lastEntry.h}mm − ${lastEntry.tPlt}mm = <b>${h_cor_last}mm (${h_cor_last/1000}m)</b></div>
+          <div>• Bentang Balok Net ($L_{\\text{cor}}$) = ${lastEntry.L}mm − ${lastEntry.penopang || 0}mm = <b>${L_cor_last}mm (${L_cor_last/1000}m)</b></div>
+          <div>• Rumus Vol. Cor Net = (${lastEntry.b}/1000) × (${h_cor_last}/1000) × (${L_cor_last}/1000) × ${lastEntry.qty} unit = <b class="text-primary">${f3(lastEntry.volTotal)} m³</b></div>
+          <div>• Rumus Bekisting Net = [2 × (${h_cor_last}/1000) + (${lastEntry.b}/1000)] × (${L_cor_last}/1000) × ${lastEntry.qty} unit = <b class="text-[#166534]">${f2(lastEntry.fwTotal)} m²</b></div>
+        </div>
+      </div>` + rebarTableHTML(lastEntry.rebarItems);
+
+      document.getElementById('blk-result').style.display = 'block';
+      renderList('balok');
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  PELAT CALCULATION
+    // ═══════════════════════════════════════════════════════════
+    function hitungPelat() {
+      const nama = S('plt-nama') || 'S' + (store.pelat.length + 1);
+      const lantai = S('plt-lantai') || 'Lantai 1';
+      const t = V('plt-t'), cc = V('plt-cc');
+      if (!t) return alert('Lengkapi tebal pelat t!');
+
+      const dX = V('plt-d-x'), sxT = V('plt-sx-tump'), sxL = V('plt-sx-lap');
+      const dY = V('plt-d-y'), syT = V('plt-sy-tump'), syL = V('plt-sy-lap');
+
+      const rows = document.querySelectorAll('#plt-bentang-container .bentang-row');
+      let batchVol = 0, batchFw = 0, batchW = 0;
+      let addedEntries = [];
+
+      rows.forEach(r => {
+        const ly = parseFloat(r.querySelector('.plt-ly-val')?.value) || 0;
+        const lx = parseFloat(r.querySelector('.plt-lx-val')?.value) || 0;
+        const qty = parseFloat(r.querySelector('.plt-qty-val')?.value) || 1;
+        if (!lx || !ly || lx <= 0 || ly <= 0) return;
+
+        const tumpXL = lx / 4, lapXL = lx / 2;
+        const tumpYL = ly / 4, lapYL = ly / 2;
+
+        const vol1 = (lx / 1000) * (ly / 1000) * (t / 1000) * (1 + WASTE_C);
+        const fw1 = (lx / 1000) * (ly / 1000) * (1 + WASTE_F);
+
+        const ldX = calcLd(dX), ldY = calcLd(dY);
+        const pjgX = (ly + 2 * ldX) / 1000;
+        const pjgY = (lx + 2 * ldY) / 1000;
+
+        const nXtK = Math.ceil(tumpXL / sxT) + 1, nXtN = Math.ceil(tumpXL / sxT) + 1;
+        const nXlp = Math.ceil(lapXL / sxL);
+        const nYtK = Math.ceil(tumpYL / syT) + 1, nYtN = Math.ceil(tumpYL / syT) + 1;
+        const nYlp = Math.ceil(lapYL / syL);
+
+        const tXt = (nXtK + nXtN) * pjgX, tXl = nXlp * pjgX;
+        const tYt = (nYtK + nYtN) * pjgY, tYl = nYlp * pjgY;
+        const wXt = tXt * RB[dX].W * (1 + WASTE_R), wXl = tXl * RB[dX].W * (1 + WASTE_R);
+        const wYt = tYt * RB[dY].W * (1 + WASTE_R), wYl = tYl * RB[dY].W * (1 + WASTE_R);
+        const w1 = wXt + wXl + wYt + wYl;
+
+        const items = [
+          { label: 'Tul. X Tumpuan', dia: dX, pcs: (nXtK + nXtN) * qty, lenPc: pjgX, totalLen: tXt * qty, weight: wXt * qty },
+          { label: 'Tul. X Lapangan', dia: dX, pcs: nXlp * qty, lenPc: pjgX, totalLen: tXl * qty, weight: wXl * qty },
+          { label: 'Tul. Y Tumpuan', dia: dY, pcs: (nYtK + nYtN) * qty, lenPc: pjgY, totalLen: tYt * qty, weight: wYt * qty },
+          { label: 'Tul. Y Lapangan', dia: dY, pcs: nYlp * qty, lenPc: pjgY, totalLen: tYl * qty, weight: wYl * qty },
+        ];
+
+        const entry = {
+          nama, lantai, qty, lx, ly, t,
+          volTotal: vol1 * qty, fwTotal: fw1 * qty, totalW: w1 * qty,
+          rebarItems: items
+        };
+        if (editState.type === 'pelat' && editState.index !== null && editState.index >= 0) {
+          store.pelat[editState.index] = entry;
+        } else {
+          store.pelat.push(entry);
+        }
+        addedEntries.push(entry);
+        batchVol += entry.volTotal; batchFw += entry.fwTotal; batchW += entry.totalW;
+      });
+
+      if (editState.type === 'pelat') {
+        editState = { type: null, index: null };
+        updateSubmitBtn('pelat', false);
+      }
+
+      if (!addedEntries.length) return alert('Masukkan setidaknya 1 dimensi Pelat (ly x lx) yang valid!');
+
+      const lastEntry = addedEntries[addedEntries.length - 1];
+
+      document.getElementById('plt-res-sum').innerHTML = resultCards(batchVol, batchFw, batchW);
+      document.getElementById('plt-res-det').innerHTML = `<div class="space-y-sm text-body-md text-on-surface">
+        <div class="font-headline-md text-primary font-bold border-b pb-1">📐 Hasil Perhitungan Pelat ${nama} (${lantai})</div>
+        <div>Telah berhasil dihitung dan ditambahkan <b>${addedEntries.length} variasi dimensi</b> ke daftar terhitung.</div>
+        
+        <div class="bg-surface-container-low p-3 rounded-lg border border-outline-variant/60 my-2 space-y-1 text-xs font-mono-data">
+          <div class="font-bold text-primary text-sm flex items-center gap-1">📊 Breakdown Perhitungan Cor & Bekisting Pelat:</div>
+          <div>• Tebal Pelat ($t$) = ${lastEntry.t}mm (${lastEntry.t/1000}m)</div>
+          <div>• Rumus Vol. Cor = (${lastEntry.lx}/1000) × (${lastEntry.ly}/1000) × (${lastEntry.t}/1000) × ${lastEntry.qty} unit = <b class="text-primary">${f3(lastEntry.volTotal)} m³</b></div>
+          <div>• Rumus Bekisting = (${lastEntry.lx}/1000) × (${lastEntry.ly}/1000) × ${lastEntry.qty} unit = <b class="text-[#166534]">${f2(lastEntry.fwTotal)} m²</b></div>
+        </div>
+      </div>` + rebarTableHTML(lastEntry.rebarItems);
+
+      document.getElementById('plt-result').style.display = 'block';
+      renderList('pelat');
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  SHARED UI & RENDERERS
+    // ═══════════════════════════════════════════════════════════
+    let editState = { type: null, index: null };
+
+    function editEntry(type, idx) {
+      const item = store[type][idx];
+      if (!item) return;
+
+      editState = { type, index: idx };
+
+      if (type === 'kolom') {
+        switchTab('kolom', document.getElementById('nav-btn-kolom'));
+        if (document.getElementById('kol-nama')) document.getElementById('kol-nama').value = item.nama || 'K1';
+        if (document.getElementById('kol-lantai')) document.getElementById('kol-lantai').value = item.lantai || 'Lantai 1';
+        if (document.getElementById('kol-b')) document.getElementById('kol-b').value = item.b || '';
+        if (document.getElementById('kol-h')) document.getElementById('kol-h').value = item.h || '';
+        if (document.getElementById('kol-t-pelat')) document.getElementById('kol-t-pelat').value = item.tPlt !== undefined ? item.tPlt : 120;
+        if (document.getElementById('kol-cc')) document.getElementById('kol-cc').value = item.cc || 40;
+
+        const mainRebar = (item.rebarItems || []).find(r => r.label.includes('Utama'));
+        if (mainRebar && document.getElementById('kol-d-utm')) document.getElementById('kol-d-utm').value = mainRebar.dia;
+        if (mainRebar && document.getElementById('kol-n-utm')) document.getElementById('kol-n-utm').value = Math.round(mainRebar.pcs / (item.qty || 1));
+
+        const sgkRebar = (item.rebarItems || []).find(r => r.label.includes('Sengkang'));
+        if (sgkRebar && document.getElementById('kol-d-sgk')) document.getElementById('kol-d-sgk').value = sgkRebar.dia;
+        if (document.getElementById('kol-s-sgk')) document.getElementById('kol-s-sgk').value = item.sS || 150;
+
+        const crossRebar = (item.rebarItems || []).find(r => r.label.includes('Crosstie'));
+        if (crossRebar && document.getElementById('kol-d-cross')) document.getElementById('kol-d-cross').value = crossRebar.dia;
+        else if (document.getElementById('kol-d-cross')) document.getElementById('kol-d-cross').value = 0;
+        if (document.getElementById('kol-s-cross')) document.getElementById('kol-s-cross').value = item.sCross || 150;
+
+        const container = document.getElementById('kol-bentang-container');
+        if (container) {
+          container.innerHTML = '';
+          addBentangRow('kolom', item.L, item.qty);
+        }
+
+        updateSubmitBtn('kolom', true);
+        drawKolomSVG();
+      } else if (type === 'balok') {
+        switchTab('balok', document.getElementById('nav-btn-balok'));
+        if (document.getElementById('blk-nama')) document.getElementById('blk-nama').value = item.nama || 'B1';
+        if (document.getElementById('blk-lantai')) document.getElementById('blk-lantai').value = item.lantai || 'Lantai 1';
+        if (document.getElementById('blk-b')) document.getElementById('blk-b').value = item.b || '';
+        if (document.getElementById('blk-h')) document.getElementById('blk-h').value = item.h || '';
+        if (document.getElementById('blk-cc')) document.getElementById('blk-cc').value = item.cc || 30;
+        if (document.getElementById('blk-penopang')) document.getElementById('blk-penopang').value = item.penopang || 0;
+        if (document.getElementById('blk-t-pelat')) document.getElementById('blk-t-pelat').value = item.tPlt !== undefined ? item.tPlt : 120;
+
+        const container = document.getElementById('blk-bentang-container');
+        if (container) {
+          container.innerHTML = '';
+          addBentangRow('balok', item.L, item.qty);
+        }
+
+        updateSubmitBtn('balok', true);
+        drawBalokSVG();
+      } else if (type === 'pelat') {
+        switchTab('pelat', document.getElementById('nav-btn-pelat'));
+        if (document.getElementById('plt-nama')) document.getElementById('plt-nama').value = item.nama || 'S1';
+        if (document.getElementById('plt-lantai')) document.getElementById('plt-lantai').value = item.lantai || 'Lantai 1';
+        if (document.getElementById('plt-t')) document.getElementById('plt-t').value = item.t || '';
+        if (document.getElementById('plt-cc')) document.getElementById('plt-cc').value = item.cc || 20;
+
+        const container = document.getElementById('plt-bentang-container');
+        if (container) {
+          container.innerHTML = '';
+          addBentangRow('pelat', '', item.qty, item.ly, item.lx);
+        }
+
+        updateSubmitBtn('pelat', true);
+        drawPelatSVG();
+      }
+    }
+
+    function cancelEdit(type) {
+      editState = { type: null, index: null };
+      updateSubmitBtn(type, false);
+      resetForm(type);
+    }
+
+    function updateSubmitBtn(type, isEdit) {
+      const btn = document.querySelector(`#panel-${type} button[onclick="hitung${type.charAt(0).toUpperCase() + type.slice(1)}()"]`);
+      if (!btn) return;
+
+      if (isEdit) {
+        btn.innerHTML = `<span class="material-symbols-outlined">save</span> Simpan Perubahan`;
+        btn.className = 'flex-1 bg-amber-600 text-white py-3 rounded-lg font-headline-md shadow-sm hover:bg-amber-700 transition-all flex items-center justify-center gap-sm';
+      } else {
+        btn.innerHTML = `<span class="material-symbols-outlined">bolt</span> Hitung & Tambahkan`;
+        btn.className = 'flex-1 bg-primary text-on-primary py-3 rounded-lg font-headline-md shadow-sm hover:opacity-90 transition-all flex items-center justify-center gap-sm';
+      }
+    }
+    function getRebarSummaryBadges(items) {
+      if (!items || !items.length) return '<span class="text-xs text-secondary italic">Tidak ada data pembesian</span>';
+      const byDia = {};
+      items.forEach(r => {
+        if (!byDia[r.dia]) byDia[r.dia] = { len: 0, w: 0, pcs: 0 };
+        byDia[r.dia].len += r.totalLen;
+        byDia[r.dia].w += r.weight;
+        byDia[r.dia].pcs += r.pcs;
+      });
+
+      const sortedDias = Object.keys(byDia).sort((a, b) => Number(a) - Number(b));
+      return sortedDias.map(d => {
+        const totalBtg12m = stk(byDia[d].len);
+        return `<div class="inline-flex items-center gap-1.5 bg-surface-container border border-outline-variant/80 rounded-md px-2.5 py-1 text-xs shadow-2xs">
+          <span class="font-bold text-primary">D${d}:</span>
+          <span class="font-mono font-bold text-on-surface">${totalBtg12m} btg (12m)</span>
+          <span class="text-secondary text-[11px]">| Pjg: ${f2(byDia[d].len)} m</span>
+          <span class="text-[#b45309] font-semibold text-[11px]">(${f1(byDia[d].w)} kg)</span>
+        </div>`;
+      }).join('');
+    }
+
+    function toggleCardDetail(id) {
+      const el = document.getElementById('detail_' + id);
+      const arrow = document.getElementById('arrow_' + id);
+      if (!el) return;
+      if (el.classList.contains('hidden')) {
+        el.classList.remove('hidden');
+        if (arrow) arrow.textContent = 'expand_less';
+      } else {
+        el.classList.add('hidden');
+        if (arrow) arrow.textContent = 'expand_more';
+      }
+    }
+
+    function renderList(type) {
+      saveAutoLocalStorage();
+      const el = document.getElementById(type === 'kolom' ? 'kol-list' : type === 'balok' ? 'blk-list' : 'plt-list');
+      const selectEl = document.getElementById('filter-lantai-' + type);
+      const arr = store[type];
+
+      if (selectEl) {
+        const currentVal = selectEl.value || 'ALL';
+        const uniqueFloors = [...new Set(arr.map(e => e.lantai || 'Lantai 1'))];
+        selectEl.innerHTML = '<option value="ALL">Semua Lantai</option>' +
+          uniqueFloors.map(f => `<option value="${f}">${f}</option>`).join('');
+        selectEl.value = uniqueFloors.includes(currentVal) ? currentVal : 'ALL';
+      }
+
+      const activeFloor = selectEl ? selectEl.value : 'ALL';
+      const filtered = activeFloor === 'ALL' ? arr : arr.filter(e => (e.lantai || 'Lantai 1') === activeFloor);
+
+      if (!filtered.length) {
+        el.innerHTML = `<div class="p-8 text-center text-secondary font-label-md"><span class="material-symbols-outlined text-[32px] opacity-40 mb-1 block">inventory_2</span>Belum ada data ${type} terhitung ${activeFloor !== 'ALL' ? 'di ' + activeFloor : ''}</div>`;
+        return;
+      }
+
+      el.innerHTML = filtered.map((k, i) => {
+        const realIndex = arr.indexOf(k);
+        const cardId = `${type}_${realIndex}`;
+        const lantaiTag = `<span class="bg-primary/10 text-primary border border-primary/20 font-bold px-2.5 py-0.5 rounded text-[11px]">${k.lantai || 'Lantai 1'}</span>`;
+        const d = type === 'kolom'
+          ? `b×h: ${k.b}×${k.h} mm | Tinggi L: ${k.L / 1000} m (${k.L} mm)`
+          : (type === 'balok'
+            ? `b×h: ${k.b}×${k.h} mm | Bentang L: ${k.L / 1000} m (Net: ${(k.L - (k.penopang || 0)) / 1000} m)`
+            : `Dimension: ${k.lx}×${k.ly} mm | Tebal t: ${k.t} mm`);
+
+        return `<div class="p-4 bg-surface-container-lowest border border-outline-variant rounded-xl mb-3 shadow-2xs hover:shadow-xs transition-all">
+          <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-outline-variant/50">
+            <div class="flex items-center gap-2 flex-wrap">
+              ${lantaiTag}
+              <span class="font-bold text-on-surface text-body-lg flex items-center gap-1">
+                <span class="material-symbols-outlined text-[18px] text-primary">bookmark</span> ${k.nama}
+              </span>
+              <span class="bg-surface-variant text-secondary text-xs px-2 py-0.5 rounded font-mono font-medium">(${k.qty} ${type === 'balok' ? 'buah' : 'unit'})</span>
+            </div>
+            
+            <div class="flex items-center gap-1.5">
+              <button onclick="toggleCardDetail('${cardId}')" class="text-xs text-primary bg-primary/5 hover:bg-primary/15 border border-primary/20 px-2.5 py-1 rounded-md font-semibold transition-colors flex items-center gap-1" title="Lihat/Sembunyikan Rincian">
+                <span class="material-symbols-outlined text-[16px]">analytics</span>
+                <span>Detail</span>
+                <span class="material-symbols-outlined text-[16px]" id="arrow_${cardId}">expand_more</span>
+              </button>
+              <button onclick="editEntry('${type}', ${realIndex})" class="text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-300 p-1.5 rounded-md transition-colors flex items-center gap-0.5 text-xs font-semibold" title="Edit Item Ini (Simpan Tanpa Duplikasi)">
+                <span class="material-symbols-outlined text-[18px]">edit</span>
+                <span>Edit</span>
+              </button>
+              <button onclick="duplicateItem('${type}', ${realIndex})" class="text-secondary hover:text-primary hover:bg-surface-container-high p-1.5 rounded-md transition-colors" title="Duplikat Ke Form">
+                <span class="material-symbols-outlined text-[18px]">content_copy</span>
+              </button>
+              <button onclick="removeItem('${type}', ${realIndex})" class="text-error hover:bg-error-container/20 p-1.5 rounded-md transition-colors" title="Hapus">
+                <span class="material-symbols-outlined text-[18px]">delete</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-2 py-2.5 text-xs font-mono-data border-b border-outline-variant/40">
+            <div class="text-secondary">
+              <span class="text-on-surface-variant font-medium block">Geometri:</span>
+              <span class="font-bold text-on-surface">${d}</span>
+            </div>
+            <div>
+              <span class="text-secondary block">Volume Cor:</span>
+              <span class="font-bold text-primary text-sm">${f3(k.volTotal)} m³</span>
+            </div>
+            <div>
+              <span class="text-secondary block">Luas Bekisting:</span>
+              <span class="font-bold text-[#166534] text-sm">${f2(k.fwTotal)} m²</span>
+            </div>
+            <div>
+              <span class="text-secondary block">Total Berat Besi:</span>
+              <span class="font-bold text-[#b45309] text-sm">${f1(k.totalW)} kg</span>
+            </div>
+          </div>
+
+          <div class="pt-2">
+            <div class="text-[11px] font-semibold text-secondary uppercase tracking-wider mb-1.5 flex items-center gap-1">
+              <span class="material-symbols-outlined text-[14px] text-primary">reorder</span> Kebutuhan Besi Per Diameter (Jumlah Batang & Total Panjang):
+            </div>
+            <div class="flex flex-wrap gap-2">
+              ${getRebarSummaryBadges(k.rebarItems)}
+            </div>
+          </div>
+
+          <div id="detail_${cardId}" class="hidden pt-3 mt-3 border-t border-outline-variant/60">
+            <div class="text-xs font-bold text-primary mb-1">Rincian Perhitungan Sub-Elemen (${k.nama} - ${k.lantai}):</div>
+            ${rebarTableHTML(k.rebarItems)}
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    function removeItem(type, idx) { store[type].splice(idx, 1); renderList(type); }
+
+    function resetForm(type) {
+      if (type === 'kolom') {
+        ['kol-nama', 'kol-b', 'kol-h', 'kol-s-sgk', 'kol-s-cross'].forEach(id => { if (document.getElementById(id)) document.getElementById(id).value = ''; });
+        const container = document.getElementById('kol-bentang-container');
+        if (container) { container.innerHTML = ''; addBentangRow('kolom', 4000, 1); }
+        document.getElementById('kol-result').style.display = 'none';
+        drawKolomSVG();
+      } else if (type === 'balok') {
+        ['blk-nama', 'blk-b', 'blk-h', 'blk-penopang'].forEach(id => { if (document.getElementById(id)) document.getElementById(id).value = ''; });
+        const container = document.getElementById('blk-bentang-container');
+        if (container) { container.innerHTML = ''; addBentangRow('balok', 5500, 1); }
+        document.getElementById('blk-result').style.display = 'none';
+        drawBalokSVG();
+      } else {
+        ['plt-nama', 'plt-t'].forEach(id => { if (document.getElementById(id)) document.getElementById(id).value = ''; });
+        const container = document.getElementById('plt-bentang-container');
+        if (container) { container.innerHTML = ''; addBentangRow('pelat', '', 1, 5000, 4000); }
+        document.getElementById('plt-result').style.display = 'none';
+        drawPelatSVG();
+      }
+    }
+
+    function resetSemua() {
+      if (!confirm('Hapus semua data perhitungan proyek?')) return;
+      store = { kolom: [], balok: [], pelat: [] };
+      saveAutoLocalStorage();
+      ['kolom', 'balok', 'pelat'].forEach(t => renderList(t));
+      ['kol-result', 'blk-result', 'plt-result'].forEach(id => document.getElementById(id).style.display = 'none');
+      renderRekap();
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  REKAP
+    // ═══════════════════════════════════════════════════════════
+    function renderRekap() {
+      const allStore = [...store.kolom, ...store.balok, ...store.pelat];
+      const selectEl = document.getElementById('rekap-filter-lantai');
+
+      if (selectEl) {
+        const currentVal = selectEl.value || 'ALL';
+        const uniqueFloors = [...new Set(allStore.map(e => e.lantai || 'Lantai 1'))];
+        selectEl.innerHTML = '<option value="ALL">Semua Lantai (Total Proyek)</option>' +
+          uniqueFloors.map(f => `<option value="${f}">${f}</option>`).join('');
+        selectEl.value = uniqueFloors.includes(currentVal) ? currentVal : 'ALL';
+      }
+
+      const activeFloor = selectEl ? selectEl.value : 'ALL';
+      const kList = activeFloor === 'ALL' ? store.kolom : store.kolom.filter(e => (e.lantai || 'Lantai 1') === activeFloor);
+      const bList = activeFloor === 'ALL' ? store.balok : store.balok.filter(e => (e.lantai || 'Lantai 1') === activeFloor);
+      const pList = activeFloor === 'ALL' ? store.pelat : store.pelat.filter(e => (e.lantai || 'Lantai 1') === activeFloor);
+      const allFiltered = [...kList, ...bList, ...pList];
+
+      const tV = allFiltered.reduce((s, e) => s + e.volTotal, 0);
+      const tF = allFiltered.reduce((s, e) => s + e.fwTotal, 0);
+      const tW = allFiltered.reduce((s, e) => s + e.totalW, 0);
+
+      document.getElementById('rekap-totals').innerHTML = resultCards(tV, tF, tW);
+
+      // Volume Cor Table
+      const vK = kList.reduce((s, e) => s + e.volTotal, 0);
+      const vB = bList.reduce((s, e) => s + e.volTotal, 0);
+      const vP = pList.reduce((s, e) => s + e.volTotal, 0);
+      document.getElementById('rekap-cor').innerHTML = `
+        <div class="overflow-x-auto rounded-lg border border-outline-variant">
+          <table class="w-full text-left font-mono-data text-mono-data">
+            <thead>
+              <tr class="bg-surface-variant border-b border-outline-variant font-label-sm text-label-sm text-on-surface uppercase">
+                <th class="py-2.5 px-4">Elemen Struktur</th>
+                <th class="py-2.5 px-4 text-right">Volume Cor (m³)</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-outline-variant/40 bg-surface-container-lowest">
+              <tr><td class="py-2.5 px-4">Kolom (${kList.length} tipe/item)</td><td class="py-2.5 px-4 text-right font-semibold text-primary">${f3(vK)}</td></tr>
+              <tr><td class="py-2.5 px-4">Balok (${bList.length} tipe/item)</td><td class="py-2.5 px-4 text-right font-semibold text-primary">${f3(vB)}</td></tr>
+              <tr><td class="py-2.5 px-4">Pelat (${pList.length} tipe/item)</td><td class="py-2.5 px-4 text-right font-semibold text-primary">${f3(vP)}</td></tr>
+              <tr class="bg-surface-container font-bold border-t-2 border-primary">
+                <td class="py-3 px-4 font-label-md">TOTAL VOLUME COR ${activeFloor !== 'ALL' ? '(' + activeFloor + ')' : ''}</td>
+                <td class="py-3 px-4 text-right text-headline-md text-primary">${f3(tV)} m³</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>`;
+
+      // Bekisting Table
+      const fK = kList.reduce((s, e) => s + e.fwTotal, 0);
+      const fB = bList.reduce((s, e) => s + e.fwTotal, 0);
+      const fP = pList.reduce((s, e) => s + e.fwTotal, 0);
+      document.getElementById('rekap-bek').innerHTML = `
+        <div class="overflow-x-auto rounded-lg border border-outline-variant">
+          <table class="w-full text-left font-mono-data text-mono-data">
+            <thead>
+              <tr class="bg-surface-variant border-b border-outline-variant font-label-sm text-label-sm text-on-surface uppercase">
+                <th class="py-2.5 px-4">Elemen Struktur</th>
+                <th class="py-2.5 px-4 text-right">Luas Bekisting (m²)</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-outline-variant/40 bg-surface-container-lowest">
+              <tr><td class="py-2.5 px-4">Kolom (${kList.length} tipe/item)</td><td class="py-2.5 px-4 text-right font-semibold text-[#166534]">${f2(fK)}</td></tr>
+              <tr><td class="py-2.5 px-4">Balok (${bList.length} tipe/item)</td><td class="py-2.5 px-4 text-right font-semibold text-[#166534]">${f2(fB)}</td></tr>
+              <tr><td class="py-2.5 px-4">Pelat (${pList.length} tipe/item)</td><td class="py-2.5 px-4 text-right font-semibold text-[#166534]">${f2(fP)}</td></tr>
+              <tr class="bg-surface-container font-bold border-t-2 border-[#166534]">
+                <td class="py-3 px-4 font-label-md">TOTAL LUAS BEKISTING ${activeFloor !== 'ALL' ? '(' + activeFloor + ')' : ''}</td>
+                <td class="py-3 px-4 text-right text-headline-md text-[#166534]">${f2(tF)} m²</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>`;
+
+      // Pembesian Per Diameter Table
+      const db = {};
+      allFiltered.forEach(e => e.rebarItems.forEach(r => {
+        if (!db[r.dia]) db[r.dia] = { len: 0, w: 0 };
+        db[r.dia].len += r.totalLen;
+        db[r.dia].w += r.weight;
+      }));
+      const dias = Object.keys(db).sort((a, b) => +a - +b);
+
+      if (!dias.length) {
+        document.getElementById('rekap-besi').innerHTML = `<div class="p-6 text-center text-secondary font-label-md">Belum ada data pembesian terhitung ${activeFloor !== 'ALL' ? 'di ' + activeFloor : ''}</div>`;
+        return;
+      }
+
+      let gL = 0, gW = 0, gB = 0;
+      document.getElementById('rekap-besi').innerHTML = `
+        <div class="overflow-x-auto rounded-lg border border-outline-variant">
+          <table class="w-full text-left font-mono-data text-mono-data">
+            <thead>
+              <tr class="bg-surface-variant border-b border-outline-variant font-label-sm text-label-sm text-on-surface uppercase">
+                <th class="py-2.5 px-4">Diameter</th>
+                <th class="py-2.5 px-4 text-right">Panjang Total (m)</th>
+                <th class="py-2.5 px-4 text-right">Berat (kg)</th>
+                <th class="py-2.5 px-4 text-right">Kebutuhan Batang 12m</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-outline-variant/40 bg-surface-container-lowest">
+              ${dias.map(d => {
+        const b12 = stk(db[d].len);
+        gL += db[d].len; gW += db[d].w; gB += b12;
+        return `<tr>
+                  <td class="py-2.5 px-4 font-bold text-primary">D${d}</td>
+                  <td class="py-2.5 px-4 text-right">${f2(db[d].len)}</td>
+                  <td class="py-2.5 px-4 text-right font-semibold">${f1(db[d].w)}</td>
+                  <td class="py-2.5 px-4 text-right font-bold text-primary">${b12}</td>
+                </tr>`;
+      }).join('')}
+              <tr class="bg-surface-container font-bold border-t-2 border-[#b45309]">
+                <td class="py-3 px-4 font-label-md">GRAND TOTAL ${activeFloor !== 'ALL' ? '(' + activeFloor + ')' : ''}</td>
+                <td class="py-3 px-4 text-right text-primary">${f2(gL)} m</td>
+                <td class="py-3 px-4 text-right text-headline-md text-[#b45309]">${f1(gW)} kg</td>
+                <td class="py-3 px-4 text-right text-headline-md text-primary">${gB} batang</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>`;
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  LIVE SVG DRAWING ENGINE (KOLOM, BALOK, PELAT)
+    // ═══════════════════════════════════════════════════════════
+
+    // ── 1. KOLOM SVG DRAWING ──
+    function drawKolomSVG() {
+      const b = parseFloat(document.getElementById('kol-b').value) || 400;
+      const h = parseFloat(document.getElementById('kol-h').value) || 400;
+      const cc = parseFloat(document.getElementById('kol-cc').value) || 40;
+      const dU = parseFloat(document.getElementById('kol-d-utm').value) || 19;
+      const nU = parseInt(document.getElementById('kol-n-utm').value) || 8;
+      const dS = parseFloat(document.getElementById('kol-d-sgk').value) || 10;
+      const tPlt = parseFloat(document.getElementById('kol-t-pelat').value) || 0;
+
+      const svg = document.getElementById('kol-svg-canvas');
+      if (!svg) return;
+
+      const canvasWidth = 240, canvasHeight = 240;
+      const targetSize = 160;
+
+      const ratio = b / h;
+      let wPx = targetSize;
+      let hPx = targetSize;
+      if (ratio > 1) {
+        hPx = targetSize / ratio;
+        if (hPx < 60) hPx = 60;
+      } else {
+        wPx = targetSize * ratio;
+        if (wPx < 60) wPx = 60;
+      }
+
+      const x0 = (canvasWidth - wPx) / 2;
+      const y0 = (canvasHeight - hPx) / 2;
+
+      const scaleFactor = Math.min(wPx / b, hPx / h);
+      const ccPx = Math.min(cc * scaleFactor, Math.min(wPx, hPx) * 0.20);
+      const strokeSgkPx = Math.max(1.5, Math.min(3.5, dS * scaleFactor));
+      const rUtmPx = Math.max(3.5, Math.min(8, (dU / 2) * scaleFactor, Math.min(wPx, hPx) * 0.08));
+
+      let html = `<!-- Concrete base -->
+      <rect x="${x0}" y="${y0}" width="${wPx}" height="${hPx}" fill="#e2e8f0" stroke="#64748b" stroke-width="2" rx="4" />`;
+
+      // Stirrups
+      const sX = x0 + ccPx;
+      const sY = y0 + ccPx;
+      const sW = Math.max(12, wPx - 2 * ccPx);
+      const sH = Math.max(12, hPx - 2 * ccPx);
+      html += `<rect x="${sX}" y="${sY}" width="${sW}" height="${sH}" fill="none" stroke="#dc2626" stroke-width="${strokeSgkPx}" rx="3" />`;
+
+      // Rebar positions
+      const offset = ccPx + strokeSgkPx + rUtmPx * 0.5;
+      let leftX = x0 + offset;
+      let rightX = x0 + wPx - offset;
+      let topY = y0 + offset;
+      let botY = y0 + hPx - offset;
+
+      if (rightX <= leftX) {
+        const midX = x0 + wPx / 2;
+        leftX = midX - 6; rightX = midX + 6;
+      }
+      if (botY <= topY) {
+        const midY = y0 + hPx / 2;
+        topY = midY - 6; botY = midY + 6;
+      }
+
+      let rebarCoords = [];
+      if (nU <= 4) {
+        rebarCoords = [{ x: leftX, y: topY }, { x: rightX, y: topY }, { x: leftX, y: botY }, { x: rightX, y: botY }];
+      } else {
+        rebarCoords.push({ x: leftX, y: topY }, { x: rightX, y: topY }, { x: leftX, y: botY }, { x: rightX, y: botY });
+        const extra = nU - 4;
+        const sideCount = Math.ceil(extra / 4);
+        for (let i = 1; i <= sideCount; i++) {
+          const fx = i / (sideCount + 1);
+          rebarCoords.push({ x: leftX + fx * (rightX - leftX), y: topY });
+          rebarCoords.push({ x: leftX + fx * (rightX - leftX), y: botY });
+          rebarCoords.push({ x: leftX, y: topY + fx * (botY - topY) });
+          rebarCoords.push({ x: rightX, y: topY + fx * (botY - topY) });
+        }
+      }
+
+      rebarCoords.forEach(c => {
+        html += `<circle cx="${c.x}" cy="${c.y}" r="${rUtmPx}" fill="#2563eb" stroke="#1e3a8a" stroke-width="1.2" />`;
+      });
+
+      // Dimensions & Annotations
+      html += `<text x="120" y="${y0 - 8}" fill="#475569" font-family="Inter" font-size="11" text-anchor="middle" font-weight="600">${b} mm</text>`;
+      html += `<text x="${x0 - 8}" y="120" fill="#475569" font-family="Inter" font-size="11" text-anchor="middle" font-weight="600" transform="rotate(-90 ${x0 - 8} 120)">${h} mm</text>`;
+      if (tPlt > 0) {
+        html += `<text x="120" y="${y0 + hPx + 16}" fill="#059669" font-family="Inter" font-size="10" text-anchor="middle" font-weight="600">t_pelat = ${tPlt} mm (dikurangi pada Cor)</text>`;
+      }
+
+      svg.innerHTML = html;
+    }
+
+    // ── 2. BALOK SVG DRAWING ──
+    function drawBalokSVG() {
+      const b = parseFloat(document.getElementById('blk-b').value) || 300;
+      const h = parseFloat(document.getElementById('blk-h').value) || 550;
+      const cc = parseFloat(document.getElementById('blk-cc').value) || 30;
+      const tPlt = parseFloat(document.getElementById('blk-t-pelat').value) || 120;
+      const dU = parseFloat(document.getElementById('blk-d-utm').value) || 19;
+      const nTop = (parseInt(document.getElementById('blk-n-atas-men').value) || 2) + (parseInt(document.getElementById('blk-n-tump').value) || 0);
+      const nBot = (parseInt(document.getElementById('blk-n-bawah-men').value) || 2) + (parseInt(document.getElementById('blk-n-lap-extra').value) || 0);
+      const dS = parseFloat(document.getElementById('blk-d-sgk').value) || 10;
+      const dP = parseFloat(document.getElementById('blk-d-pgng').value) || 0;
+      const nP = parseInt(document.getElementById('blk-n-pgng').value) || 0;
+
+      const svg = document.getElementById('blk-svg-canvas');
+      if (!svg) return;
+
+      const canvasWidth = 240, canvasHeight = 240;
+      const targetSize = 160;
+
+      const ratio = b / h;
+      let wPx = targetSize;
+      let hPx = targetSize;
+      if (ratio > 1) {
+        hPx = targetSize / ratio;
+        if (hPx < 60) hPx = 60;
+      } else {
+        wPx = targetSize * ratio;
+        if (wPx < 60) wPx = 60;
+      }
+
+      const x0 = (canvasWidth - wPx) / 2;
+      const y0 = (canvasHeight - hPx) / 2;
+
+      const scaleFactor = Math.min(wPx / b, hPx / h);
+      const ccPx = Math.min(cc * scaleFactor, Math.min(wPx, hPx) * 0.20);
+      const strokeSgkPx = Math.max(1.5, Math.min(3.5, dS * scaleFactor));
+      const rUtmPx = Math.max(3.5, Math.min(8, (dU / 2) * scaleFactor, Math.min(wPx, hPx) * 0.08));
+      const tPltPx = Math.min(hPx * 0.35, tPlt * scaleFactor);
+
+      let html = `<!-- Concrete Beam Base -->
+      <rect x="${x0}" y="${y0}" width="${wPx}" height="${hPx}" fill="#e2e8f0" stroke="#64748b" stroke-width="2" rx="4" />`;
+
+      // Slab flange line indication (Tebal Pelat Netto)
+      if (tPlt > 0 && tPltPx > 0) {
+        html += `<line x1="${x0 - 15}" y1="${y0 + tPltPx}" x2="${x0 + wPx + 15}" y2="${y0 + tPltPx}" stroke="#059669" stroke-width="1.5" stroke-dasharray="4,3" />`;
+        html += `<text x="${x0 + wPx + 18}" y="${y0 + tPltPx + 3}" fill="#059669" font-family="Inter" font-size="9" font-weight="600">t=${tPlt}mm</text>`;
+      }
+
+      // Stirrups (Sengkang)
+      const sX = x0 + ccPx;
+      const sY = y0 + ccPx;
+      const sW = Math.max(12, wPx - 2 * ccPx);
+      const sH = Math.max(12, hPx - 2 * ccPx);
+      html += `<rect x="${sX}" y="${sY}" width="${sW}" height="${sH}" fill="none" stroke="#dc2626" stroke-width="${strokeSgkPx}" rx="3" />`;
+
+      // Rebar positions
+      const offset = ccPx + strokeSgkPx + rUtmPx * 0.5;
+      let leftX = x0 + offset;
+      let rightX = x0 + wPx - offset;
+      let topY = y0 + offset;
+      let botY = y0 + hPx - offset;
+
+      if (rightX <= leftX) {
+        const midX = x0 + wPx / 2;
+        leftX = midX - 6; rightX = midX + 6;
+      }
+      if (botY <= topY) {
+        const midY = y0 + hPx / 2;
+        topY = midY - 6; botY = midY + 6;
+      }
+
+      // Top Rebars (Blue)
+      for (let i = 0; i < nTop; i++) {
+        const cx = nTop === 1 ? (leftX + rightX) / 2 : leftX + (i / (nTop - 1)) * (rightX - leftX);
+        html += `<circle cx="${cx}" cy="${topY}" r="${rUtmPx}" fill="#2563eb" stroke="#1e3a8a" stroke-width="1.2" />`;
+      }
+
+      // Bottom Rebars (Amber)
+      for (let i = 0; i < nBot; i++) {
+        const cx = nBot === 1 ? (leftX + rightX) / 2 : leftX + (i / (nBot - 1)) * (rightX - leftX);
+        html += `<circle cx="${cx}" cy="${botY}" r="${rUtmPx}" fill="#d97706" stroke="#78350f" stroke-width="1.2" />`;
+      }
+
+      // Skin Rebars (Pinggang - Green)
+      if (dP > 0 && nP > 0) {
+        const rSkinPx = Math.max(2.5, Math.min(6, (dP / 2) * scaleFactor));
+        const countPerSide = Math.ceil(nP / 2);
+        for (let i = 1; i <= countPerSide; i++) {
+          const cy = topY + (i / (countPerSide + 1)) * (botY - topY);
+          html += `<circle cx="${leftX}" cy="${cy}" r="${rSkinPx}" fill="#16a34a" stroke="#14532d" stroke-width="1" />`;
+          html += `<circle cx="${rightX}" cy="${cy}" r="${rSkinPx}" fill="#16a34a" stroke="#14532d" stroke-width="1" />`;
+        }
+      }
+
+      // Dimensions
+      html += `<text x="120" y="${y0 - 8}" fill="#475569" font-family="Inter" font-size="11" text-anchor="middle" font-weight="600">b = ${b} mm</text>`;
+      html += `<text x="${x0 - 8}" y="120" fill="#475569" font-family="Inter" font-size="11" text-anchor="middle" font-weight="600" transform="rotate(-90 ${x0 - 8} 120)">h = ${h} mm</text>`;
+      if (tPlt > 0) {
+        html += `<text x="120" y="${y0 + hPx + 16}" fill="#059669" font-family="Inter" font-size="10" text-anchor="middle" font-weight="600">h_cor = ${Math.max(0, h - tPlt)} mm (h - t_pelat)</text>`;
+      }
+
+      svg.innerHTML = html;
+    }
+
+    // ── 3. PELAT SVG DRAWING ──
+    function drawPelatSVG() {
+      const lx = parseFloat(document.getElementById('plt-lx')?.value) || 4000;
+      const ly = parseFloat(document.getElementById('plt-ly')?.value) || 5000;
+      const t = parseFloat(document.getElementById('plt-t')?.value) || 120;
+      const cc = parseFloat(document.getElementById('plt-cc')?.value) || 20;
+      const dX = parseFloat(document.getElementById('plt-d-x')?.value) || 10;
+      const dY = parseFloat(document.getElementById('plt-d-y')?.value) || 8;
+      const sx = parseFloat(document.getElementById('plt-sx-tump')?.value) || 150;
+      const sy = parseFloat(document.getElementById('plt-sy-tump')?.value) || 200;
+
+      const svg = document.getElementById('plt-svg-canvas');
+      if (!svg) return;
+
+      const wPx = 170;
+      const hPx = Math.min(85, Math.max(50, t * 0.45));
+      const x0 = (240 - wPx) / 2;
+      const y0 = (240 - hPx) / 2;
+
+      const ccPx = Math.min(Math.max(5, cc * 0.25), hPx * 0.2);
+      const rXPx = Math.max(3, Math.min(6, (dX / 2) * 0.5));
+      const rYPx = Math.max(2.5, Math.min(5, (dY / 2) * 0.5));
+
+      let html = `<!-- Slab Section Concrete Base -->
+      <rect x="${x0}" y="${y0}" width="${wPx}" height="${hPx}" fill="#e2e8f0" stroke="#64748b" stroke-width="2" rx="3" />`;
+
+      // Top rebar layer (Tumpuan X - line, Y - dots)
+      const topY = y0 + ccPx + rXPx;
+      html += `<line x1="${x0 + 8}" y1="${topY}" x2="${x0 + wPx - 8}" y2="${topY}" stroke="#2563eb" stroke-width="2" />`;
+      for (let i = 0; i < 7; i++) {
+        const cx = x0 + 15 + i * 23;
+        html += `<circle cx="${cx}" cy="${topY + rXPx + rYPx}" r="${rYPx}" fill="#d97706" stroke="#78350f" stroke-width="1" />`;
+      }
+
+      // Bottom rebar layer (Lapangan X - line, Y - dots)
+      const botY = y0 + hPx - ccPx - rXPx;
+      html += `<line x1="${x0 + 8}" y1="${botY}" x2="${x0 + wPx - 8}" y2="${botY}" stroke="#2563eb" stroke-width="2" />`;
+      for (let i = 0; i < 7; i++) {
+        const cx = x0 + 15 + i * 23;
+        html += `<circle cx="${cx}" cy="${botY - rXPx - rYPx}" r="${rYPx}" fill="#d97706" stroke="#78350f" stroke-width="1" />`;
+      }
+
+      // Dimensions & Labels
+      html += `<text x="120" y="${y0 - 8}" fill="#475569" font-family="Inter" font-size="11" text-anchor="middle" font-weight="600">Bentang lx = ${lx} mm | ly = ${ly} mm</text>`;
+      html += `<text x="${x0 - 8}" y="120" fill="#475569" font-family="Inter" font-size="11" text-anchor="middle" font-weight="600" transform="rotate(-90 ${x0 - 8} 120)">t = ${t} mm</text>`;
+      html += `<text x="120" y="${y0 + hPx + 16}" fill="#2563eb" font-family="Inter" font-size="10" text-anchor="middle" font-weight="500">Tul. X (D${dX}@${sx}mm) | Tul. Y (D${dY}@${sy}mm)</text>`;
+
+      svg.innerHTML = html;
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  EXPORT TO EXCEL WITH DYNAMIC LINKED FORMULAS & BEAUTIFUL STYLING
+    // ═══════════════════════════════════════════════════════════
+    async function exportToExcel() {
+      if (typeof ExcelJS === 'undefined') {
+        alert('Library ExcelJS sedang dimuat, harap coba lagi dalam 2 detik!');
+        return;
+      }
+      const allStore = [...store.kolom, ...store.balok, ...store.pelat];
+      if (!allStore.length) {
+        alert('Belum ada data perhitungan terhitung untuk diekspor!');
+        return;
+      }
+
+      const workbook = new ExcelJS.Workbook();
+      workbook.creator = 'SIPILCALC Engineering System';
+      workbook.created = new Date();
+
+      // Theme Colors
+      const COLOR_NAVY = '004AC6';
+      const COLOR_DARK_SLATE = '1E293B';
+      const COLOR_LIGHT_BLUE = 'F0F3FF';
+      const COLOR_BORDER = 'C3C6D7';
+
+      const fontTitle = { name: 'Arial', size: 13, bold: true, color: { argb: 'FFFFFF' } };
+      const fontHeader = { name: 'Arial', size: 10, bold: true, color: { argb: 'FFFFFF' } };
+      const fontBold = { name: 'Arial', size: 10, bold: true };
+      const fontRegular = { name: 'Arial', size: 10 };
+      const fontYellowInput = { name: 'Arial', size: 10, bold: true, color: { argb: 'FFD97706' } }; // Gold/Amber Yellow font for manual inputs
+      const fillYellowInput = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFDF6B2' } }; // Soft yellow cell background for manual inputs
+
+      const thinBorder = {
+        top: { style: 'thin', color: { argb: COLOR_BORDER } },
+        left: { style: 'thin', color: { argb: COLOR_BORDER } },
+        bottom: { style: 'thin', color: { argb: COLOR_BORDER } },
+        right: { style: 'thin', color: { argb: COLOR_BORDER } }
+      };
+
+      // ── SHEET 1: REKAPITULASI PROYEK ──
+      const wsRekap = workbook.addWorksheet('REKAPITULASI PROYEK', {
+        views: [{
+          view: 'pageBreakPreview',
+          showGridLines: true,
+          state: 'frozen',
+          xSplit: 3,
+          ySplit: 3,
+          activeCell: 'D4'
+        }]
+      });
+      wsRekap.columns = [
+        { key: 'no', width: 6 },
+        { key: 'elemen', width: 32 },
+        { key: 'item', width: 14 },
+        { key: 'vol', width: 20 },
+        { key: 'fw', width: 22 },
+        { key: 'w', width: 24 },
+        { key: 'btg', width: 22 }
+      ];
+
+      wsRekap.mergeCells('A1:G1');
+      const t1 = wsRekap.getCell('A1');
+      t1.value = 'SIPILCALC - LAPORAN REKAPITULASI PROYEK STRUKTUR';
+      t1.font = fontTitle;
+      t1.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: COLOR_NAVY } };
+      t1.alignment = { vertical: 'middle', horizontal: 'center' };
+      wsRekap.getRow(1).height = 36;
+
+      wsRekap.mergeCells('A2:G2');
+      const t2 = wsRekap.getCell('A2');
+      t2.value = 'Tanggal Export: ' + new Date().toLocaleString('id-ID') + ' | Page Break Preview & Freeze Panes Auto Enabled';
+      t2.font = { name: 'Arial', size: 9, italic: true, color: { argb: '505F76' } };
+      t2.alignment = { vertical: 'middle', horizontal: 'center' };
+      wsRekap.getRow(2).height = 20;
+
+      wsRekap.addRow([]);
+
+      const hRow1 = wsRekap.getRow(4);
+      hRow1.values = ['No', 'Elemen Struktur', 'Jumlah Item', 'Volume Cor (m³)', 'Luas Bekisting (m²)', 'Total Berat Besi (kg)', 'Kebutuhan Batang 12m'];
+      hRow1.font = fontHeader;
+      hRow1.height = 26;
+      hRow1.eachCell(c => {
+        c.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: COLOR_DARK_SLATE } };
+        c.alignment = { vertical: 'middle', horizontal: 'center' };
+        c.border = thinBorder;
+      });
+
+      const rKol = wsRekap.addRow([1, 'KOLOM BETON', store.kolom.length, { formula: "=SUM('KOLOM'!P4:P9999)", result: store.kolom.reduce((s,e)=>s+e.volTotal,0) }, { formula: "=SUM('KOLOM'!Q4:Q9999)", result: store.kolom.reduce((s,e)=>s+e.fwTotal,0) }, { formula: "=SUM('KOLOM'!T4:T9999)", result: store.kolom.reduce((s,e)=>s+e.totalW,0) }, { formula: "=IF(F5>0, ROUNDUP(F5/12, 0), 0)" }]);
+      const rBlk = wsRekap.addRow([2, 'BALOK BETON', store.balok.length, { formula: "=SUM('BALOK'!P4:P9999)", result: store.balok.reduce((s,e)=>s+e.volTotal,0) }, { formula: "=SUM('BALOK'!Q4:Q9999)", result: store.balok.reduce((s,e)=>s+e.fwTotal,0) }, { formula: "=SUM('BALOK'!T4:T9999)", result: store.balok.reduce((s,e)=>s+e.totalW,0) }, { formula: "=IF(F6>0, ROUNDUP(F6/12, 0), 0)" }]);
+      const rPlt = wsRekap.addRow([3, 'PELAT BETON', store.pelat.length, { formula: "=SUM('PELAT'!K4:K9999)", result: store.pelat.reduce((s,e)=>s+e.volTotal,0) }, { formula: "=SUM('PELAT'!L4:L9999)", result: store.pelat.reduce((s,e)=>s+e.fwTotal,0) }, { formula: "=SUM('PELAT'!O4:O9999)", result: store.pelat.reduce((s,e)=>s+e.totalW,0) }, { formula: "=IF(F7>0, ROUNDUP(F7/12, 0), 0)" }]);
+
+      [rKol, rBlk, rPlt].forEach((r) => {
+        r.font = fontRegular;
+        r.height = 22;
+        r.getCell(1).alignment = { horizontal: 'center' };
+        r.getCell(3).alignment = { horizontal: 'center' };
+        [4, 5, 6, 7].forEach(col => r.getCell(col).font = fontBold);
+        r.getCell(4).numFmt = '#,##0.000';
+        r.getCell(5).numFmt = '#,##0.00';
+        r.getCell(6).numFmt = '#,##0.0';
+        r.getCell(7).numFmt = '#,##0';
+        r.eachCell(cell => cell.border = thinBorder);
+      });
+
+      const totRow = wsRekap.addRow(['', 'TOTAL PROYEK', { formula: '=SUM(C5:C7)' }, { formula: '=SUM(D5:D7)' }, { formula: '=SUM(E5:E7)' }, { formula: '=SUM(F5:F7)' }, { formula: '=SUM(G5:G7)' }]);
+      totRow.font = fontBold;
+      totRow.height = 26;
+      totRow.getCell(4).numFmt = '#,##0.000';
+      totRow.getCell(5).numFmt = '#,##0.00';
+      totRow.getCell(6).numFmt = '#,##0.0';
+      totRow.getCell(7).numFmt = '#,##0';
+      totRow.eachCell(cell => {
+        cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: COLOR_LIGHT_BLUE } };
+        cell.border = {
+          top: { style: 'medium', color: { argb: COLOR_NAVY } },
+          bottom: { style: 'double', color: { argb: COLOR_NAVY } },
+          left: { style: 'thin', color: { argb: COLOR_BORDER } },
+          right: { style: 'thin', color: { argb: COLOR_BORDER } }
+        };
+      });
+
+      wsRekap.addRow([]);
+      wsRekap.addRow([]);
+
+      // Tabel Rekapitulasi Besi Per Diameter
+      const hRow2 = wsRekap.addRow(['', 'REKAPITULASI BESI PER DIAMETER (AKUMULASI PROYEK)', '', '', '', '']);
+      wsRekap.mergeCells(`B${hRow2.number}:F${hRow2.number}`);
+      hRow2.getCell(2).font = { name: 'Arial', size: 11, bold: true, color: { argb: COLOR_NAVY } };
+
+      const hRow3 = wsRekap.addRow(['No', 'Diameter Besi', 'Berat Nominal (kg/m)', 'Total Panjang (m)', 'Total Berat Besi (kg)', 'Batang 12m']);
+      hRow3.font = fontHeader;
+      hRow3.height = 24;
+      hRow3.eachCell(c => {
+        c.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: COLOR_DARK_SLATE } };
+        c.alignment = { vertical: 'middle', horizontal: 'center' };
+        c.border = thinBorder;
+      });
+
+      const allRebarItems = [];
+      allStore.forEach(e => e.rebarItems.forEach(r => allRebarItems.push(r)));
+      const uniqueDias = [...new Set(allRebarItems.map(r => r.dia))].sort((a, b) => Number(a) - Number(b));
+
+      uniqueDias.forEach((d, idx) => {
+        const wPerM = RB[d] ? RB[d].W : 0;
+        const rowNum = hRow3.number + idx + 1;
+        const rDia = wsRekap.addRow([
+          idx + 1,
+          `D${d}`,
+          wPerM,
+          { formula: `=SUMIF('BALOK'!E:E, ${d}, 'BALOK'!S:S) + SUMIF('KOLOM'!E:E, ${d}, 'KOLOM'!S:S) + SUMIF('PELAT'!E:E, ${d}, 'PELAT'!N:N)` },
+          { formula: `=D${rowNum}*C${rowNum}` },
+          { formula: `=IF(D${rowNum}>0, ROUNDUP(D${rowNum}/12, 0), 0)` }
+        ]);
+        rDia.font = fontRegular;
+        rDia.height = 20;
+        rDia.getCell(1).alignment = { horizontal: 'center' };
+        rDia.getCell(2).alignment = { horizontal: 'center' };
+        rDia.getCell(2).font = { name: 'Arial', size: 10, bold: true, color: { argb: COLOR_NAVY } };
+        rDia.getCell(3).numFmt = '#,##0.000';
+        [4, 5, 6].forEach(col => rDia.getCell(col).font = fontBold);
+        rDia.getCell(4).numFmt = '#,##0.00';
+        rDia.getCell(5).numFmt = '#,##0.0';
+        rDia.getCell(6).numFmt = '#,##0';
+        rDia.eachCell(cell => cell.border = thinBorder);
+      });
+
+      // ── SHEET 2: BALOK ──
+      const wsBlk = workbook.addWorksheet('BALOK', {
+        views: [{
+          view: 'pageBreakPreview',
+          showGridLines: true,
+          state: 'frozen',
+          xSplit: 4,
+          ySplit: 3,
+          activeCell: 'E4'
+        }]
+      });
+      wsBlk.columns = [
+        { key: 'no', width: 6 }, { key: 'nama', width: 14 }, { key: 'lantai', width: 14 },
+        { key: 'kode', width: 24 }, { key: 'dia', width: 10 }, { key: 'qty', width: 12 },
+        { key: 'pcs', width: 12 }, { key: 'b', width: 12 }, { key: 'h', width: 12 },
+        { key: 'cc', width: 14 }, { key: 'tPlt', width: 14 }, { key: 'penopang', width: 14 },
+        { key: 'L', width: 14 }, { key: 'sT', width: 14 }, { key: 'sLp', width: 14 },
+        { key: 'vol', width: 16 }, { key: 'fw', width: 16 }, { key: 'pjgPc', width: 16 },
+        { key: 'totalLen', width: 16 }, { key: 'weight', width: 16 }, { key: 'btg12', width: 14 }
+      ];
+
+      wsBlk.mergeCells('A1:U1');
+      const bT = wsBlk.getCell('A1');
+      bT.value = 'RINCIAN PERHITUNGAN BALOK (EXCEL DYNAMIC FORMULA)';
+      bT.font = fontTitle;
+      bT.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: COLOR_NAVY } };
+      bT.alignment = { vertical: 'middle', horizontal: 'center' };
+      wsBlk.getRow(1).height = 36;
+
+      const bHead = wsBlk.getRow(3);
+      bHead.values = [
+        'No', 'ID Balok', 'Lantai', 'Sub-Kode / Uraian', 'Dia (mm)', 'Jml Unit (unit)',
+        'Jml (pcs)', 'Lebar b (mm)', 'Tinggi h (mm)', 'Selimut cc (mm)', 'Tebal Plat t (mm)',
+        'Penopang (mm)', 'Bentang L (mm)', 'Spasi Tump (mm)', 'Spasi Lap (mm)', 'Vol. Cor (m³)',
+        'Bekisting (m²)', 'Pjg/btg (m)', 'Total Pjg (m)', 'Berat (kg)', 'Btg 12m'
+      ];
+      bHead.font = fontHeader;
+      bHead.height = 28;
+      bHead.eachCell(c => {
+        c.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: COLOR_DARK_SLATE } };
+        c.alignment = { vertical: 'middle', horizontal: 'center', wrapText: true };
+        c.border = thinBorder;
+      });
+
+      let rIdxB = 4;
+      store.balok.forEach((item, idx) => {
+        item.rebarItems.forEach((sub, sIdx) => {
+          const cR = rIdxB;
+          const bRow = wsBlk.getRow(cR);
+          const isFirst = sIdx === 0;
+
+          const sT_val = item.sT || 100;
+          const sLp_val = item.sLp || 200;
+
+          let formulaPjg = '';
+          let pcsVal = sub.pcs;
+
+          if (sub.label.includes('Sengkang')) {
+            formulaPjg = `=2*(ROUNDUP(7.5*E${cR}/1000, 2)) + (2*(H${cR}-2*J${cR})/1000) + (2*(I${cR}-2*J${cR})/1000)`;
+            pcsVal = { formula: `=IF(AND(N${cR}>0, O${cR}>0), (ROUNDUP(((M${cR}-L${cR})*0.5)/N${cR}, 0) + ROUNDUP(((M${cR}-L${cR})*0.5)/O${cR}, 0)) * F${cR}, ${sub.pcs})`, result: sub.pcs };
+          } else if (sub.label.includes('Atas Menerus')) {
+            formulaPjg = `=2*(ROUNDUP(7.5*E${cR}/1000, 2) + (0.5*M${cR}/1000))`;
+          } else if (sub.label.includes('Tumpuan Extra')) {
+            formulaPjg = `=2*(ROUNDUP(7.5*E${cR}/1000, 2) + MAX(0, (0.25*M${cR}-L${cR})/1000) + (15*E${cR}/1000) + ROUNDUP(7.5*E${cR}/1000, 2))`;
+          } else if (sub.label.includes('Lapangan Extra')) {
+            formulaPjg = `=2*(ROUNDUP(7.5*E${cR}/1000, 2) + (20*E${cR}/1000)) + MAX(0, (0.25*M${cR}-L${cR})/1000)`;
+          } else if (sub.label.includes('Bawah Menerus')) {
+            formulaPjg = `=2*(ROUNDUP(7.5*E${cR}/1000, 2) + (0.5*M${cR}/1000))`;
+          } else if (sub.label.includes('Pinggang')) {
+            formulaPjg = `=M${cR}/1000`;
+          }
+
+          const wPerM = RB[sub.dia] ? RB[sub.dia].W : 0;
+
+          bRow.values = [
+            isFirst ? idx + 1 : '',
+            isFirst ? item.nama : '',
+            isFirst ? item.lantai : '',
+            sub.label,
+            sub.dia,
+            item.qty || 1,
+            pcsVal,
+            item.b,
+            item.h,
+            item.cc || 30,
+            item.tPlt || 120,
+            item.penopang || 0,
+            item.L,
+            sub.label.includes('Sengkang') ? sT_val : (item.sT || 0),
+            sub.label.includes('Sengkang') ? sLp_val : (item.sLp || 0),
+            isFirst ? { formula: `=(H${cR}/1000)*(MAX(0, I${cR}-K${cR})/1000)*(MAX(0, M${cR}-L${cR})/1000)*F${cR}`, result: item.volTotal } : 0,
+            isFirst ? { formula: `=(2*(MAX(0, I${cR}-K${cR})/1000)+(H${cR}/1000))*(MAX(0, M${cR}-L${cR})/1000)*F${cR}`, result: item.fwTotal } : 0,
+            { formula: formulaPjg, result: sub.lenPc },
+            { formula: `=G${cR}*R${cR}`, result: sub.totalLen },
+            { formula: `=S${cR}*${wPerM}`, result: sub.weight },
+            { formula: `=IF(S${cR}>0, ROUNDUP(S${cR}/12, 0), 0)`, result: Math.ceil(sub.totalLen / 12) }
+          ];
+
+          bRow.font = fontRegular;
+          bRow.height = 20;
+
+          // BOLD styling for Formula Cells
+          [7, 16, 17, 18, 19, 20, 21].forEach(colIdx => {
+            bRow.getCell(colIdx).font = fontBold;
+          });
+
+          bRow.getCell(16).numFmt = '#,##0.000';
+          bRow.getCell(17).numFmt = '#,##0.00';
+          bRow.getCell(18).numFmt = '#,##0.00';
+          bRow.getCell(19).numFmt = '#,##0.00';
+          bRow.getCell(20).numFmt = '#,##0.0';
+          bRow.getCell(21).numFmt = '#,##0';
+          bRow.eachCell(c => c.border = thinBorder);
+
+          rIdxB++;
+        });
+      });
+
+      // ── SHEET 3: KOLOM ──
+      const wsKol = workbook.addWorksheet('KOLOM', {
+        views: [{
+          view: 'pageBreakPreview',
+          showGridLines: true,
+          state: 'frozen',
+          xSplit: 4,
+          ySplit: 3,
+          activeCell: 'E4'
+        }]
+      });
+      wsKol.columns = [
+        { key: 'no', width: 6 }, { key: 'nama', width: 14 }, { key: 'lantai', width: 14 },
+        { key: 'kode', width: 24 }, { key: 'dia', width: 10 }, { key: 'qty', width: 12 },
+        { key: 'pcs', width: 12 }, { key: 'b', width: 12 }, { key: 'h', width: 12 },
+        { key: 'cc', width: 14 }, { key: 'tPlt', width: 14 }, { key: 'L', width: 14 },
+        { key: 'L_cor', width: 16 }, { key: 'sS', width: 16 }, { key: 'sCross', width: 16 },
+        { key: 'vol', width: 16 }, { key: 'fw', width: 16 }, { key: 'pjgPc', width: 16 },
+        { key: 'totalLen', width: 16 }, { key: 'weight', width: 16 }, { key: 'btg12', width: 14 }
+      ];
+
+      wsKol.mergeCells('A1:U1');
+      const kT = wsKol.getCell('A1');
+      kT.value = 'RINCIAN PERHITUNGAN KOLOM (NET COR & EXCEL DYNAMIC FORMULA)';
+      kT.font = fontTitle;
+      kT.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: COLOR_NAVY } };
+      kT.alignment = { vertical: 'middle', horizontal: 'center' };
+      wsKol.getRow(1).height = 36;
+
+      const kHead = wsKol.getRow(3);
+      kHead.values = [
+        'No', 'ID Kolom', 'Lantai', 'Sub-Kode / Uraian', 'Dia (mm)', 'Jml Unit (unit)',
+        'Jml (pcs)', 'Lebar b (mm)', 'Panjang h (mm)', 'Selimut cc (mm)', 'Tebal Plat t (mm)',
+        'Tinggi L (mm)', 'Tinggi Cor L_net (mm)', 'Spasi Sengkang sS (mm)', 'Spasi Crosstie sCross (mm)',
+        'Vol. Cor (m³)', 'Bekisting (m²)', 'Pjg/btg (m)', 'Total Pjg (m)', 'Berat (kg)', 'Btg 12m'
+      ];
+      kHead.font = fontHeader;
+      kHead.height = 28;
+      kHead.eachCell(c => {
+        c.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: COLOR_DARK_SLATE } };
+        c.alignment = { vertical: 'middle', horizontal: 'center', wrapText: true };
+        c.border = thinBorder;
+      });
+
+      let rIdxK = 4;
+      store.kolom.forEach((item, idx) => {
+        item.rebarItems.forEach((sub, sIdx) => {
+          const cR = rIdxK;
+          const kRow = wsKol.getRow(cR);
+          const isFirst = sIdx === 0;
+
+          const isCrossRow = sub.label.includes('Crosstie');
+          const isSgkRow = sub.label.includes('Sengkang');
+
+          const sS_val = item.sS || 150;
+          const sCross_val = isCrossRow ? (item.sCross || 300) : (item.sCross || 0);
+
+          let formulaPjg = '';
+          let pcsVal = sub.pcs;
+
+          if (sub.label.includes('Utama')) {
+            formulaPjg = `=L${cR}/1000`;
+          } else if (sub.label.includes('Sengkang')) {
+            formulaPjg = `=(2*ROUNDUP(7.5*E${cR}/1000, 2)) + (2*(H${cR}-2*J${cR})/1000) + (2*(I${cR}-2*J${cR})/1000)`;
+            pcsVal = { formula: `=IF(N${cR}>0, ROUNDUP(L${cR}/N${cR}, 0) * F${cR}, ${sub.pcs})`, result: sub.pcs };
+          } else if (sub.label.includes('Crosstie')) {
+            formulaPjg = `=((H${cR}-2*J${cR}-E${cR})/1000) + 0.15`;
+            pcsVal = { formula: `=IF(O${cR}>0, ROUNDUP(L${cR}/O${cR}, 0) * F${cR}, ${sub.pcs})`, result: sub.pcs };
+          }
+
+          const wPerM = RB[sub.dia] ? RB[sub.dia].W : 0;
+
+          kRow.values = [
+            isFirst ? idx + 1 : '',
+            isFirst ? item.nama : '',
+            isFirst ? item.lantai : '',
+            sub.label,
+            sub.dia,
+            item.qty || 1,
+            pcsVal,
+            item.b,
+            item.h,
+            item.cc || 40,
+            item.tPlt || 120,
+            item.L,
+            { formula: `=MAX(0, L${cR} - K${cR})`, result: Math.max(0, item.L - (item.tPlt || 120)) },
+            isSgkRow ? sS_val : (item.sS || 0),
+            isCrossRow ? sCross_val : (item.sCross || 0),
+            isFirst ? { formula: `=(H${cR}/1000)*(I${cR}/1000)*(M${cR}/1000)*F${cR}`, result: item.volTotal } : 0,
+            isFirst ? { formula: `=2*((H${cR}/1000)+(I${cR}/1000))*(M${cR}/1000)*F${cR}`, result: item.fwTotal } : 0,
+            { formula: formulaPjg, result: sub.lenPc },
+            { formula: `=G${cR}*R${cR}`, result: sub.totalLen },
+            { formula: `=S${cR}*${wPerM}`, result: sub.weight },
+            { formula: `=IF(S${cR}>0, ROUNDUP(S${cR}/12, 0), 0)`, result: Math.ceil(sub.totalLen / 12) }
+          ];
+
+          kRow.font = fontRegular;
+          kRow.height = 20;
+
+          // BOLD styling for Formula Cells
+          [7, 13, 16, 17, 18, 19, 20, 21].forEach(colIdx => {
+            kRow.getCell(colIdx).font = fontBold;
+          });
+
+          kRow.getCell(16).numFmt = '#,##0.000';
+          kRow.getCell(17).numFmt = '#,##0.00';
+          kRow.getCell(18).numFmt = '#,##0.00';
+          kRow.getCell(19).numFmt = '#,##0.00';
+          kRow.getCell(20).numFmt = '#,##0.0';
+          kRow.getCell(21).numFmt = '#,##0';
+          kRow.eachCell(c => c.border = thinBorder);
+
+          rIdxK++;
+        });
+      });
+
+      // ── SHEET 4: PELAT ──
+      const wsPlt = workbook.addWorksheet('PELAT', {
+        views: [{
+          view: 'pageBreakPreview',
+          showGridLines: true,
+          state: 'frozen',
+          xSplit: 4,
+          ySplit: 3,
+          activeCell: 'E4'
+        }]
+      });
+      wsPlt.columns = [
+        { key: 'no', width: 6 }, { key: 'nama', width: 14 }, { key: 'lantai', width: 14 },
+        { key: 'kode', width: 24 }, { key: 'dia', width: 10 }, { key: 'qty', width: 12 },
+        { key: 'pcs', width: 12 }, { key: 'ly', width: 12 }, { key: 'lx', width: 12 },
+        { key: 't', width: 12 }, { key: 'vol', width: 16 }, { key: 'fw', width: 16 },
+        { key: 'pjgPc', width: 16 }, { key: 'totalLen', width: 16 }, { key: 'weight', width: 16 },
+        { key: 'btg12', width: 14 }
+      ];
+
+            wsPlt.mergeCells('A1:P1');
+      const pT = wsPlt.getCell('A1');
+      pT.value = 'RINCIAN PERHITUNGAN PELAT (EXCEL DYNAMIC FORMULA)';
+      pT.font = fontTitle;
+      pT.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: COLOR_NAVY } };
+      pT.alignment = { vertical: 'middle', horizontal: 'center' };
+      wsPlt.getRow(1).height = 36;
+
+      const pHead = wsPlt.getRow(3);
+      pHead.values = [
+        'No', 'ID Pelat', 'Lantai', 'Sub-Kode / Uraian', 'Dia (mm)', 'Jml Unit (unit)',
+        'Jml (pcs)', 'Panjang ly (mm)', 'Lebar lx (mm)', 'Tebal t (mm)', 'Vol. Cor (m³)',
+        'Bekisting (m²)', 'Pjg/btg (m)', 'Total Pjg (m)', 'Berat (kg)', 'Btg 12m'
+      ];
+      pHead.font = fontHeader;
+      pHead.height = 28;
+      pHead.eachCell(c => {
+        c.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: COLOR_DARK_SLATE } };
+        c.alignment = { vertical: 'middle', horizontal: 'center', wrapText: true };
+        c.border = thinBorder;
+      });
+
+      let rIdxP = 4;
+      store.pelat.forEach((item, idx) => {
+        item.rebarItems.forEach((sub, sIdx) => {
+          const cR = rIdxP;
+          const pRow = wsPlt.getRow(cR);
+          const isFirst = sIdx === 0;
+
+          let formulaPjg = '';
+          let pcsVal = sub.pcs;
+
+          if (sub.label.includes('Tul. X')) {
+            formulaPjg = `=(H${cR} + 2*(12*E${cR}))/1000`;
+            pcsVal = { formula: `=IF(I${cR}>0, ROUNDUP(I${cR}/${item.sx || 150}, 0) * F${cR}, ${sub.pcs})`, result: sub.pcs };
+          } else {
+            formulaPjg = `=(I${cR} + 2*(12*E${cR}))/1000`;
+            pcsVal = { formula: `=IF(H${cR}>0, ROUNDUP(H${cR}/${item.sy || 150}, 0) * F${cR}, ${sub.pcs})`, result: sub.pcs };
+          }
+
+          const wPerM = RB[sub.dia] ? RB[sub.dia].W : 0;
+
+          pRow.values = [
+            isFirst ? idx + 1 : '',
+            isFirst ? item.nama : '',
+            isFirst ? item.lantai : '',
+            sub.label,
+            sub.dia,
+            item.qty || 1,
+            pcsVal,
+            item.ly,
+            item.lx,
+            item.t,
+            isFirst ? { formula: `=(H${cR}/1000)*(I${cR}/1000)*(J${cR}/1000)*F${cR}`, result: item.volTotal } : 0,
+            isFirst ? { formula: `=(H${cR}/1000)*(I${cR}/1000)*F${cR}`, result: item.fwTotal } : 0,
+            { formula: formulaPjg, result: sub.lenPc },
+            { formula: `=G${cR}*M${cR}`, result: sub.totalLen },
+            { formula: `=N${cR}*${wPerM}`, result: sub.weight },
+            { formula: `=IF(N${cR}>0, ROUNDUP(N${cR}/12, 0), 0)`, result: Math.ceil(sub.totalLen / 12) }
+          ];
+
+          pRow.font = fontRegular;
+          pRow.height = 20;
+
+          // BOLD styling for Formula Cells
+          [7, 11, 12, 13, 14, 15, 16].forEach(colIdx => {
+            pRow.getCell(colIdx).font = fontBold;
+          });
+
+          pRow.getCell(11).numFmt = '#,##0.000';
+          pRow.getCell(12).numFmt = '#,##0.00';
+          pRow.getCell(13).numFmt = '#,##0.00';
+          pRow.getCell(14).numFmt = '#,##0.00';
+          pRow.getCell(15).numFmt = '#,##0.0';
+          pRow.getCell(16).numFmt = '#,##0';
+          pRow.eachCell(c => c.border = thinBorder);
+
+          rIdxP++;
+        });
+      });
+
+      // File Export Generation
+      const buffer = await workbook.xlsx.writeBuffer();
+      const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      saveAs(blob, `SIPILCALC_Export_Proyek_${new Date().toISOString().slice(0, 10)}.xlsx`);
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  PDF REPORT GENERATION (PROFESSIONAL ENGINEERING REPORT)
+    // ═══════════════════════════════════════════════════════════
+    async function exportToPDF() {
+      const totalItems = store.kolom.length + store.balok.length + store.pelat.length;
+      if (!totalItems) {
+        return alert('Belum ada data terhitung untuk diekspor ke PDF! Silakan hitung sekurang-kurangnya 1 elemen.');
+      }
+
+      // Pre-load logo to Base64 to ensure instant rendering without CORS or loading delay
+      const logoDataUrl = await new Promise(resolve => {
+        const img = new Image();
+        img.crossOrigin = 'Anonymous';
+        img.onload = () => {
+          try {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width; canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+            resolve(canvas.toDataURL('image/png'));
+          } catch(e) { resolve('screen.png'); }
+        };
+        img.onerror = () => resolve('screen.png');
+        img.src = 'screen.png';
+      });
+
+      // Calculate totals
+      let totalVolCor = 0, totalBekisting = 0, totalBeratBesi = 0;
+      const rebarByDiaProject = {};
+
+      ['kolom', 'balok', 'pelat'].forEach(type => {
+        store[type].forEach(item => {
+          totalVolCor += (item.volTotal || 0);
+          totalBekisting += (item.fwTotal || 0);
+          totalBeratBesi += (item.totalW || 0);
+
+          (item.rebarItems || []).forEach(r => {
+            if (!rebarByDiaProject[r.dia]) {
+              rebarByDiaProject[r.dia] = { len: 0, w: 0 };
+            }
+            rebarByDiaProject[r.dia].len += (r.totalLen || 0);
+            rebarByDiaProject[r.dia].w += (r.weight || 0);
+          });
+        });
+      });
+
+      const now = new Date();
+      const dateStr = now.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+      const projName = document.getElementById('project-save-name')?.value || 'Proyek_Struktur';
+
+      // Group items per floor & type
+      const floors = [...new Set([
+        ...store.kolom.map(e => e.lantai || 'Lantai 1'),
+        ...store.balok.map(e => e.lantai || 'Lantai 1'),
+        ...store.pelat.map(e => e.lantai || 'Lantai 1')
+      ])].sort();
+
+      let pagesHTML = '';
+
+      // ── 1. HALAMAN SAMPUL (LOGOS BESAR TERPUSAT - CLEAN & MINIMALIS) ──
+      pagesHTML += `
+      <div class="print-page cover-page">
+        <div class="cover-border">
+          <div class="cover-header">
+            <img src="${logoDataUrl}" class="cover-logo" alt="Logo SIPILCALC" />
+            <div class="cover-system-title">SIPILCALC ENGINEERING SYSTEM</div>
+            <h1 class="cover-main-title">LAPORAN ESTIMASI VOLUME STRUKTUR & PEMBESIAN</h1>
+            <p class="cover-sub-title">Dokumen Resmi Perhitungan Volume Cor Beton Netto, Luas Bekisting Netto, dan Kebutuhan Besi Tulangan Terstruktur</p>
+          </div>
+
+          <div class="cover-footer">
+            <div>Diterbitkan Oleh Engine SIPILCALC System</div>
+            <div>Tanggal Ekspor: ${dateStr}</div>
+          </div>
+        </div>
+      </div>
+      `;
+
+      // ── 2. METODOLOGI & RUMUS PERHITUNGAN STRUKTUR ──
+      pagesHTML += `
+      <div class="print-page content-page">
+        <img src="${logoDataUrl}" class="watermark-bg" alt="Watermark" />
+        <div class="page-content-wrapper">
+          <div class="page-header-title">
+            <h2>1. METODOLOGI & RUMUS PERHITUNGAN STRUKTUR</h2>
+            <span class="page-num-tag">Halaman 2</span>
+          </div>
+
+          <p class="section-desc">
+            Seluruh dimensi input yang dimasukkan dalam satuan milimeter (mm) dikonversi ke meter (m) dengan membagi 1.000 (karena 1 m = 1.000 mm). Kalkulasi dilaksanakan secara presisi dengan acuan teknis standar baku sebagai berikut:
+          </p>
+
+          <div class="formula-box">
+            <div class="box-title">A. Perhitungan Balok (Beton Cor Net & Bekisting Net)</div>
+            <div class="formula-item-label">• Volume Cor Net Balok (m³):</div>
+            <div class="formula-code-block">
+              ∑ [ (Lebar / 1.000) × ((Tinggi − Tebal Pelat) / 1.000) × ((Bentang − Penopang) / 1.000) × Qty ]
+            </div>
+            <div class="formula-item-label">• Luas Bekisting Net Balok (m²):</div>
+            <div class="formula-code-block">
+              ∑ [ (2 × ((Tinggi − Tebal Pelat) / 1.000) + (Lebar / 1.000)) × ((Bentang − Penopang) / 1.000) × Qty ]
+            </div>
+          </div>
+
+          <div class="formula-box">
+            <div class="box-title">B. Perhitungan Kolom (Beton Cor Net & Bekisting Net)</div>
+            <div class="formula-item-label">• Volume Cor Net Kolom (m³):</div>
+            <div class="formula-code-block">
+              (Lebar / 1.000) × (Panjang / 1.000) × ((Tinggi − Tebal Pelat) / 1.000) × Qty
+            </div>
+            <div class="formula-item-label">• Luas Bekisting Net Kolom (m²):</div>
+            <div class="formula-code-block">
+              2 × [ (Lebar / 1.000) + (Panjang / 1.000) ] × ((Tinggi − Tebal Pelat) / 1.000) × Qty
+            </div>
+          </div>
+
+          <div class="formula-box">
+            <div class="box-title">C. Perhitungan Pelat Lantai</div>
+            <div class="formula-item-label">• Volume Cor Pelat (m³): (Bentang LX / 1.000) × (Bentang LY / 1.000) × (Tebal Pelat / 1.000) × Qty</div>
+            <div class="formula-item-label">• Luas Bekisting Pelat (m²): (Bentang LX / 1.000) × (Bentang LY / 1.000) × Qty</div>
+          </div>
+
+          <div class="formula-box">
+            <div class="box-title">D. Perhitungan Besi Tulangan & Pembesian</div>
+            <div class="formula-sub">• <b>Panjang Kait Standar (mm):</b> Pembulatan Ke Atas ( 7,5 × Diameter / 10 ) × 10</div>
+            <div class="formula-sub">• <b>Panjang Penyaluran Ld (mm):</b> MAX [ (fy / (1,1 × √fc)) × (ps / cb) × Diameter , 300 ]</div>
+            <div class="formula-sub">• <b>Jumlah Sengkang (pcs):</b> CEIL [ (0,5 × Bentang Bersih / Spasi Tumpuan) + (0,5 × Bentang Bersih / Spasi Lapangan) ]</div>
+            <div class="formula-sub">• <b>Berat Total Besi (kg):</b> Total Panjang Bersih (m) × Berat Jenis Spesifik (kg/m)</div>
+            <div class="formula-sub">• <b>Kebutuhan Batang (12m):</b> CEIL ( Total Panjang Bersih / 12 meter )</div>
+          </div>
+        </div>
+      </div>
+      `;
+
+      // ── 3. RINCIAN DATA DETIL PER LANTAI & PER ELEMEN (TERMASUK DETAIL TULANGAN PER SUB-ITEM & SUBTOTAL AKURAT) ──
+      let pageCounter = 3;
+      floors.forEach(flr => {
+        const kList = store.kolom.filter(e => (e.lantai || 'Lantai 1') === flr);
+        const bList = store.balok.filter(e => (e.lantai || 'Lantai 1') === flr);
+        const pList = store.pelat.filter(e => (e.lantai || 'Lantai 1') === flr);
+
+        let floorVolCor = 0;
+        let floorBekisting = 0;
+        let floorTotalLen = 0;
+        let floorTotalW = 0;
+        let floorTotalB12 = 0;
+
+        pagesHTML += `
+        <div class="print-page content-page">
+          <img src="${logoDataUrl}" class="watermark-bg" alt="Watermark" />
+          <div class="page-content-wrapper">
+            <div class="page-header-title">
+              <h2>2. RINCIAN ELEMEN PERHITUNGAN STRUKTUR — ${flr.toUpperCase()}</h2>
+              <span class="page-num-tag">Halaman ${pageCounter++}</span>
+            </div>
+        `;
+
+        // A. BALOK IN THIS FLOOR
+        if (bList.length) {
+          pagesHTML += `<div class="table-group-title">Balok ${flr} (${bList.length} Tipe Elemen)</div>`;
+          bList.forEach(item => {
+            const netL = Math.max(0, item.L - (item.penopang || 0));
+            floorVolCor += (item.volTotal || 0);
+            floorBekisting += (item.fwTotal || 0);
+            floorTotalW += (item.totalW || 0);
+
+            let subLen = 0, subW = 0, subB12 = 0;
+
+            pagesHTML += `
+              <table class="report-table">
+                <thead>
+                  <tr>
+                    <th colspan="4">Elemen Balok: ${item.nama} (${item.qty} unit) | Dimensi: ${item.b}×${item.h} mm | Bentang Net: ${netL/1000}m</th>
+                    <th class="text-right">Vol: ${f3(item.volTotal)} m³</th>
+                    <th class="text-right" colspan="2">Bekisting: ${f2(item.fwTotal)} m²</th>
+                  </tr>
+                  <tr class="bg-sub">
+                    <th style="background:#e7eeff; color:#111c2d;">Sub-Tulangan / Uraian</th>
+                    <th style="background:#e7eeff; color:#111c2d;" class="text-center">Dia</th>
+                    <th style="background:#e7eeff; color:#111c2d;" class="text-right">Jml (pcs)</th>
+                    <th style="background:#e7eeff; color:#111c2d;" class="text-right">Pjg/btg (m)</th>
+                    <th style="background:#e7eeff; color:#111c2d;" class="text-right">Total Pjg (m)</th>
+                    <th style="background:#e7eeff; color:#111c2d;" class="text-right">Berat (kg)</th>
+                    <th style="background:#e7eeff; color:#111c2d;" class="text-right">Btg 12m</th>
+                  </tr>
+                </thead>
+                <tbody>
+            `;
+            (item.rebarItems || []).forEach(r => {
+              const b12 = Math.ceil(r.totalLen / 12);
+              subLen += (r.totalLen || 0);
+              subW += (r.weight || 0);
+              subB12 += b12;
+              floorTotalLen += (r.totalLen || 0);
+              floorTotalB12 += b12;
+
+              pagesHTML += `
+                <tr>
+                  <td>${r.label}</td>
+                  <td class="text-center font-bold">D${r.dia}</td>
+                  <td class="text-right">${r.pcs}</td>
+                  <td class="text-right">${f2(r.lenPc)}</td>
+                  <td class="text-right">${f2(r.totalLen)}</td>
+                  <td class="text-right font-bold">${f1(r.weight)}</td>
+                  <td class="text-right">${b12}</td>
+                </tr>
+              `;
+            });
+            pagesHTML += `
+                <tr class="bg-total">
+                  <td colspan="4">SUBTOTAL BESI ${item.nama}</td>
+                  <td class="text-right">${f2(subLen)} m</td>
+                  <td class="text-right">${f1(subW)} kg</td>
+                  <td class="text-right">${subB12} btg</td>
+                </tr>
+              </tbody>
+            </table>`;
+          });
+        }
+
+        // B. KOLOM IN THIS FLOOR
+        if (kList.length) {
+          pagesHTML += `<div class="table-group-title">Kolom ${flr} (${kList.length} Tipe Elemen)</div>`;
+          kList.forEach(item => {
+            const netH = Math.max(0, item.L - (item.tPlt || 0));
+            floorVolCor += (item.volTotal || 0);
+            floorBekisting += (item.fwTotal || 0);
+            floorTotalW += (item.totalW || 0);
+
+            let subLen = 0, subW = 0, subB12 = 0;
+
+            pagesHTML += `
+              <table class="report-table">
+                <thead>
+                  <tr>
+                    <th colspan="4">Elemen Kolom: ${item.nama} (${item.qty} unit) | Dimensi: ${item.b}×${item.h} mm | Tinggi Net: ${netH/1000}m</th>
+                    <th class="text-right">Vol: ${f3(item.volTotal)} m³</th>
+                    <th class="text-right" colspan="2">Bekisting: ${f2(item.fwTotal)} m²</th>
+                  </tr>
+                  <tr class="bg-sub">
+                    <th style="background:#e7eeff; color:#111c2d;">Sub-Tulangan / Uraian</th>
+                    <th style="background:#e7eeff; color:#111c2d;" class="text-center">Dia</th>
+                    <th style="background:#e7eeff; color:#111c2d;" class="text-right">Jml (pcs)</th>
+                    <th style="background:#e7eeff; color:#111c2d;" class="text-right">Pjg/btg (m)</th>
+                    <th style="background:#e7eeff; color:#111c2d;" class="text-right">Total Pjg (m)</th>
+                    <th style="background:#e7eeff; color:#111c2d;" class="text-right">Berat (kg)</th>
+                    <th style="background:#e7eeff; color:#111c2d;" class="text-right">Btg 12m</th>
+                  </tr>
+                </thead>
+                <tbody>
+            `;
+            (item.rebarItems || []).forEach(r => {
+              const b12 = Math.ceil(r.totalLen / 12);
+              subLen += (r.totalLen || 0);
+              subW += (r.weight || 0);
+              subB12 += b12;
+              floorTotalLen += (r.totalLen || 0);
+              floorTotalB12 += b12;
+
+              pagesHTML += `
+                <tr>
+                  <td>${r.label}</td>
+                  <td class="text-center font-bold">D${r.dia}</td>
+                  <td class="text-right">${r.pcs}</td>
+                  <td class="text-right">${f2(r.lenPc)}</td>
+                  <td class="text-right">${f2(r.totalLen)}</td>
+                  <td class="text-right font-bold">${f1(r.weight)}</td>
+                  <td class="text-right">${b12}</td>
+                </tr>
+              `;
+            });
+            pagesHTML += `
+                <tr class="bg-total">
+                  <td colspan="4">SUBTOTAL BESI ${item.nama}</td>
+                  <td class="text-right">${f2(subLen)} m</td>
+                  <td class="text-right">${f1(subW)} kg</td>
+                  <td class="text-right">${subB12} btg</td>
+                </tr>
+              </tbody>
+            </table>`;
+          });
+        }
+
+        // C. PELAT IN THIS FLOOR
+        if (pList.length) {
+          pagesHTML += `<div class="table-group-title">Pelat ${flr} (${pList.length} Tipe Panel)</div>`;
+          pList.forEach(item => {
+            floorVolCor += (item.volTotal || 0);
+            floorBekisting += (item.fwTotal || 0);
+            floorTotalW += (item.totalW || 0);
+
+            let subLen = 0, subW = 0, subB12 = 0;
+
+            pagesHTML += `
+              <table class="report-table">
+                <thead>
+                  <tr>
+                    <th colspan="4">Elemen Pelat: ${item.nama} (${item.qty} unit) | Dimensi: ${item.lx}×${item.ly} mm | Tebal: ${item.t} mm</th>
+                    <th class="text-right">Vol: ${f3(item.volTotal)} m³</th>
+                    <th class="text-right" colspan="2">Bekisting: ${f2(item.fwTotal)} m²</th>
+                  </tr>
+                  <tr class="bg-sub">
+                    <th style="background:#e7eeff; color:#111c2d;">Sub-Tulangan / Uraian</th>
+                    <th style="background:#e7eeff; color:#111c2d;" class="text-center">Dia</th>
+                    <th style="background:#e7eeff; color:#111c2d;" class="text-right">Jml (pcs)</th>
+                    <th style="background:#e7eeff; color:#111c2d;" class="text-right">Pjg/btg (m)</th>
+                    <th style="background:#e7eeff; color:#111c2d;" class="text-right">Total Pjg (m)</th>
+                    <th style="background:#e7eeff; color:#111c2d;" class="text-right">Berat (kg)</th>
+                    <th style="background:#e7eeff; color:#111c2d;" class="text-right">Btg 12m</th>
+                  </tr>
+                </thead>
+                <tbody>
+            `;
+            (item.rebarItems || []).forEach(r => {
+              const b12 = Math.ceil(r.totalLen / 12);
+              subLen += (r.totalLen || 0);
+              subW += (r.weight || 0);
+              subB12 += b12;
+              floorTotalLen += (r.totalLen || 0);
+              floorTotalB12 += b12;
+
+              pagesHTML += `
+                <tr>
+                  <td>${r.label}</td>
+                  <td class="text-center font-bold">D${r.dia}</td>
+                  <td class="text-right">${r.pcs}</td>
+                  <td class="text-right">${f2(r.lenPc)}</td>
+                  <td class="text-right">${f2(r.totalLen)}</td>
+                  <td class="text-right font-bold">${f1(r.weight)}</td>
+                  <td class="text-right">${b12}</td>
+                </tr>
+              `;
+            });
+            pagesHTML += `
+                <tr class="bg-total">
+                  <td colspan="4">SUBTOTAL BESI ${item.nama}</td>
+                  <td class="text-right">${f2(subLen)} m</td>
+                  <td class="text-right">${f1(subW)} kg</td>
+                  <td class="text-right">${subB12} btg</td>
+                </tr>
+              </tbody>
+            </table>`;
+          });
+        }
+
+        // D. SUMMARY TABLE FOR THIS FLOOR
+        pagesHTML += `
+          <div class="table-group-title" style="margin-top: 15px; border-top: 2px solid #004ac6; padding-top: 8px;">
+            RINGKASAN TOTAL SELURUH ELEMEN — ${flr.toUpperCase()}
+          </div>
+          <table class="report-table">
+            <thead>
+              <tr class="bg-total">
+                <th>Deskripsi Parameter ${flr}</th>
+                <th class="text-right">Volume Cor Net (m³)</th>
+                <th class="text-right">Luas Bekisting Net (m²)</th>
+                <th class="text-right">Total Panjang Besi (m)</th>
+                <th class="text-right">Total Berat Besi (kg)</th>
+                <th class="text-right">Total Batang 12m</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>TOTAL KESELURUHAN ${flr.toUpperCase()}</b></td>
+                <td class="text-right font-bold">${f3(floorVolCor)} m³</td>
+                <td class="text-right font-bold">${f2(floorBekisting)} m²</td>
+                <td class="text-right font-bold">${f2(floorTotalLen)} m</td>
+                <td class="text-right font-bold">${f1(floorTotalW)} kg</td>
+                <td class="text-right font-bold">${floorTotalB12} btg</td>
+              </tr>
+            </tbody>
+          </table>
+        `;
+
+        pagesHTML += `
+          </div>
+        </div>
+        `;
+      });
+
+      // ── 4. HALAMAN REKAPITULASI AKHIR PROYEK & REKAPITULASI BESI PER DIAMETER ──
+      const sortedDias = Object.keys(rebarByDiaProject).sort((a, b) => Number(a) - Number(b));
+
+      pagesHTML += `
+      <div class="print-page content-page">
+        <img src="${logoDataUrl}" class="watermark-bg" alt="Watermark" />
+        <div class="page-content-wrapper">
+          <div class="page-header-title">
+            <h2>3. REKAPITULASI TOTAL PROYEK & KEBUTUHAN BESI TULANGAN</h2>
+            <span class="page-num-tag">Halaman ${pageCounter++}</span>
+          </div>
+
+          <p class="section-desc">
+            Berikut adalah tabel rekapitulasi akhir seluruh hasil perhitungan volume cor beton, luas bekisting, dan rincian kebutuhan besi tulangan per diameter standar (batang 12 meter) untuk seluruh proyek:
+          </p>
+
+          <!-- TABEL 1: REKAP ELEMEN STRUKTUR -->
+          <div class="table-group-title">A. Rekapitulasi Total Volume Cor, Bekisting & Besi Per Elemen</div>
+          <table class="report-table">
+            <thead>
+              <tr>
+                <th>Elemen Struktur</th>
+                <th class="text-center">Jumlah Tipe</th>
+                <th class="text-right">Volume Cor Net (m³)</th>
+                <th class="text-right">Luas Bekisting Net (m²)</th>
+                <th class="text-right">Total Berat Besi (kg)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Kolom Struktur</td>
+                <td class="text-center">${store.kolom.length} tipe</td>
+                <td class="text-right font-bold">${f3(store.kolom.reduce((s,e) => s + e.volTotal, 0))}</td>
+                <td class="text-right font-bold">${f2(store.kolom.reduce((s,e) => s + e.fwTotal, 0))}</td>
+                <td class="text-right font-bold">${f1(store.kolom.reduce((s,e) => s + e.totalW, 0))}</td>
+              </tr>
+              <tr>
+                <td>Balok Struktur</td>
+                <td class="text-center">${store.balok.length} tipe</td>
+                <td class="text-right font-bold">${f3(store.balok.reduce((s,e) => s + e.volTotal, 0))}</td>
+                <td class="text-right font-bold">${f2(store.balok.reduce((s,e) => s + e.fwTotal, 0))}</td>
+                <td class="text-right font-bold">${f1(store.balok.reduce((s,e) => s + e.totalW, 0))}</td>
+              </tr>
+              <tr>
+                <td>Pelat Lantai</td>
+                <td class="text-center">${store.pelat.length} tipe</td>
+                <td class="text-right font-bold">${f3(store.pelat.reduce((s,e) => s + e.volTotal, 0))}</td>
+                <td class="text-right font-bold">${f2(store.pelat.reduce((s,e) => s + e.fwTotal, 0))}</td>
+                <td class="text-right font-bold">${f1(store.pelat.reduce((s,e) => s + e.totalW, 0))}</td>
+              </tr>
+              <tr class="bg-total">
+                <td>GRAND TOTAL PROYEK</td>
+                <td class="text-center">${totalItems} item</td>
+                <td class="text-right">${f3(totalVolCor)} m³</td>
+                <td class="text-right">${f2(totalBekisting)} m²</td>
+                <td class="text-right">${f1(totalBeratBesi)} kg</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- TABEL 2: REKAP KEBUTUHAN BESI PER DIAMETER -->
+          <div class="table-group-title">B. Rekapitulasi Kebutuhan Besi Tulangan Per Diameter (Standard Batang 12m)</div>
+          <table class="report-table">
+            <thead>
+              <tr>
+                <th>Diameter Besi</th>
+                <th class="text-center">Berat Jenis Spesifik</th>
+                <th class="text-right">Total Panjang (m)</th>
+                <th class="text-right">Total Berat (kg)</th>
+                <th class="text-right">Kebutuhan Batang (12m)</th>
+              </tr>
+            </thead>
+            <tbody>
+      `;
+
+      let totalLenProj = 0, totalWProj = 0, totalBtgProj = 0;
+      sortedDias.forEach(d => {
+        const lenD = rebarByDiaProject[d].len;
+        const wD = rebarByDiaProject[d].w;
+        const btgD = Math.ceil(lenD / 12);
+        totalLenProj += lenD;
+        totalWProj += wD;
+        totalBtgProj += btgD;
+
+        pagesHTML += `
+          <tr>
+            <td class="font-bold">Besi Polos / Ulir D${d}</td>
+            <td class="text-center">${f3(RB[d]?.W || 0)} kg/m</td>
+            <td class="text-right font-bold">${f2(lenD)} m</td>
+            <td class="text-right font-bold">${f1(wD)} kg</td>
+            <td class="text-right font-bold">${btgD} btg</td>
+          </tr>
+        `;
+      });
+
+      pagesHTML += `
+              <tr class="bg-total">
+                <td>TOTAL SELURUH DIAMETER BESI</td>
+                <td class="text-center">-</td>
+                <td class="text-right">${f2(totalLenProj)} m</td>
+                <td class="text-right">${f1(totalWProj)} kg</td>
+                <td class="text-right">${totalBtgProj} btg (12m)</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div style="margin-top: 20px; padding: 12px; border: 1px solid #c3c6d7; border-radius: 6px; background: #f9f9ff; font-size: 10px; line-height: 1.5; color: #434655;">
+            <b>Catatan Pelaksanaan Pekerjaan Struktur:</b>
+            <ol style="margin: 5px 0 0 15px; padding: 0;">
+              <li>Seluruh perhitungan telah memperhitungkan penyerapan beton netto (dikurangi tebal pelat & penopang) dan pembulatan kait standar.</li>
+              <li>Jumlah kebutuhan batang 12m menggunakan pembulatan ke atas (*CEIL*) untuk menjamin pemenuhan stok di lapangan.</li>
+              <li>Dokumen ini diterbitkan oleh SIPILCALC System untuk analisis estimasi biaya dan pengadaan material proyek.</li>
+            </ol>
+          </div>
+
+        </div>
+      </div>
+      `;
+
+      // Inject into Live Preview Modal Container
+      const previewTarget = document.getElementById('pdf-preview-content');
+      if (previewTarget) previewTarget.innerHTML = pagesHTML;
+
+      // Inject into Native Print Wrapper Container
+      const printTarget = document.getElementById('pdf-print-wrapper');
+      if (printTarget) printTarget.innerHTML = pagesHTML;
+
+      // Close project modal if open
+      closeProjectModal();
+
+      // Open PDF live preview modal
+      openPDFPreviewModal();
+    }
+
+    function openPDFPreviewModal() {
+      const modal = document.getElementById('pdf-preview-modal');
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closePDFPreviewModal() {
+      const modal = document.getElementById('pdf-preview-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function triggerPrintPDF() {
+      window.print();
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  PROJECT PROGRESS MANAGEMENT: SAVE FILE, RESTORE FILE & ACCESS CODE
+    // ═══════════════════════════════════════════════════════════
+    function openProjectModal() {
+      const modal = document.getElementById('project-modal');
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeProjectModal() {
+      const modal = document.getElementById('project-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function setCookie(name, value, days = 365) {
+      try {
+        const d = new Date();
+        d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+        const expires = "expires=" + d.toUTCString();
+        const jsonStr = typeof value === 'string' ? value : JSON.stringify(value);
+        document.cookie = name + "=" + encodeURIComponent(jsonStr) + ";" + expires + ";path=/;SameSite=Lax";
+      } catch (e) { console.error('Cookie Set Error:', e); }
+    }
+
+    function getCookie(name) {
+      try {
+        const cname = name + "=";
+        const decodedCookie = decodeURIComponent(document.cookie);
+        const ca = decodedCookie.split(';');
+        for (let i = 0; i < ca.length; i++) {
+          let c = ca[i].trim();
+          if (c.indexOf(cname) === 0) {
+            return c.substring(cname.length, c.length);
+          }
+        }
+      } catch (e) { console.error('Cookie Get Error:', e); }
+      return "";
+    }
+
+    function saveAutoLocalStorage() {
+      try {
+        const str = JSON.stringify(store);
+        localStorage.setItem('SIPILCALC_STORE', str);
+        if (str.length < 3800) {
+          setCookie('SIPILCALC_STORE_COOKIE', str);
+        }
+      } catch (e) { console.error('LocalStorage Save Error:', e); }
+    }
+
+    function loadAutoLocalStorage() {
+      try {
+        let saved = localStorage.getItem('SIPILCALC_STORE');
+        if (!saved) {
+          saved = getCookie('SIPILCALC_STORE_COOKIE');
+        }
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed && (parsed.kolom || parsed.balok || parsed.pelat)) {
+            store = {
+              kolom: parsed.kolom || [],
+              balok: parsed.balok || [],
+              pelat: parsed.pelat || []
+            };
+          }
+        }
+      } catch (e) { console.error('LocalStorage/Cookie Load Error:', e); }
+    }
+
+    function exportProjectFile() {
+      const projNameInput = document.getElementById('project-save-name');
+      const projName = (projNameInput ? projNameInput.value.trim() : '') || 'Proyek_Struktur';
+      const fileData = {
+        version: '2.5.0',
+        appName: 'SIPILCALC Engineering System',
+        timestamp: new Date().toISOString(),
+        projectName: projName,
+        store: store
+      };
+
+      const jsonStr = JSON.stringify(fileData, null, 2);
+      const blob = new Blob([jsonStr], { type: 'application/json;charset=utf-8;' });
+      const safeName = projName.replace(/[^a-zA-Z0-9_\-]/g, '_');
+      saveAs(blob, `${safeName}_Progress_${new Date().toISOString().slice(0, 10)}.json`);
+      alert(`File progress proyek "${projName}" (.json) berhasil diunduh/disimpan!`);
+    }
+
+    function importProjectFile(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        try {
+          const parsed = JSON.parse(e.target.result);
+          const loadedStore = parsed.store || parsed;
+          if (!loadedStore || (!Array.isArray(loadedStore.kolom) && !Array.isArray(loadedStore.balok) && !Array.isArray(loadedStore.pelat))) {
+            return alert('Format file progress proyek tidak valid!');
+          }
+
+          store = {
+            kolom: loadedStore.kolom || [],
+            balok: loadedStore.balok || [],
+            pelat: loadedStore.pelat || []
+          };
+
+          saveAutoLocalStorage();
+          ['kolom', 'balok', 'pelat'].forEach(t => renderList(t));
+          renderRekap();
+
+          const totalItems = store.kolom.length + store.balok.length + store.pelat.length;
+          alert(`Berhasil memuat progress proyek "${parsed.projectName || file.name}"!\nTotal Data: ${totalItems} item (${store.kolom.length} Kolom, ${store.balok.length} Balok, ${store.pelat.length} Pelat).`);
+          closeProjectModal();
+        } catch (err) {
+          alert('Gagal membaca file proyek: ' + err.message);
+        }
+      };
+      reader.readAsText(file);
+      event.target.value = '';
+    }
+
+    // Init
+    loadAutoLocalStorage();
+    addBentangRow('kolom', 4000, 1);
+    addBentangRow('balok', 5500, 1);
+    addBentangRow('pelat', '', 1, 5000, 4000);
+    ['kolom', 'balok', 'pelat'].forEach(t => renderList(t));
+    drawKolomSVG();
+    drawBalokSVG();
+    drawPelatSVG();
+  </script>
+</body>
+
+</html>
