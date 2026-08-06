@@ -59,3 +59,6 @@ Desktop.ini
 *.njsproj
 *.sln
 *.sw?
+
+# 8. Markdown Documentation Files (Tetap ada di folder lokal, di-ignore dari GitHub)
+*.md
