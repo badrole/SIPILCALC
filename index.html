@@ -620,14 +620,16 @@
                     Kolom (mm)</label><input type="number" id="blk-penopang" placeholder="600" oninput="drawBalokSVG()"
                     class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data text-on-surface text-right" />
                 </div>
+                <div><label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs">Jumlah Balok (buah)</label><input type="number" id="blk-qty" value="1" min="1" placeholder="1"
+                    class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data text-on-surface text-right" />
+                </div>
                 <!-- Dynamic Bentang Container -->
                 <div class="md:col-span-2 space-y-sm">
-                  <label class="block font-label-sm text-label-sm text-on-surface-variant">Variasi Panjang Bentang &
-                    Jumlah</label>
+                  <label class="block font-label-sm text-label-sm text-on-surface-variant">Variasi Bentang per As (mm) — Misal A-B, B-C, C-D...</label>
                   <div id="blk-bentang-container" class="space-y-sm"></div>
                   <button type="button" onclick="addBentangRow('balok')"
                     class="flex items-center gap-xs text-primary font-label-md hover:bg-primary-container/20 px-3 py-1.5 rounded transition-colors">
-                    <span class="material-symbols-outlined text-[18px]">add_circle</span> + Tambah Variasi Bentang
+                    <span class="material-symbols-outlined text-[18px]">add_circle</span> + Tambah Bentang As
                   </button>
                 </div>
               </div>
@@ -658,12 +660,12 @@
                     (btg)</label><input type="number" id="blk-n-bawah-men" value="4" min="2" oninput="drawBalokSVG()"
                     class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data text-right" />
                 </div>
-                <div><label class="block font-label-sm text-label-sm text-secondary mb-xs">Tumpuan Extra
-                    (btg)</label><input type="number" id="blk-n-tump" value="2" min="0" oninput="drawBalokSVG()"
+                <div><label class="block font-label-sm text-label-sm text-secondary mb-xs">Tulangan Tumpuan
+                    (btg/bentang)</label><input type="number" id="blk-n-tump" value="2" min="0" oninput="drawBalokSVG()"
                     class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data text-right" />
                 </div>
-                <div><label class="block font-label-sm text-label-sm text-secondary mb-xs">Lapangan Extra
-                    (btg)</label><input type="number" id="blk-n-lap-extra" value="2" min="0" oninput="drawBalokSVG()"
+                <div><label class="block font-label-sm text-label-sm text-secondary mb-xs">Tulangan Lapangan
+                    (btg/bentang)</label><input type="number" id="blk-n-lap-extra" value="2" min="0" oninput="drawBalokSVG()"
                     class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data text-right" />
                 </div>
               </div>
@@ -1256,12 +1258,8 @@
       if (type === 'balok') {
         div.innerHTML = `
           <div class="flex-1">
-            <label class="block text-[11px] font-semibold text-secondary mb-1">Panjang Bentang L (mm)</label>
-            <input type="number" class="blk-L-val w-full bg-surface-bright border border-outline-variant border-l-2 border-l-primary rounded px-2.5 py-1.5 font-mono-data text-right text-sm" placeholder="5500" value="${defaultL !== undefined && defaultL !== '' ? defaultL : ''}" oninput="drawBalokSVG()" />
-          </div>
-          <div class="w-32">
-            <label class="block text-[11px] font-semibold text-secondary mb-1">Jumlah (buah)</label>
-            <input type="number" class="blk-qty-val w-full bg-surface-bright border border-outline-variant rounded px-2.5 py-1.5 font-mono-data text-right text-sm" placeholder="1" value="${defaultQty || 1}" min="1" />
+            <label class="block text-[11px] font-semibold text-secondary mb-1">Panjang Bentang As (mm) — Misal: 5000, 6000, 8000</label>
+            <input type="number" class="blk-L-val w-full bg-surface-bright border border-outline-variant border-l-2 border-l-primary rounded px-2.5 py-1.5 font-mono-data text-right text-sm" placeholder="6000" value="${defaultL !== undefined && defaultL !== '' ? defaultL : ''}" oninput="drawBalokSVG()" />
           </div>
           <button type="button" onclick="removeBentangRow(this, 'balok')" class="self-end mb-1 text-error hover:bg-error-container/30 p-1.5 rounded transition-colors" title="Hapus Baris">
             <span class="material-symbols-outlined text-[18px]">close</span>
@@ -1340,12 +1338,13 @@
         document.getElementById('blk-lantai').value = item.lantai || 'Lantai 1';
         document.getElementById('blk-b').value = item.b;
         document.getElementById('blk-h').value = item.h;
+        if (document.getElementById('blk-qty')) document.getElementById('blk-qty').value = item.qty || 1;
         if (document.getElementById('blk-penopang')) document.getElementById('blk-penopang').value = item.penopang || '';
         if (document.getElementById('blk-t-pelat')) document.getElementById('blk-t-pelat').value = item.tPlt || 120;
 
         const container = document.getElementById('blk-bentang-container');
         container.innerHTML = '';
-        addBentangRow('balok', item.L, item.qty);
+        addBentangRow('balok', item.L);
 
         drawBalokSVG();
       } else if (type === 'pelat') {
@@ -1364,7 +1363,7 @@
     }
 
     // ═══════════════════════════════════════════════════════════
-    //  KOLOM CALCULATION (REVISI PROYEK FINAL)
+    //  KOLOM CALCULATION (SESUAI RUMUS BARU.MD)
     // ═══════════════════════════════════════════════════════════
     function hitungKolom() {
       const nama = S('kol-nama') || 'K' + (store.kolom.length + 1);
@@ -1382,39 +1381,50 @@
       let addedEntries = [];
 
       rows.forEach(r => {
-        const L = parseFloat(r.querySelector('.kol-L-val')?.value) || 0;
-        const qty = parseFloat(r.querySelector('.kol-qty-val')?.value) || 1;
+        const L = parseFloat(r.querySelector('.kol-L-val')?.value) || 0; // Tinggi Kolom H (mm)
+        const qty = parseFloat(r.querySelector('.kol-qty-val')?.value) || 1; // Jumlah Kolom N (buah)
         if (!L || L <= 0) return;
 
         const tPlt = V('kol-t-pelat') || 0;
-        const L_cor = Math.max(0, L - tPlt); // Tinggi bersih kolom (dikurangi tebal pelat)
+        const H_m = L / 1000; // Tinggi Kolom (m)
+        const H_cor_m = Math.max(0, (L - tPlt) / 1000); // Tinggi Kolom Net Cor (m)
+        const b_m = b / 1000; // Lebar Kolom B (m)
+        const h_m = h / 1000; // Panjang Kolom L (m)
+        const c_m = cc / 1000; // Selimut Beton c (m)
 
-        const volTotal = (b / 1000) * (h / 1000) * (L_cor / 1000) * qty;
-        const fwTotal = (2 * (b / 1000 + h / 1000)) * (L_cor / 1000) * qty;
+        // Volume Cor Net & Bekisting Net
+        const volTotal = b_m * h_m * H_cor_m * qty;
+        const fwTotal = 2 * (b_m + h_m) * H_cor_m * qty;
 
-        const nUTotal = nU * qty;
-        const pjgU = L / 1000;
-        const tLenU = nUTotal * pjgU;
-        const wU = tLenU * (RB[dU] ? RB[dU].W : 0);
+        // 1. Tulangan Utama Kolom (Rumus: Panjang 1 btg = H + 40d)
+        const dU_m = dU / 1000;
+        const pjgU = H_m + (40 * dU_m); // Panjang 1 batang (m)
+        const nUTotal = nU * qty; // Total batang
+        const tLenU = pjgU * nUTotal; // Total panjang (m)
+        const wU_per_m = (dU * dU) / 162; // Berat per meter (kg/m)
+        const wU = tLenU * wU_per_m; // Total berat (kg)
 
-        const nS_perKolom = Math.ceil(L / sS);
+        // 2. Tulangan Sengkang Kolom (Rumus: Panjang 1 sengkang = 2(B-2c) + 2(L-2c) + 12(ds/1000))
+        const sS_m = sS / 1000;
+        const dS_m = dS / 1000;
+        const nS_perKolom = Math.ceil(H_m / sS_m); // Jumlah sengkang per kolom = ROUNDUP(H / s ; 0)
         const nS_Total = nS_perKolom * qty;
-        const pjgKaitS = Math.ceil((7.5 * dS / 1000) * 100) / 100;
-        const bBersihS = (b - 2 * cc) / 1000;
-        const hBersihS = (h - 2 * cc) / 1000;
-        const pjgS = (2 * pjgKaitS) + (2 * bBersihS) + (2 * hBersihS);
+        const pjgS = 2 * (b_m - 2 * c_m) + 2 * (h_m - 2 * c_m) + 12 * dS_m; // Panjang 1 sengkang (m)
         const tLenS = nS_Total * pjgS;
-        const wS = tLenS * (RB[dS] ? RB[dS].W : 0);
+        const wS_per_m = (dS * dS) / 162;
+        const wS = tLenS * wS_per_m;
 
+        // 3. Crosstie Kolom (Rumus: Panjang 1 crosstie = (B-2c) + (L-2c) + 24(dc/1000))
         let nCross_Total = 0, pjgCross = 0, tLenCross = 0, wCross = 0;
         if (dCross > 0 && sCross > 0) {
-          const nCross_perKolom = Math.ceil(L / sCross);
+          const sCross_m = sCross / 1000;
+          const dCross_m = dCross / 1000;
+          const nCross_perKolom = Math.ceil(H_m / sCross_m); // Jumlah crosstie per kolom = ROUNDUP(H / sc ; 0)
           nCross_Total = nCross_perKolom * qty;
-          const pjgKaitCross = 0.075;
-          const bBersihCross = (b - 2 * cc - dCross) / 1000;
-          pjgCross = bBersihCross + (2 * pjgKaitCross);
+          pjgCross = (b_m - 2 * c_m) + (h_m - 2 * c_m) + 24 * dCross_m; // Panjang 1 crosstie (m)
           tLenCross = nCross_Total * pjgCross;
-          wCross = tLenCross * (RB[dCross] ? RB[dCross].W : 0);
+          const wCross_per_m = (dCross * dCross) / 162;
+          wCross = tLenCross * wCross_per_m;
         }
 
         const totalW = wU + wS + wCross;
@@ -1441,7 +1451,7 @@
         updateSubmitBtn('kolom', false);
       }
 
-      if (!addedEntries.length) return alert('Masukkan setidaknya 1 Tinggi Kolom (L) yang valid!');
+      if (!addedEntries.length) return alert('Masukkan setidaknya 1 Tinggi Kolom (H) yang valid!');
 
       const lastEntry = addedEntries[addedEntries.length - 1];
       const L_cor_last = Math.max(0, lastEntry.L - lastEntry.tPlt);
@@ -1453,7 +1463,7 @@
         
         <div class="bg-surface-container-low p-3 rounded-lg border border-outline-variant/60 my-2 space-y-1 text-xs font-mono-data">
           <div class="font-bold text-primary text-sm flex items-center gap-1">📊 Breakdown Perhitungan Cor & Bekisting Net:</div>
-          <div>• Tinggi Kolom Net ($L_{\\text{cor}}$) = ${lastEntry.L}mm − ${lastEntry.tPlt}mm = <b>${L_cor_last}mm (${L_cor_last/1000}m)</b></div>
+          <div>• Tinggi Kolom Net ($H_{\\text{cor}}$) = ${lastEntry.L}mm − ${lastEntry.tPlt}mm = <b>${L_cor_last}mm (${L_cor_last/1000}m)</b></div>
           <div>• Rumus Vol. Cor Net = (${lastEntry.b}/1000) × (${lastEntry.h}/1000) × (${L_cor_last}/1000) × ${lastEntry.qty} unit = <b class="text-primary">${f3(lastEntry.volTotal)} m³</b></div>
           <div>• Rumus Bekisting Net = 2 × [(${lastEntry.b}/1000) + (${lastEntry.h}/1000)] × (${L_cor_last}/1000) × ${lastEntry.qty} unit = <b class="text-[#166534]">${f2(lastEntry.fwTotal)} m²</b></div>
         </div>
@@ -1464,7 +1474,7 @@
     }
 
     // ═══════════════════════════════════════════════════════════
-    //  BALOK CALCULATION — RUMUS PROYEK REVISI
+    //  BALOK CALCULATION (SESUAI RUMUS BARU.MD)
     // ═══════════════════════════════════════════════════════════
     function hitungBalok() {
       // 1. Parameter Input Geometri & Penulangan Balok
@@ -1476,142 +1486,171 @@
       const tPlt = V('blk-t-pelat') || 0;
 
       const dU = V('blk-d-utm') || 16, dS = V('blk-d-sgk') || 8, dP = V('blk-d-pgng') || 10;
-      const nB = V('blk-n-atas-men') || 2, nC = V('blk-n-tump') || 0, nD = V('blk-n-lap-extra') || 0, nE = V('blk-n-bawah-men') || 2, nF = V('blk-n-pgng') || 0;
+      const nB_atas = V('blk-n-atas-men') || 2;
+      const nE_bawah = V('blk-n-bawah-men') || 2;
+      const nC_tump = V('blk-n-tump') || 0;
+      const nD_lap = V('blk-n-lap-extra') || 0;
+      const nF_pgng = V('blk-n-pgng') || 0;
       const sT = V('blk-s-tump') || 100, sLp = V('blk-s-lap') || 200;
 
       if (!b || !h) return alert('Isi Dimensi Balok (Lebar b & Tinggi h) terlebih dahulu!');
 
-      // 2. Panjang Kait Excel: ROUNDUP(7,5 × Diameter / 1000, 2)
-      function getKaitExcel(d) { return Math.ceil((7.5 * d / 1000) * 100) / 100; }
-      
-      const k_sgk = getKaitExcel(dS);
-      const k_utm = getKaitExcel(dU);
-
-      // Panjang Penyaluran Tumpuan (15d) & Lapangan (20d) dalam meter
-      const l_dev_tump = (15 * dU) / 1000;
-      const l_dev_lap = (20 * dU) / 1000;
+      const b_m = b / 1000;
+      const h_m = h / 1000;
+      const c_m = cc / 1000;
+      const dU_m = dU / 1000;
+      const dS_m = dS / 1000;
+      const dP_m = dP / 1000;
 
       const rows = document.querySelectorAll('#blk-bentang-container .bentang-row');
       let batchVol = 0, batchFw = 0, batchW = 0;
-      let totalSpanNetMm = 0;
       let addedEntries = [];
 
+      // Accumulate bentang lengths for multi-span beam
+      let spanLengths_m = [];
+      const totalQty = parseFloat(document.getElementById('blk-qty')?.value) || 1;
+
       rows.forEach(r => {
-        const L = parseFloat(r.querySelector('.blk-L-val')?.value) || 0; // Panjang Bentang (mm)
-        const qty = parseFloat(r.querySelector('.blk-qty-val')?.value) || 1; // Jumlah Balok (buah)
-        if (!L || L <= 0) return;
-
-        // -------------------------------------------------------
-        // a. Sengkang (Kode A)
-        // Rumus Excel: =ROUNDUP(((((BENTANG-PENOPANG)*0,5)/JARAK SENGKANG TUMPUAN)+(((BENTANG-PENOPANG)*0,5)/JARAK SENGKANG LAPANGAN));0)
-        const netSpan = Math.max(0, L - penopang);
-        const nA = (sT > 0 && sLp > 0)
-          ? Math.ceil(( (netSpan * 0.5) / sT ) + ( (netSpan * 0.5) / sLp ))
-          : 0;
-        
-        // Panjang Satu Sengkang = (2 × Kait) + (2 × (Lebar − 2×cc)) + (2 × (Tinggi − 2×cc))
-        const bBersihS = (b - 2 * cc) / 1000;
-        const hBersihS = (h - 2 * cc) / 1000;
-        const pjgA = (2 * k_sgk) + (2 * bBersihS) + (2 * hBersihS);
-        const tA = nA * pjgA;
-        const wA = tA * (RB[dS] ? RB[dS].W : 0);
-
-        // -------------------------------------------------------
-        // b. Tulangan Atas Menerus (Kode B)
-        // Rumus Excel: =2*(ROUNDUP(7,5*d/1000;2)+(0,5*L_total))
-        const pjgB = 2 * (k_utm + (0.5 * (L / 1000)));
-        const tB = nB * pjgB;
-        const wB = tB * (RB[dU] ? RB[dU].W : 0);
-
-        // -------------------------------------------------------
-        // c. Tulangan Tumpuan Extra (Kode C - Excel Exact)
-        // Rumus Excel: =2*(ROUNDUP(7,5*d/1000;2)+(0,25*L-penopang)+(15*d/1000)+ROUNDUP(7,5*d/1000;2))
-        const len_tump_clean = Math.max(0, (0.25 * L - penopang) / 1000);
-        const pjgC = 2 * (k_utm + len_tump_clean + l_dev_tump + k_utm);
-        const tC = nC * pjgC;
-        const wC = tC * (RB[dU] ? RB[dU].W : 0);
-
-        // -------------------------------------------------------
-        // d. Tulangan Lapangan Extra (Kode D - Excel Exact)
-        // Rumus Excel: =2*(ROUNDUP(7,5*d/1000;2)+(20*d/1000))+(0,25*L-penopang)
-        const len_lap_clean = Math.max(0, (0.25 * L - penopang) / 1000);
-        const pjgD = 2 * (k_utm + l_dev_lap) + len_lap_clean;
-        const tD = nD * pjgD;
-        const wD = tD * (RB[dU] ? RB[dU].W : 0);
-
-        // -------------------------------------------------------
-        // e. Tulangan Bawah Menerus (Kode E)
-        // Rumus Excel: =2*(ROUNDUP(7,5*d/1000;2)+(0,5*L_total))
-        const pjgE = 2 * (k_utm + (0.5 * (L / 1000)));
-        const tE = nE * pjgE;
-        const wE = tE * (RB[dU] ? RB[dU].W : 0);
-
-        // -------------------------------------------------------
-        // f. Tulangan Pinggang (Kode F)
-        // Panjang Tulangan = Panjang Bentang (L_total)
-        const pjgF = L / 1000;
-        const tF = (dP > 0 && nF > 0) ? nF * pjgF : 0;
-        const wF = (dP > 0 && nF > 0) ? tF * (RB[dP] ? RB[dP].W : 0) : 0;
-
-        // Total Berat Besi 1 Balok (kg)
-        const w1_balok = wA + wB + wC + wD + wE + wF;
-
-        // Volume Cor Net & Bekisting Net (Tinggi Balok dikurangi Tebal Pelat, Bentang dikurangi Penopang)
-        const h_cor = Math.max(0, h - tPlt);
-        const L_cor = Math.max(0, L - penopang);
-        totalSpanNetMm += L_cor * qty;
-        
-        const vol1 = (b / 1000) * (h_cor / 1000) * (L_cor / 1000);
-        const fw1 = (2 * (h_cor / 1000) + (b / 1000)) * (L_cor / 1000);
-
-        // Sub-items dikalikan kuantitas balok (qty)
-        const items = [
-          { label: 'Sengkang', dia: dS, pcs: nA * qty, lenPc: pjgA, totalLen: tA * qty, weight: wA * qty },
-          { label: 'Tulangan Atas Menerus', dia: dU, pcs: nB * qty, lenPc: pjgB, totalLen: tB * qty, weight: wB * qty },
-        ];
-        if (nC > 0) items.push({ label: 'Tulangan Tumpuan Extra', dia: dU, pcs: nC * qty, lenPc: pjgC, totalLen: tC * qty, weight: wC * qty });
-        if (nD > 0) items.push({ label: 'Tulangan Lapangan Extra', dia: dU, pcs: nD * qty, lenPc: pjgD, totalLen: tD * qty, weight: wD * qty });
-        items.push({ label: 'Tulangan Bawah Menerus', dia: dU, pcs: nE * qty, lenPc: pjgE, totalLen: tE * qty, weight: wE * qty });
-        if (dP > 0 && nF > 0) items.push({ label: 'Tulangan Pinggang', dia: dP, pcs: nF * qty, lenPc: pjgF, totalLen: tF * qty, weight: wF * qty });
-
-        const entry = {
-          nama, lantai, qty, b, h, L, cc, penopang, sT, sLp, tPlt,
-          volTotal: vol1 * qty, fwTotal: fw1 * qty, totalW: w1_balok * qty,
-          rebarItems: items
-        };
-        if (editState.type === 'balok' && editState.index !== null && editState.index >= 0) {
-          store.balok[editState.index] = entry;
-        } else {
-          store.balok.push(entry);
+        const L_mm = parseFloat(r.querySelector('.blk-L-val')?.value) || 0; // Panjang Bentang (mm)
+        if (L_mm > 0) {
+          spanLengths_m.push(L_mm / 1000);
         }
-        addedEntries.push(entry);
-        batchVol += entry.volTotal; batchFw += entry.fwTotal; batchW += entry.totalW;
       });
+
+      if (!spanLengths_m.length) return alert('Masukkan setidaknya 1 Panjang Bentang (L) yang valid!');
+
+      const totalSpan_m = spanLengths_m.reduce((a, b) => a + b, 0); // Total Panjang Bentang (m)
+      const numSpans = spanLengths_m.length;
+
+      // 1. Tulangan Atas Menerus (Panjang 1 btg = total bentang + 40d + 24d)
+      const pjgAtasMen = totalSpan_m + (40 * dU_m) + (24 * dU_m);
+      const tLenAtasMen = pjgAtasMen * nB_atas * totalQty;
+      const wAtasMen = tLenAtasMen * ((dU * dU) / 162);
+
+      // 2. Tulangan Bawah Menerus (Panjang 1 btg = total bentang + 40d + 24d)
+      const pjgBawahMen = totalSpan_m + (40 * dU_m) + (24 * dU_m);
+      const tLenBawahMen = pjgBawahMen * nE_bawah * totalQty;
+      const wBawahMen = tLenBawahMen * ((dU * dU) / 162);
+
+      // 3. Tulangan Pinggang (Panjang 1 btg = total bentang + 40d)
+      let pjgPgng = 0, tLenPgng = 0, wPgng = 0;
+      if (dP > 0 && nF_pgng > 0) {
+        pjgPgng = totalSpan_m + (40 * dP_m);
+        tLenPgng = pjgPgng * nF_pgng * totalQty;
+        wPgng = tLenPgng * ((dP * dP) / 162);
+      }
+
+      // 4. Tulangan Tumpuan (Dihitung per bentang: Panjang = L_bentang/4 + 40d. Ada 2 tumpuan per bentang)
+      let tLenTumpTotal = 0;
+      let pjgTumpAvg = 0;
+      if (nC_tump > 0) {
+        spanLengths_m.forEach(L_bentang => {
+          const pjg1Tump = (L_bentang / 4) + (40 * dU_m);
+          tLenTumpTotal += (2 * pjg1Tump * nC_tump); // 2 tumpuan per bentang
+        });
+        pjgTumpAvg = tLenTumpTotal / (2 * numSpans * nC_tump);
+        tLenTumpTotal *= totalQty;
+      }
+      const wTump = tLenTumpTotal * ((dU * dU) / 162);
+
+      // 5. Tulangan Lapangan (Dihitung per bentang: Panjang = L_bentang/2 + 40d)
+      let tLenLapTotal = 0;
+      let pjgLapAvg = 0;
+      if (nD_lap > 0) {
+        spanLengths_m.forEach(L_bentang => {
+          const pjg1Lap = (L_bentang / 2) + (40 * dU_m);
+          tLenLapTotal += (pjg1Lap * nD_lap);
+        });
+        pjgLapAvg = tLenLapTotal / (numSpans * nD_lap);
+        tLenLapTotal *= totalQty;
+      }
+      const wLap = tLenLapTotal * ((dU * dU) / 162);
+
+      // 6. Sengkang Balok (Dihitung per bentang: netSpan = L_bentang - lebarKolom)
+      const penopang_m = penopang / 1000;
+      const sT_m = sT / 1000;
+      const sLp_m = sLp / 1000;
+
+      let nS_single = 0;
+      let totalNetSpan_m = 0;
+
+      if (sT_m > 0 && sLp_m > 0) {
+        spanLengths_m.forEach(L_bentang => {
+          const netSpan_i = Math.max(0, L_bentang - penopang_m);
+          totalNetSpan_m += netSpan_i;
+          const areaTump_i = netSpan_i * 0.5;
+          const areaLap_i = netSpan_i * 0.5;
+          const nS_i = Math.ceil((areaTump_i / sT_m) + (areaLap_i / sLp_m));
+          nS_single += nS_i;
+        });
+      }
+
+      const nS_total = nS_single * totalQty;
+
+      // Panjang 1 sengkang = 2(B - 2c) + 2(H - 2c) + 12(ds/1000)
+      const pjg1Sengkang = 2 * (b_m - 2 * c_m) + 2 * (h_m - 2 * c_m) + 12 * dS_m;
+      const tLenSgk = nS_total * pjg1Sengkang;
+      const wSgk = tLenSgk * ((dS * dS) / 162);
+
+      // Total Berat Besi Balok
+      const w1_balok = wSgk + wAtasMen + wTump + wLap + wBawahMen + wPgng;
+
+      // Volume Cor Net & Bekisting Net Balok
+      const h_cor_m = Math.max(0, (h - tPlt) / 1000);
+      const vol1 = b_m * h_cor_m * totalNetSpan_m * totalQty;
+      const fw1 = (2 * h_cor_m + b_m) * totalNetSpan_m * totalQty;
+
+      // Sub-items array
+      const items = [
+        { label: 'Tulangan Atas Menerus', dia: dU, pcs: nB_atas * totalQty, lenPc: pjgAtasMen, totalLen: tLenAtasMen, weight: wAtasMen },
+        { label: 'Tulangan Bawah Menerus', dia: dU, pcs: nE_bawah * totalQty, lenPc: pjgBawahMen, totalLen: tLenBawahMen, weight: wBawahMen },
+      ];
+      if (nF_pgng > 0 && dP > 0) {
+        items.push({ label: 'Tulangan Pinggang', dia: dP, pcs: nF_pgng * totalQty, lenPc: pjgPgng, totalLen: tLenPgng, weight: wPgng });
+      }
+      if (nC_tump > 0) {
+        items.push({ label: 'Tulangan Tumpuan', dia: dU, pcs: 2 * numSpans * nC_tump * totalQty, lenPc: pjgTumpAvg, totalLen: tLenTumpTotal, weight: wTump });
+      }
+      if (nD_lap > 0) {
+        items.push({ label: 'Tulangan Lapangan', dia: dU, pcs: numSpans * nD_lap * totalQty, lenPc: pjgLapAvg, totalLen: tLenLapTotal, weight: wLap });
+      }
+      items.push({ label: 'Sengkang', dia: dS, pcs: nS_total * totalQty, lenPc: pjg1Sengkang, totalLen: tLenSgk, weight: wSgk });
+
+      const entry = {
+        nama, lantai, qty: totalQty, b, h, L: totalSpan_m * 1000, cc, penopang, sT, sLp, tPlt,
+        volTotal: vol1, fwTotal: fw1, totalW: w1_balok,
+        rebarItems: items
+      };
+
+      if (editState.type === 'balok' && editState.index !== null && editState.index >= 0) {
+        store.balok[editState.index] = entry;
+      } else {
+        store.balok.push(entry);
+      }
+      addedEntries.push(entry);
+      batchVol += vol1; batchFw += fw1; batchW += w1_balok;
 
       if (editState.type === 'balok') {
         editState = { type: null, index: null };
         updateSubmitBtn('balok', false);
       }
 
-      if (!addedEntries.length) return alert('Masukkan setidaknya 1 Panjang Bentang (L) yang valid!');
-
-      const lastEntry = addedEntries[addedEntries.length - 1];
-      const h_cor_last = Math.max(0, lastEntry.h - lastEntry.tPlt);
-      const totalSpanNetMeter = totalSpanNetMm / 1000;
+      const h_cor_last = Math.max(0, h - tPlt);
+      const L_cor_last = Math.max(0, (totalSpan_m * 1000) - (numSpans * penopang));
 
       document.getElementById('blk-res-sum').innerHTML = resultCards(batchVol, batchFw, batchW);
       document.getElementById('blk-res-det').innerHTML = `<div class="space-y-sm text-body-md text-on-surface">
         <div class="font-headline-md text-primary font-bold border-b pb-1">📐 Hasil Perhitungan Balok ${nama} (${lantai})</div>
-        <div>Telah berhasil dihitung dan ditambahkan <b>${addedEntries.length} variasi bentang</b> ke daftar terhitung.</div>
+        <div>Telah berhasil dihitung <b>Total Bentang ${(totalSpan_m).toFixed(2)}m (${numSpans} bentang)</b>.</div>
         
         <div class="bg-surface-container-low p-3 rounded-lg border border-outline-variant/60 my-2 space-y-1 text-xs font-mono-data">
           <div class="font-bold text-primary text-sm flex items-center gap-1">📊 Breakdown Perhitungan Cor & Bekisting Net Balok:</div>
-          <div>• Tinggi Balok Net ($h_{\\text{cor}}$) = ${lastEntry.h}mm − ${lastEntry.tPlt}mm = <b>${h_cor_last}mm (${h_cor_last/1000}m)</b></div>
-          <div>• Bentang Balok Net ($L_{\\text{cor}}$) = ${lastEntry.L}mm − ${lastEntry.penopang || 0}mm = <b>${L_cor_last}mm (${L_cor_last/1000}m)</b></div>
-          <div>• Rumus Vol. Cor Net = (${lastEntry.b}/1000) × (${h_cor_last}/1000) × (${L_cor_last}/1000) × ${lastEntry.qty} unit = <b class="text-primary">${f3(lastEntry.volTotal)} m³</b></div>
-          <div>• Rumus Bekisting Net = [2 × (${h_cor_last}/1000) + (${lastEntry.b}/1000)] × (${L_cor_last}/1000) × ${lastEntry.qty} unit = <b class="text-[#166534]">${f2(lastEntry.fwTotal)} m²</b></div>
+          <div>• Tinggi Balok Net ($h_{\\text{cor}}$) = ${h}mm − ${tPlt}mm = <b>${h_cor_last}mm (${h_cor_last/1000}m)</b></div>
+          <div>• Bentang Balok Net ($L_{\\text{cor}}$) = ${totalSpan_m * 1000}mm − ${numSpans * penopang}mm = <b>${L_cor_last}mm (${L_cor_last/1000}m)</b></div>
+          <div>• Rumus Vol. Cor Net = (${b}/1000) × (${h_cor_last}/1000) × (${L_cor_last}/1000) × ${totalQty} unit = <b class="text-primary">${f3(vol1)} m³</b></div>
+          <div>• Rumus Bekisting Net = [2 × (${h_cor_last}/1000) + (${b}/1000)] × (${L_cor_last}/1000) × ${totalQty} unit = <b class="text-[#166534]">${f2(fw1)} m²</b></div>
         </div>
-      </div>` + rebarTableHTML(lastEntry.rebarItems);
+      </div>` + rebarTableHTML(items);
 
       document.getElementById('blk-result').style.display = 'block';
       renderList('balok');
@@ -1754,6 +1793,7 @@
         if (document.getElementById('blk-lantai')) document.getElementById('blk-lantai').value = item.lantai || 'Lantai 1';
         if (document.getElementById('blk-b')) document.getElementById('blk-b').value = item.b || '';
         if (document.getElementById('blk-h')) document.getElementById('blk-h').value = item.h || '';
+        if (document.getElementById('blk-qty')) document.getElementById('blk-qty').value = item.qty || 1;
         if (document.getElementById('blk-cc')) document.getElementById('blk-cc').value = item.cc || 30;
         if (document.getElementById('blk-penopang')) document.getElementById('blk-penopang').value = item.penopang || 0;
         if (document.getElementById('blk-t-pelat')) document.getElementById('blk-t-pelat').value = item.tPlt !== undefined ? item.tPlt : 120;
@@ -1761,7 +1801,7 @@
         const container = document.getElementById('blk-bentang-container');
         if (container) {
           container.innerHTML = '';
-          addBentangRow('balok', item.L, item.qty);
+          addBentangRow('balok', item.L);
         }
 
         updateSubmitBtn('balok', true);
@@ -2564,21 +2604,21 @@
           let pcsVal = sub.pcs;
 
           if (sub.label.includes('Sengkang')) {
-            formulaPjg = `=2*(ROUNDUP(7.5*E${cR}/1000, 2)) + (2*(H${cR}-2*J${cR})/1000) + (2*(I${cR}-2*J${cR})/1000)`;
-            pcsVal = { formula: `=IF(AND(N${cR}>0, O${cR}>0), (ROUNDUP(((M${cR}-L${cR})*0.5)/N${cR}, 0) + ROUNDUP(((M${cR}-L${cR})*0.5)/O${cR}, 0)) * F${cR}, ${sub.pcs})`, result: sub.pcs };
+            formulaPjg = `=2*((H${cR}-2*J${cR})/1000) + 2*((I${cR}-2*J${cR})/1000) + 12*(E${cR}/1000)`;
+            pcsVal = { formula: `=IF(AND(N${cR}>0, O${cR}>0), ROUNDUP((((M${cR}-L${cR})*0.5)/(N${cR}/1000)) + (((M${cR}-L${cR})*0.5)/(O${cR}/1000)), 0), ${sub.pcs}) * F${cR}`, result: sub.pcs };
           } else if (sub.label.includes('Atas Menerus')) {
-            formulaPjg = `=2*(ROUNDUP(7.5*E${cR}/1000, 2) + (0.5*M${cR}/1000))`;
-          } else if (sub.label.includes('Tumpuan Extra')) {
-            formulaPjg = `=2*(ROUNDUP(7.5*E${cR}/1000, 2) + MAX(0, (0.25*M${cR}-L${cR})/1000) + (15*E${cR}/1000) + ROUNDUP(7.5*E${cR}/1000, 2))`;
-          } else if (sub.label.includes('Lapangan Extra')) {
-            formulaPjg = `=2*(ROUNDUP(7.5*E${cR}/1000, 2) + (20*E${cR}/1000)) + MAX(0, (0.25*M${cR}-L${cR})/1000)`;
+            formulaPjg = `=M${cR}/1000 + 40*(E${cR}/1000) + 24*(E${cR}/1000)`;
+          } else if (sub.label.includes('Tumpuan')) {
+            formulaPjg = `=2 * (((M${cR}/1000)/4) + 40*(E${cR}/1000))`;
+          } else if (sub.label.includes('Lapangan')) {
+            formulaPjg = `=(M${cR}/1000)/2 + 40*(E${cR}/1000)`;
           } else if (sub.label.includes('Bawah Menerus')) {
-            formulaPjg = `=2*(ROUNDUP(7.5*E${cR}/1000, 2) + (0.5*M${cR}/1000))`;
+            formulaPjg = `=M${cR}/1000 + 40*(E${cR}/1000) + 24*(E${cR}/1000)`;
           } else if (sub.label.includes('Pinggang')) {
-            formulaPjg = `=M${cR}/1000`;
+            formulaPjg = `=M${cR}/1000 + 40*(E${cR}/1000)`;
           }
 
-          const wPerM = RB[sub.dia] ? RB[sub.dia].W : 0;
+          const wPerM = (sub.dia * sub.dia) / 162;
 
           bRow.values = [
             isFirst ? idx + 1 : '',
@@ -2685,16 +2725,16 @@
           let pcsVal = sub.pcs;
 
           if (sub.label.includes('Utama')) {
-            formulaPjg = `=L${cR}/1000`;
+            formulaPjg = `=L${cR}/1000 + 40*(E${cR}/1000)`;
           } else if (sub.label.includes('Sengkang')) {
-            formulaPjg = `=(2*ROUNDUP(7.5*E${cR}/1000, 2)) + (2*(H${cR}-2*J${cR})/1000) + (2*(I${cR}-2*J${cR})/1000)`;
+            formulaPjg = `=2*((H${cR}-2*J${cR})/1000) + 2*((I${cR}-2*J${cR})/1000) + 12*(E${cR}/1000)`;
             pcsVal = { formula: `=IF(N${cR}>0, ROUNDUP(L${cR}/N${cR}, 0) * F${cR}, ${sub.pcs})`, result: sub.pcs };
           } else if (sub.label.includes('Crosstie')) {
-            formulaPjg = `=((H${cR}-2*J${cR}-E${cR})/1000) + 0.15`;
+            formulaPjg = `=((H${cR}-2*J${cR})/1000) + ((I${cR}-2*J${cR})/1000) + 24*(E${cR}/1000)`;
             pcsVal = { formula: `=IF(O${cR}>0, ROUNDUP(L${cR}/O${cR}, 0) * F${cR}, ${sub.pcs})`, result: sub.pcs };
           }
 
-          const wPerM = RB[sub.dia] ? RB[sub.dia].W : 0;
+          const wPerM = (sub.dia * sub.dia) / 162;
 
           kRow.values = [
             isFirst ? idx + 1 : '',
@@ -2940,7 +2980,7 @@
           </p>
 
           <div class="formula-box">
-            <div class="box-title">A. Perhitungan Balok (Beton Cor Net & Bekisting Net)</div>
+            <div class="box-title">A. Perhitungan Balok (Beton Cor Net, Bekisting Net & Pembesian)</div>
             <div class="formula-item-label">• Volume Cor Net Balok (m³):</div>
             <div class="formula-code-block">
               ∑ [ (Lebar / 1.000) × ((Tinggi − Tebal Pelat) / 1.000) × ((Bentang − Penopang) / 1.000) × Qty ]
@@ -2949,10 +2989,15 @@
             <div class="formula-code-block">
               ∑ [ (2 × ((Tinggi − Tebal Pelat) / 1.000) + (Lebar / 1.000)) × ((Bentang − Penopang) / 1.000) × Qty ]
             </div>
+            <div class="formula-sub">• <b>Tulangan Atas & Bawah Menerus (m):</b> Total Bentang + 40d + 24d</div>
+            <div class="formula-sub">• <b>Tulangan Pinggang (m):</b> Total Bentang + 40d</div>
+            <div class="formula-sub">• <b>Tulangan Tumpuan (m):</b> (Panjang Bentang / 4) + 40d (kiri & kanan per bentang)</div>
+            <div class="formula-sub">• <b>Tulangan Lapangan (m):</b> (Panjang Bentang / 2) + 40d (per bentang)</div>
+            <div class="formula-sub">• <b>Panjang 1 Sengkang (m):</b> 2(B − 2c) + 2(H − 2c) + 12(ds / 1000)</div>
           </div>
 
           <div class="formula-box">
-            <div class="box-title">B. Perhitungan Kolom (Beton Cor Net & Bekisting Net)</div>
+            <div class="box-title">B. Perhitungan Kolom (Beton Cor Net, Bekisting Net & Pembesian)</div>
             <div class="formula-item-label">• Volume Cor Net Kolom (m³):</div>
             <div class="formula-code-block">
               (Lebar / 1.000) × (Panjang / 1.000) × ((Tinggi − Tebal Pelat) / 1.000) × Qty
@@ -2961,6 +3006,9 @@
             <div class="formula-code-block">
               2 × [ (Lebar / 1.000) + (Panjang / 1.000) ] × ((Tinggi − Tebal Pelat) / 1.000) × Qty
             </div>
+            <div class="formula-sub">• <b>Tulangan Utama Kolom (m):</b> Tinggi Kolom + 40d</div>
+            <div class="formula-sub">• <b>Panjang 1 Sengkang (m):</b> 2(B − 2c) + 2(L − 2c) + 12(ds / 1000)</div>
+            <div class="formula-sub">• <b>Panjang 1 Crosstie (m):</b> (B − 2c) + (L − 2c) + 24(dc / 1000)</div>
           </div>
 
           <div class="formula-box">
@@ -2970,12 +3018,10 @@
           </div>
 
           <div class="formula-box">
-            <div class="box-title">D. Perhitungan Besi Tulangan & Pembesian</div>
-            <div class="formula-sub">• <b>Panjang Kait Standar (mm):</b> Pembulatan Ke Atas ( 7,5 × Diameter / 10 ) × 10</div>
-            <div class="formula-sub">• <b>Panjang Penyaluran Ld (mm):</b> MAX [ (fy / (1,1 × √fc)) × (ps / cb) × Diameter , 300 ]</div>
-            <div class="formula-sub">• <b>Jumlah Sengkang (pcs):</b> CEIL [ (0,5 × Bentang Bersih / Spasi Tumpuan) + (0,5 × Bentang Bersih / Spasi Lapangan) ]</div>
-            <div class="formula-sub">• <b>Berat Total Besi (kg):</b> Total Panjang Bersih (m) × Berat Jenis Spesifik (kg/m)</div>
-            <div class="formula-sub">• <b>Kebutuhan Batang (12m):</b> CEIL ( Total Panjang Bersih / 12 meter )</div>
+            <div class="box-title">D. Perhitungan Berat Besi & Kebutuhan Batang (12m)</div>
+            <div class="formula-sub">• <b>Berat Besi Per Meter (kg/m):</b> d² / 162</div>
+            <div class="formula-sub">• <b>Berat Total Besi (kg):</b> Total Panjang Besi (m) × (d² / 162)</div>
+            <div class="formula-sub">• <b>Kebutuhan Batang (12m):</b> CEIL ( Total Panjang Besi / 12 meter )</div>
           </div>
         </div>
       </div>
