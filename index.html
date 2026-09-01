@@ -143,16 +143,21 @@
       position: relative;
       width: 210mm;
       min-height: 297mm;
-      padding: 20mm 20mm 20mm 30mm; /* Margin: Kiri 3cm (30mm), Atas/Kanan/Bawah 2cm (20mm) */
+      padding: 20mm 20mm 20mm 30mm;
+      /* Margin: Kiri 3cm (30mm), Atas/Kanan/Bawah 2cm (20mm) */
       margin: 0 auto 20px auto;
       background: #ffffff;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
       box-sizing: border-box;
       overflow: hidden;
       color: #111c2d;
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
     }
-    .cover-page { padding: 20mm 20mm 20mm 30mm; }
+
+    .cover-page {
+      padding: 20mm 20mm 20mm 30mm;
+    }
+
     .cover-border {
       height: 257mm;
       border: 3px double #004ac6;
@@ -164,39 +169,199 @@
       text-align: center;
       box-sizing: border-box;
     }
-    .cover-header { margin-top: 10mm; display: flex; flex-direction: column; align-items: center; }
-    .cover-logo { height: 120px; width: auto; margin-bottom: 25px; object-fit: contain; }
-    .cover-system-title { font-size: 13px; font-weight: 800; letter-spacing: 3.5px; color: #004ac6; text-transform: uppercase; margin-bottom: 15px; }
-    .cover-main-title { font-size: 26px; font-weight: 800; color: #111c2d; margin: 0 0 15px 0; line-height: 1.35; max-width: 540px; }
-    .cover-sub-title { font-size: 12.5px; color: #434655; margin: 0 auto; max-width: 500px; line-height: 1.6; }
-    .cover-footer { font-size: 10.5px; color: #737686; line-height: 1.6; margin-bottom: 5mm; border-top: 1px solid #e7eeff; padding-top: 15px; width: 85%; }
 
-    .watermark-bg { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 380px; opacity: 0.05; pointer-events: none; z-index: 0; }
-    .page-content-wrapper { position: relative; z-index: 1; }
-    .page-header-title { border-bottom: 2px solid #004ac6; padding-bottom: 6px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: flex-end; }
-    .page-header-title h2 { font-size: 15px; font-weight: 800; color: #004ac6; margin: 0; letter-spacing: 0.5px; }
-    .page-num-tag { font-size: 10px; color: #737686; font-weight: 600; }
-    .section-desc { font-size: 10.5px; line-height: 1.6; color: #434655; margin-bottom: 12px; }
-    
-    .formula-box { background: #f9f9ff; border: 1px solid #c3c6d7; border-left: 4px solid #004ac6; border-radius: 6px; padding: 10px 14px; margin-bottom: 12px; font-size: 10.5px; }
-    .box-title { font-weight: 800; font-size: 11.5px; margin-bottom: 6px; color: #111c2d; }
-    .formula-item-label { margin-bottom: 3px; font-weight: 600; color: #111c2d; }
-    .formula-code-block { background: #ffffff; padding: 6px 10px; border-radius: 4px; border: 1px solid #c3c6d7; font-family: monospace; font-weight: 700; color: #004ac6; margin-bottom: 6px; font-size: 10px; }
-    .formula-sub { margin-bottom: 3px; font-size: 10px; color: #434655; }
+    .cover-header {
+      margin-top: 10mm;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-    .table-group-title { font-weight: 800; font-size: 11.5px; margin: 12px 0 6px 0; color: #004ac6; border-bottom: 1px solid #d8e3fb; padding-bottom: 3px; }
-    .report-table { width: 100%; border-collapse: collapse; font-size: 9px; margin-bottom: 14px; }
-    .report-table th, .report-table td { padding: 5.5px 7px; border: 1px solid #c3c6d7; }
-    .report-table th { background: #004ac6; color: #ffffff; font-weight: 700; text-align: left; }
-    .report-table th.text-center, .report-table td.text-center { text-align: center; }
-    .report-table th.text-right, .report-table td.text-right { text-align: right; }
-    .report-table tr.bg-sub { background: #f0f3ff; font-weight: 600; }
-    .report-table tr.bg-total { background: #d8e3fb; font-weight: 800; color: #004ac6; }
+    .cover-logo {
+      height: 120px;
+      width: auto;
+      margin-bottom: 25px;
+      object-fit: contain;
+    }
+
+    .cover-system-title {
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 3.5px;
+      color: #004ac6;
+      text-transform: uppercase;
+      margin-bottom: 15px;
+    }
+
+    .cover-main-title {
+      font-size: 26px;
+      font-weight: 800;
+      color: #111c2d;
+      margin: 0 0 15px 0;
+      line-height: 1.35;
+      max-width: 540px;
+    }
+
+    .cover-sub-title {
+      font-size: 12.5px;
+      color: #434655;
+      margin: 0 auto;
+      max-width: 500px;
+      line-height: 1.6;
+    }
+
+    .cover-footer {
+      font-size: 10.5px;
+      color: #737686;
+      line-height: 1.6;
+      margin-bottom: 5mm;
+      border-top: 1px solid #e7eeff;
+      padding-top: 15px;
+      width: 85%;
+    }
+
+    .watermark-bg {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 380px;
+      opacity: 0.05;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page-content-wrapper {
+      position: relative;
+      z-index: 1;
+    }
+
+    .page-header-title {
+      border-bottom: 2px solid #004ac6;
+      padding-bottom: 6px;
+      margin-bottom: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .page-header-title h2 {
+      font-size: 15px;
+      font-weight: 800;
+      color: #004ac6;
+      margin: 0;
+      letter-spacing: 0.5px;
+    }
+
+    .page-num-tag {
+      font-size: 10px;
+      color: #737686;
+      font-weight: 600;
+    }
+
+    .section-desc {
+      font-size: 10.5px;
+      line-height: 1.6;
+      color: #434655;
+      margin-bottom: 12px;
+    }
+
+    .formula-box {
+      background: #f9f9ff;
+      border: 1px solid #c3c6d7;
+      border-left: 4px solid #004ac6;
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin-bottom: 12px;
+      font-size: 10.5px;
+    }
+
+    .box-title {
+      font-weight: 800;
+      font-size: 11.5px;
+      margin-bottom: 6px;
+      color: #111c2d;
+    }
+
+    .formula-item-label {
+      margin-bottom: 3px;
+      font-weight: 600;
+      color: #111c2d;
+    }
+
+    .formula-code-block {
+      background: #ffffff;
+      padding: 6px 10px;
+      border-radius: 4px;
+      border: 1px solid #c3c6d7;
+      font-family: monospace;
+      font-weight: 700;
+      color: #004ac6;
+      margin-bottom: 6px;
+      font-size: 10px;
+    }
+
+    .formula-sub {
+      margin-bottom: 3px;
+      font-size: 10px;
+      color: #434655;
+    }
+
+    .table-group-title {
+      font-weight: 800;
+      font-size: 11.5px;
+      margin: 12px 0 6px 0;
+      color: #004ac6;
+      border-bottom: 1px solid #d8e3fb;
+      padding-bottom: 3px;
+    }
+
+    .report-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9px;
+      margin-bottom: 14px;
+    }
+
+    .report-table th,
+    .report-table td {
+      padding: 5.5px 7px;
+      border: 1px solid #c3c6d7;
+    }
+
+    .report-table th {
+      background: #004ac6;
+      color: #ffffff;
+      font-weight: 700;
+      text-align: left;
+    }
+
+    .report-table th.text-center,
+    .report-table td.text-center {
+      text-align: center;
+    }
+
+    .report-table th.text-right,
+    .report-table td.text-right {
+      text-align: right;
+    }
+
+    .report-table tr.bg-sub {
+      background: #f0f3ff;
+      font-weight: 600;
+    }
+
+    .report-table tr.bg-total {
+      background: #d8e3fb;
+      font-weight: 800;
+      color: #004ac6;
+    }
 
     @media print {
-      body > *:not(#pdf-print-wrapper) {
+      body>*:not(#pdf-print-wrapper) {
         display: none !important;
       }
+
       #pdf-print-wrapper {
         display: block !important;
         position: absolute !important;
@@ -205,12 +370,14 @@
         width: 100% !important;
         background: #ffffff !important;
       }
+
       .print-page {
         margin: 0 !important;
         box-shadow: none !important;
         page-break-after: always !important;
         break-after: page !important;
       }
+
       @page {
         size: A4 portrait;
         margin: 0;
@@ -222,7 +389,8 @@
 <body class="bg-background text-on-surface font-body-md h-screen flex overflow-hidden antialiased">
 
   <!-- Sidebar Backdrop Overlay for Mobile -->
-  <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/40 z-20 hidden transition-opacity"></div>
+  <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/40 z-20 hidden transition-opacity">
+  </div>
 
   <!-- SideNavBar -->
   <aside id="sidebar"
@@ -281,8 +449,8 @@
     <!-- Footer -->
     <div class="px-md mt-auto pt-lg border-t border-outline-variant">
       <div class="text-xs text-secondary text-center">
-        Precision Engineering<br>
-        <span class="font-semibold text-primary">SIPILCALC v2.5</span>
+        Engineering SystemC<br>
+        <span class="font-semibold text-primary">SIPILCALC</span>
       </div>
     </div>
   </aside>
@@ -620,12 +788,10 @@
                     Kolom (mm)</label><input type="number" id="blk-penopang" placeholder="600" oninput="drawBalokSVG()"
                     class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data text-on-surface text-right" />
                 </div>
-                <div><label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs">Jumlah Balok (buah)</label><input type="number" id="blk-qty" value="1" min="1" placeholder="1"
-                    class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data text-on-surface text-right" />
-                </div>
                 <!-- Dynamic Bentang Container -->
                 <div class="md:col-span-2 space-y-sm">
-                  <label class="block font-label-sm text-label-sm text-on-surface-variant">Variasi Bentang per As (mm) — Misal A-B, B-C, C-D...</label>
+                  <label class="block font-label-sm text-label-sm text-on-surface-variant">Variasi Bentang per As
+                    (mm)</label>
                   <div id="blk-bentang-container" class="space-y-sm"></div>
                   <button type="button" onclick="addBentangRow('balok')"
                     class="flex items-center gap-xs text-primary font-label-md hover:bg-primary-container/20 px-3 py-1.5 rounded transition-colors">
@@ -665,7 +831,8 @@
                     class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data text-right" />
                 </div>
                 <div><label class="block font-label-sm text-label-sm text-secondary mb-xs">Tulangan Lapangan
-                    (btg/bentang)</label><input type="number" id="blk-n-lap-extra" value="2" min="0" oninput="drawBalokSVG()"
+                    (btg/bentang)</label><input type="number" id="blk-n-lap-extra" value="2" min="0"
+                    oninput="drawBalokSVG()"
                     class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data text-right" />
                 </div>
               </div>
@@ -818,8 +985,8 @@
                 </div>
                 <!-- Dynamic Bentang Container -->
                 <div class="md:col-span-2 space-y-sm">
-                  <label class="block font-label-sm text-label-sm text-on-surface-variant">Variasi Dimensi Pelat (ly ×
-                    lx) & Jumlah</label>
+                  <label class="block font-label-sm text-label-sm text-on-surface-variant">Variasi Dimensi Pelat
+                  </label>
                   <div id="plt-bentang-container" class="space-y-sm"></div>
                   <button type="button" onclick="addBentangRow('pelat')"
                     class="flex items-center gap-xs text-primary font-label-md hover:bg-primary-container/20 px-3 py-1.5 rounded transition-colors">
@@ -829,51 +996,34 @@
               </div>
             </div>
 
-            <!-- Tulangan Arah X & Y -->
+            <!-- Penulangan Pelat -->
             <div
               class="bg-surface-container-lowest rounded-lg border border-outline-variant shadow-sm overflow-hidden p-lg space-y-md">
-              <h3 class="font-headline-md text-headline-md text-on-surface border-b pb-sm">Tulangan Arah-X
-                (Utama/Pendek)</h3>
+              <h3 class="font-headline-md text-headline-md text-on-surface border-b pb-sm">Detail Penulangan Pelat Beton
+              </h3>
               <div class="grid grid-cols-1 md:grid-cols-3 gap-md">
                 <div>
-                  <label class="block font-label-sm text-label-sm text-secondary mb-xs">Diameter X</label>
-                  <select id="plt-d-x" onchange="drawPelatSVG()"
+                  <label class="block font-label-sm text-label-sm text-secondary mb-xs">Jumlah Lapis Tulangan</label>
+                  <select id="plt-lapis" onchange="drawPelatSVG()"
+                    class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-body-md">
+                    <option value="2" selected>2 Lapis (Atas & Bawah)</option>
+                    <option value="1">1 Lapis (Tunggal)</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block font-label-sm text-label-sm text-secondary mb-xs">Diameter Tulangan (mm)</label>
+                  <select id="plt-d" onchange="drawPelatSVG()"
                     class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data">
                     <option value="8">D8</option>
                     <option value="10" selected>D10</option>
                     <option value="12">D12</option>
                     <option value="13">D13</option>
+                    <option value="16">D16</option>
                   </select>
                 </div>
-                <div><label class="block font-label-sm text-label-sm text-secondary mb-xs">Spasi Tumpuan X
-                    (mm)</label><input type="number" id="plt-sx-tump" value="150" oninput="drawPelatSVG()"
-                    class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data text-right" />
-                </div>
-                <div><label class="block font-label-sm text-label-sm text-secondary mb-xs">Spasi Lapangan X
-                    (mm)</label><input type="number" id="plt-sx-lap" value="200" oninput="drawPelatSVG()"
-                    class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data text-right" />
-                </div>
-              </div>
-
-              <h3 class="font-headline-md text-headline-md text-on-surface border-b pt-md pb-sm">Tulangan Arah-Y
-                (Sekunder/Panjang)</h3>
-              <div class="grid grid-cols-1 md:grid-cols-3 gap-md">
                 <div>
-                  <label class="block font-label-sm text-label-sm text-secondary mb-xs">Diameter Y</label>
-                  <select id="plt-d-y" onchange="drawPelatSVG()"
-                    class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data">
-                    <option value="8" selected>D8</option>
-                    <option value="10">D10</option>
-                    <option value="12">D12</option>
-                    <option value="13">D13</option>
-                  </select>
-                </div>
-                <div><label class="block font-label-sm text-label-sm text-secondary mb-xs">Spasi Tumpuan Y
-                    (mm)</label><input type="number" id="plt-sy-tump" value="200" oninput="drawPelatSVG()"
-                    class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data text-right" />
-                </div>
-                <div><label class="block font-label-sm text-label-sm text-secondary mb-xs">Spasi Lapangan Y
-                    (mm)</label><input type="number" id="plt-sy-lap" value="250" oninput="drawPelatSVG()"
+                  <label class="block font-label-sm text-label-sm text-secondary mb-xs">Spasi Tulangan (mm)</label>
+                  <input type="number" id="plt-spasi" value="150" min="50" step="10" oninput="drawPelatSVG()"
                     class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data text-right" />
                 </div>
               </div>
@@ -999,29 +1149,36 @@
   </main>
 
   <!-- Modal Manajemen Progress Proyek -->
-  <div id="project-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-md hidden">
-    <div class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-xl w-full max-w-lg overflow-hidden">
-      <div class="px-lg py-md bg-surface-container-low border-b border-outline-variant flex justify-between items-center">
+  <div id="project-modal"
+    class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-md hidden">
+    <div
+      class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-xl w-full max-w-lg overflow-hidden">
+      <div
+        class="px-lg py-md bg-surface-container-low border-b border-outline-variant flex justify-between items-center">
         <h3 class="font-headline-md font-bold text-primary flex items-center gap-xs">
           <span class="material-symbols-outlined text-[22px]">folder_managed</span> Simpan & Restore Progress
         </h3>
-        <button onclick="closeProjectModal()" class="text-secondary hover:text-on-surface p-1 rounded-md transition-colors">
+        <button onclick="closeProjectModal()"
+          class="text-secondary hover:text-on-surface p-1 rounded-md transition-colors">
           <span class="material-symbols-outlined">close</span>
         </button>
       </div>
 
       <div class="p-lg space-y-md">
-        
+
         <!-- 1. Simpan Ke File Proyek (.json) -->
         <div class="bg-surface-bright border border-outline-variant rounded-lg p-md space-y-sm">
           <h4 class="font-label-md font-bold text-on-surface flex items-center gap-xs">
-            <span class="material-symbols-outlined text-primary text-[18px]">download</span> Simpan Progress Ke File (.json)
+            <span class="material-symbols-outlined text-primary text-[18px]">download</span> Simpan Progress Ke File
+            (.json)
           </h4>
           <p class="text-xs text-secondary">Unduh seluruh data perhitungan saat ini sebagai file .json.</p>
           <div class="flex gap-sm items-center">
-            <input type="text" id="project-save-name" placeholder="Nama Proyek (misal: Gedung A)" value="Proyek_Struktur"
+            <input type="text" id="project-save-name" placeholder="Nama Proyek (misal: Gedung A)"
+              value="Proyek_Struktur"
               class="flex-1 bg-surface-container-lowest border border-outline-variant rounded px-3 py-1.5 font-body-md text-sm text-on-surface" />
-            <button onclick="exportProjectFile()" class="bg-primary text-on-primary px-4 py-1.5 rounded-lg font-label-md hover:opacity-90 flex items-center gap-xs transition-opacity shrink-0">
+            <button onclick="exportProjectFile()"
+              class="bg-primary text-on-primary px-4 py-1.5 rounded-lg font-label-md hover:opacity-90 flex items-center gap-xs transition-opacity shrink-0">
               <span class="material-symbols-outlined text-[18px]">save</span> Simpan .json
             </button>
           </div>
@@ -1030,11 +1187,15 @@
         <!-- 2. Buka / Restore Dari File Proyek (.json) -->
         <div class="bg-surface-bright border border-outline-variant rounded-lg p-md space-y-sm">
           <h4 class="font-label-md font-bold text-on-surface flex items-center gap-xs">
-            <span class="material-symbols-outlined text-[#166534] text-[18px]">upload_file</span> Buka / Restore File (.json)
+            <span class="material-symbols-outlined text-[#166534] text-[18px]">upload_file</span> Buka / Restore File
+            (.json)
           </h4>
-          <p class="text-xs text-secondary">Pilih file progress .json yang pernah disimpan untuk melanjutkan perhitungan.</p>
-          <input type="file" id="import-project-file-input" accept=".json,.sipil" onchange="importProjectFile(event)" class="hidden" />
-          <button onclick="document.getElementById('import-project-file-input').click()" class="w-full bg-[#166534] text-white px-4 py-2 rounded-lg font-label-md hover:bg-[#15803d] flex items-center justify-center gap-xs transition-colors">
+          <p class="text-xs text-secondary">Pilih file progress .json yang pernah disimpan untuk melanjutkan
+            perhitungan.</p>
+          <input type="file" id="import-project-file-input" accept=".json,.sipil" onchange="importProjectFile(event)"
+            class="hidden" />
+          <button onclick="document.getElementById('import-project-file-input').click()"
+            class="w-full bg-[#166534] text-white px-4 py-2 rounded-lg font-label-md hover:bg-[#15803d] flex items-center justify-center gap-xs transition-colors">
             <span class="material-symbols-outlined text-[18px]">folder_open</span> Buka File Proyek (.json)
           </button>
         </div>
@@ -1044,8 +1205,10 @@
           <h4 class="font-label-md font-bold text-on-surface flex items-center gap-xs">
             <span class="material-symbols-outlined text-[#b45309] text-[18px]">table_view</span> Laporan Excel (.xlsx)
           </h4>
-          <p class="text-xs text-secondary">Unduh laporan lengkap dengan rumus terhubung otomatis dalam format Excel.</p>
-          <button onclick="exportToExcel()" class="w-full bg-[#b45309] text-white px-4 py-2 rounded-lg font-label-md hover:opacity-90 flex items-center justify-center gap-xs transition-opacity">
+          <p class="text-xs text-secondary">Unduh laporan lengkap dengan rumus terhubung otomatis dalam format Excel.
+          </p>
+          <button onclick="exportToExcel()"
+            class="w-full bg-[#b45309] text-white px-4 py-2 rounded-lg font-label-md hover:opacity-90 flex items-center justify-center gap-xs transition-opacity">
             <span class="material-symbols-outlined text-[18px]">file_download</span> Download Laporan Excel (.xlsx)
           </button>
         </div>
@@ -1055,14 +1218,17 @@
           <h4 class="font-label-md font-bold text-on-surface flex items-center gap-xs">
             <span class="material-symbols-outlined text-[#b91c1c] text-[18px]">picture_as_pdf</span> Laporan PDF (.pdf)
           </h4>
-          <p class="text-xs text-secondary">Unduh laporan resmi profesional lengkap dengan Sampul, Watermark, & Penjabaran Rumus.</p>
-          <button onclick="exportToPDF()" class="w-full bg-[#b91c1c] text-white px-4 py-2 rounded-lg font-label-md hover:bg-[#991b1b] flex items-center justify-center gap-xs transition-colors">
+          <p class="text-xs text-secondary">Unduh laporan resmi profesional lengkap dengan Sampul, Watermark, &
+            Penjabaran Rumus.</p>
+          <button onclick="exportToPDF()"
+            class="w-full bg-[#b91c1c] text-white px-4 py-2 rounded-lg font-label-md hover:bg-[#991b1b] flex items-center justify-center gap-xs transition-colors">
             <span class="material-symbols-outlined text-[18px]">picture_as_pdf</span> Download Laporan PDF (.pdf)
           </button>
         </div>
 
         <div class="pt-xs flex justify-end">
-          <button onclick="closeProjectModal()" class="px-4 py-1.5 bg-surface-container border border-outline-variant text-secondary hover:bg-surface-container-high rounded-lg font-label-md transition-colors">Tutup</button>
+          <button onclick="closeProjectModal()"
+            class="px-4 py-1.5 bg-surface-container border border-outline-variant text-secondary hover:bg-surface-container-high rounded-lg font-label-md transition-colors">Tutup</button>
         </div>
 
       </div>
@@ -1070,21 +1236,27 @@
   </div>
 
   <!-- Modal Live Preview & Export PDF -->
-  <div id="pdf-preview-modal" class="fixed inset-0 bg-black/75 backdrop-blur-xs z-50 flex flex-col items-center justify-center p-xs md:p-md hidden">
-    <div class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-2xl w-full max-w-5xl h-[94vh] flex flex-col overflow-hidden">
+  <div id="pdf-preview-modal"
+    class="fixed inset-0 bg-black/75 backdrop-blur-xs z-50 flex flex-col items-center justify-center p-xs md:p-md hidden">
+    <div
+      class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-2xl w-full max-w-5xl h-[94vh] flex flex-col overflow-hidden">
       <!-- Modal Header -->
-      <div class="px-lg py-md bg-surface-container-low border-b border-outline-variant flex flex-wrap justify-between items-center gap-sm shrink-0">
+      <div
+        class="px-lg py-md bg-surface-container-low border-b border-outline-variant flex flex-wrap justify-between items-center gap-sm shrink-0">
         <div>
           <h3 class="font-headline-md font-bold text-primary flex items-center gap-xs">
-            <span class="material-symbols-outlined text-[#b91c1c] text-[24px]">picture_as_pdf</span> Live Preview Laporan PDF
+            <span class="material-symbols-outlined text-[#b91c1c] text-[24px]">picture_as_pdf</span> Live Preview
+            Laporan PDF
           </h3>
           <p class="text-xs text-secondary">Tinjau seluruh halaman laporan eksekutif resmi sebelum disimpan/dicetak.</p>
         </div>
         <div class="flex items-center gap-2">
-          <button onclick="triggerPrintPDF()" class="bg-[#b91c1c] text-white px-5 py-2 rounded-lg font-label-md font-bold hover:bg-[#991b1b] shadow-md flex items-center gap-xs transition-all cursor-pointer">
+          <button onclick="triggerPrintPDF()"
+            class="bg-[#b91c1c] text-white px-5 py-2 rounded-lg font-label-md font-bold hover:bg-[#991b1b] shadow-md flex items-center gap-xs transition-all cursor-pointer">
             <span class="material-symbols-outlined text-[20px]">print</span> Simpan Sebagai PDF / Cetak Laporan
           </button>
-          <button onclick="closePDFPreviewModal()" class="bg-surface-container border border-outline-variant text-secondary hover:text-on-surface px-4 py-2 rounded-lg font-label-md transition-colors flex items-center gap-xs cursor-pointer">
+          <button onclick="closePDFPreviewModal()"
+            class="bg-surface-container border border-outline-variant text-secondary hover:text-on-surface px-4 py-2 rounded-lg font-label-md transition-colors flex items-center gap-xs cursor-pointer">
             <span class="material-symbols-outlined text-[18px]">close</span> Tutup
           </button>
         </div>
@@ -1138,14 +1310,14 @@
 
     function switchTab(name, btn) {
       document.querySelectorAll('.tab-btn').forEach(b => {
-        b.classList.remove('bg-primary-container', 'text-on-primary-container', 'border-l-4', 'border-primary', 'shadow-sm');
-        b.classList.add('text-secondary', 'hover:bg-surface-container-high');
+        b.classList.remove('bg-primary-container', 'text-on-primary-container', 'border-l-4', 'border-primary', 'rounded-r-lg', 'shadow-sm');
+        b.classList.add('text-secondary', 'hover:bg-surface-container-high', 'rounded-lg');
       });
       document.querySelectorAll('.panel').forEach(p => p.classList.add('hidden'));
 
       if (btn) {
-        btn.classList.remove('text-secondary', 'hover:bg-surface-container-high');
-        btn.classList.add('bg-primary-container', 'text-on-primary-container', 'border-l-4', 'border-primary', 'shadow-sm');
+        btn.classList.remove('text-secondary', 'hover:bg-surface-container-high', 'rounded-lg');
+        btn.classList.add('bg-primary-container', 'text-on-primary-container', 'border-l-4', 'border-primary', 'rounded-r-lg', 'shadow-sm');
       }
 
       const panel = document.getElementById('panel-' + name);
@@ -1154,6 +1326,13 @@
       if (name === 'balok') drawBalokSVG();
       if (name === 'pelat') drawPelatSVG();
       if (name === 'rekap') renderRekap();
+
+      if (window.innerWidth < 768) {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        if (sidebar) sidebar.classList.add('-translate-x-full');
+        if (overlay) overlay.classList.add('hidden');
+      }
     }
 
     function rebarTableHTML(items) {
@@ -1248,7 +1427,7 @@
     // ═══════════════════════════════════════════════════════════
     //  DYNAMIC BENTANG / DIMENSI ROW HELPERS
     // ═══════════════════════════════════════════════════════════
-    function addBentangRow(type, defaultL = '', defaultQty = 1, defaultLy = '', defaultLx = '') {
+    function addBentangRow(type, defaultL = '', defaultQty = 1, defaultLy = '', defaultLx = '', defaultAs = '') {
       const pfx = { kolom: 'kol', balok: 'blk', pelat: 'plt' }[type] || type;
       const container = document.getElementById(pfx + '-bentang-container');
       if (!container) return;
@@ -1256,10 +1435,19 @@
       div.className = 'bentang-row flex items-center gap-md bg-surface-bright p-2 rounded border border-outline-variant';
 
       if (type === 'balok') {
+        const currentCount = container.querySelectorAll('.bentang-row').length;
+        const startChar = String.fromCharCode(65 + currentCount);
+        const endChar = String.fromCharCode(66 + currentCount);
+        const autoAs = defaultAs || `${startChar}-${endChar}`;
+
         div.innerHTML = `
+          <div class="w-36">
+            <label class="block text-[11px] font-semibold text-secondary mb-1">Nama As / Variasi</label>
+            <input type="text" class="blk-as-val w-full bg-surface-bright border border-outline-variant rounded px-2.5 py-1.5 font-body-md text-sm font-semibold text-primary" placeholder="A-B" value="${autoAs}" />
+          </div>
           <div class="flex-1">
-            <label class="block text-[11px] font-semibold text-secondary mb-1">Panjang Bentang As (mm) — Misal: 5000, 6000, 8000</label>
-            <input type="number" class="blk-L-val w-full bg-surface-bright border border-outline-variant border-l-2 border-l-primary rounded px-2.5 py-1.5 font-mono-data text-right text-sm" placeholder="6000" value="${defaultL !== undefined && defaultL !== '' ? defaultL : ''}" oninput="drawBalokSVG()" />
+            <label class="block text-[11px] font-semibold text-secondary mb-1">Panjang Bentang As (mm)</label>
+            <input type="number" class="blk-L-val w-full bg-surface-bright border border-outline-variant border-l-2 border-l-primary rounded px-2.5 py-1.5 font-mono-data text-right text-sm" placeholder="8000" value="${defaultL !== undefined && defaultL !== '' ? defaultL : ''}" oninput="drawBalokSVG()" />
           </div>
           <button type="button" onclick="removeBentangRow(this, 'balok')" class="self-end mb-1 text-error hover:bg-error-container/30 p-1.5 rounded transition-colors" title="Hapus Baris">
             <span class="material-symbols-outlined text-[18px]">close</span>
@@ -1463,7 +1651,7 @@
         
         <div class="bg-surface-container-low p-3 rounded-lg border border-outline-variant/60 my-2 space-y-1 text-xs font-mono-data">
           <div class="font-bold text-primary text-sm flex items-center gap-1">📊 Breakdown Perhitungan Cor & Bekisting Net:</div>
-          <div>• Tinggi Kolom Net ($H_{\\text{cor}}$) = ${lastEntry.L}mm − ${lastEntry.tPlt}mm = <b>${L_cor_last}mm (${L_cor_last/1000}m)</b></div>
+          <div>• Tinggi Kolom Net ($H_{\\text{cor}}$) = ${lastEntry.L}mm − ${lastEntry.tPlt}mm = <b>${L_cor_last}mm (${L_cor_last / 1000}m)</b></div>
           <div>• Rumus Vol. Cor Net = (${lastEntry.b}/1000) × (${lastEntry.h}/1000) × (${L_cor_last}/1000) × ${lastEntry.qty} unit = <b class="text-primary">${f3(lastEntry.volTotal)} m³</b></div>
           <div>• Rumus Bekisting Net = 2 × [(${lastEntry.b}/1000) + (${lastEntry.h}/1000)] × (${L_cor_last}/1000) × ${lastEntry.qty} unit = <b class="text-[#166534]">${f2(lastEntry.fwTotal)} m²</b></div>
         </div>
@@ -1474,7 +1662,7 @@
     }
 
     // ═══════════════════════════════════════════════════════════
-    //  BALOK CALCULATION (SESUAI RUMUS BARU.MD)
+    //  BALOK CALCULATION (SESUAI RUMUS BARU.MD & VARIASI AS)
     // ═══════════════════════════════════════════════════════════
     function hitungBalok() {
       // 1. Parameter Input Geometri & Penulangan Balok
@@ -1501,124 +1689,135 @@
       const dU_m = dU / 1000;
       const dS_m = dS / 1000;
       const dP_m = dP / 1000;
+      const penopang_m = penopang / 1000;
 
       const rows = document.querySelectorAll('#blk-bentang-container .bentang-row');
-      let batchVol = 0, batchFw = 0, batchW = 0;
-      let addedEntries = [];
+      let spanVariations = [];
 
-      // Accumulate bentang lengths for multi-span beam
-      let spanLengths_m = [];
-      const totalQty = parseFloat(document.getElementById('blk-qty')?.value) || 1;
-
-      rows.forEach(r => {
-        const L_mm = parseFloat(r.querySelector('.blk-L-val')?.value) || 0; // Panjang Bentang (mm)
+      rows.forEach((r, idx) => {
+        const asName = r.querySelector('.blk-as-val')?.value.trim() || `As ${idx + 1}`;
+        const L_mm = parseFloat(r.querySelector('.blk-L-val')?.value) || 0;
         if (L_mm > 0) {
-          spanLengths_m.push(L_mm / 1000);
+          spanVariations.push({ asName, L_mm, L_m: L_mm / 1000 });
         }
       });
 
-      if (!spanLengths_m.length) return alert('Masukkan setidaknya 1 Panjang Bentang (L) yang valid!');
+      if (!spanVariations.length) return alert('Masukkan setidaknya 1 Panjang Bentang (L) yang valid!');
 
-      const totalSpan_m = spanLengths_m.reduce((a, b) => a + b, 0); // Total Panjang Bentang (m)
-      const numSpans = spanLengths_m.length;
+      const totalSpan_m = spanVariations.reduce((a, b) => a + b.L_m, 0);
+      const numSpans = spanVariations.length;
 
       // 1. Tulangan Atas Menerus (Panjang 1 btg = total bentang + 40d + 24d)
       const pjgAtasMen = totalSpan_m + (40 * dU_m) + (24 * dU_m);
-      const tLenAtasMen = pjgAtasMen * nB_atas * totalQty;
+      const tLenAtasMen = pjgAtasMen * nB_atas;
       const wAtasMen = tLenAtasMen * ((dU * dU) / 162);
 
       // 2. Tulangan Bawah Menerus (Panjang 1 btg = total bentang + 40d + 24d)
       const pjgBawahMen = totalSpan_m + (40 * dU_m) + (24 * dU_m);
-      const tLenBawahMen = pjgBawahMen * nE_bawah * totalQty;
+      const tLenBawahMen = pjgBawahMen * nE_bawah;
       const wBawahMen = tLenBawahMen * ((dU * dU) / 162);
 
       // 3. Tulangan Pinggang (Panjang 1 btg = total bentang + 40d)
       let pjgPgng = 0, tLenPgng = 0, wPgng = 0;
       if (dP > 0 && nF_pgng > 0) {
         pjgPgng = totalSpan_m + (40 * dP_m);
-        tLenPgng = pjgPgng * nF_pgng * totalQty;
+        tLenPgng = pjgPgng * nF_pgng;
         wPgng = tLenPgng * ((dP * dP) / 162);
       }
 
-      // 4. Tulangan Tumpuan (Dihitung per bentang: Panjang = L_bentang/4 + 40d. Ada 2 tumpuan per bentang)
-      let tLenTumpTotal = 0;
-      let pjgTumpAvg = 0;
+      // Rebar Items list (Urutan: Atas Menerus, Bawah Menerus, Pinggang, Tumpuan per Variasi, Lapangan per Variasi, Sengkang)
+      const items = [
+        { label: 'Tul. Atas Menerus', dia: dU, pcs: nB_atas, lenPc: pjgAtasMen, totalLen: tLenAtasMen, weight: wAtasMen, spanL: totalSpan_m * 1000 },
+        { label: 'Tul. Bawah Menerus', dia: dU, pcs: nE_bawah, lenPc: pjgBawahMen, totalLen: tLenBawahMen, weight: wBawahMen, spanL: totalSpan_m * 1000 }
+      ];
+
+      if (nF_pgng > 0 && dP > 0) {
+        items.push({ label: 'Tul. Pinggang', dia: dP, pcs: nF_pgng, lenPc: pjgPgng, totalLen: tLenPgng, weight: wPgng, spanL: totalSpan_m * 1000 });
+      }
+
+      let wTumpTotal = 0;
+      let wLapTotal = 0;
+
+      // 4. Tulangan Tumpuan per Variasi Bentang (Misal Tul. Tumpuan A-B)
       if (nC_tump > 0) {
-        spanLengths_m.forEach(L_bentang => {
-          const pjg1Tump = (L_bentang / 4) + (40 * dU_m);
-          tLenTumpTotal += (2 * pjg1Tump * nC_tump); // 2 tumpuan per bentang
+        spanVariations.forEach(sv => {
+          const pjg1Tump = (sv.L_m / 4) + (40 * dU_m); // Formula: (L/4) + 40d
+          const pcsTump = 2 * nC_tump; // 2 tumpuan per bentang (kiri & kanan)
+          const tLenTump = pcsTump * pjg1Tump;
+          const wTump_i = tLenTump * ((dU * dU) / 162);
+          wTumpTotal += wTump_i;
+          items.push({
+            label: `Tul. Tumpuan ${sv.asName}`,
+            dia: dU,
+            pcs: pcsTump,
+            lenPc: pjg1Tump,
+            totalLen: tLenTump,
+            weight: wTump_i,
+            spanL: sv.L_mm
+          });
         });
-        pjgTumpAvg = tLenTumpTotal / (2 * numSpans * nC_tump);
-        tLenTumpTotal *= totalQty;
       }
-      const wTump = tLenTumpTotal * ((dU * dU) / 162);
 
-      // 5. Tulangan Lapangan (Dihitung per bentang: Panjang = L_bentang/2 + 40d)
-      let tLenLapTotal = 0;
-      let pjgLapAvg = 0;
+      // 5. Tulangan Lapangan per Variasi Bentang (Misal Tul. Lapangan A-B)
       if (nD_lap > 0) {
-        spanLengths_m.forEach(L_bentang => {
-          const pjg1Lap = (L_bentang / 2) + (40 * dU_m);
-          tLenLapTotal += (pjg1Lap * nD_lap);
+        spanVariations.forEach(sv => {
+          const pjg1Lap = (sv.L_m / 2) + (40 * dU_m); // Formula: (L/2) + 40d
+          const pcsLap = nD_lap;
+          const tLenLap = pcsLap * pjg1Lap;
+          const wLap_i = tLenLap * ((dU * dU) / 162);
+          wLapTotal += wLap_i;
+          items.push({
+            label: `Tul. Lapangan ${sv.asName}`,
+            dia: dU,
+            pcs: pcsLap,
+            lenPc: pjg1Lap,
+            totalLen: tLenLap,
+            weight: wLap_i,
+            spanL: sv.L_mm
+          });
         });
-        pjgLapAvg = tLenLapTotal / (numSpans * nD_lap);
-        tLenLapTotal *= totalQty;
       }
-      const wLap = tLenLapTotal * ((dU * dU) / 162);
 
-      // 6. Sengkang Balok (Dihitung per bentang: netSpan = L_bentang - lebarKolom)
-      const penopang_m = penopang / 1000;
+      // 6. Sengkang Balok (Dihitung per bentang: netSpan = L_bentang - penopang)
       const sT_m = sT / 1000;
       const sLp_m = sLp / 1000;
-
-      let nS_single = 0;
+      let nS_total = 0;
       let totalNetSpan_m = 0;
 
       if (sT_m > 0 && sLp_m > 0) {
-        spanLengths_m.forEach(L_bentang => {
-          const netSpan_i = Math.max(0, L_bentang - penopang_m);
+        spanVariations.forEach(sv => {
+          const netSpan_i = Math.max(0, sv.L_m - penopang_m);
           totalNetSpan_m += netSpan_i;
           const areaTump_i = netSpan_i * 0.5;
           const areaLap_i = netSpan_i * 0.5;
           const nS_i = Math.ceil((areaTump_i / sT_m) + (areaLap_i / sLp_m));
-          nS_single += nS_i;
+          nS_total += nS_i;
         });
       }
 
-      const nS_total = nS_single * totalQty;
-
-      // Panjang 1 sengkang = 2(B - 2c) + 2(H - 2c) + 12(ds/1000)
       const pjg1Sengkang = 2 * (b_m - 2 * c_m) + 2 * (h_m - 2 * c_m) + 12 * dS_m;
       const tLenSgk = nS_total * pjg1Sengkang;
       const wSgk = tLenSgk * ((dS * dS) / 162);
 
-      // Total Berat Besi Balok
-      const w1_balok = wSgk + wAtasMen + wTump + wLap + wBawahMen + wPgng;
+      items.push({
+        label: 'Sengkang',
+        dia: dS,
+        pcs: nS_total,
+        lenPc: pjg1Sengkang,
+        totalLen: tLenSgk,
+        weight: wSgk,
+        spanL: totalSpan_m * 1000
+      });
 
-      // Volume Cor Net & Bekisting Net Balok
+      const totalW_balok = wAtasMen + wBawahMen + wPgng + wTumpTotal + wLapTotal + wSgk;
       const h_cor_m = Math.max(0, (h - tPlt) / 1000);
-      const vol1 = b_m * h_cor_m * totalNetSpan_m * totalQty;
-      const fw1 = (2 * h_cor_m + b_m) * totalNetSpan_m * totalQty;
-
-      // Sub-items array
-      const items = [
-        { label: 'Tulangan Atas Menerus', dia: dU, pcs: nB_atas * totalQty, lenPc: pjgAtasMen, totalLen: tLenAtasMen, weight: wAtasMen },
-        { label: 'Tulangan Bawah Menerus', dia: dU, pcs: nE_bawah * totalQty, lenPc: pjgBawahMen, totalLen: tLenBawahMen, weight: wBawahMen },
-      ];
-      if (nF_pgng > 0 && dP > 0) {
-        items.push({ label: 'Tulangan Pinggang', dia: dP, pcs: nF_pgng * totalQty, lenPc: pjgPgng, totalLen: tLenPgng, weight: wPgng });
-      }
-      if (nC_tump > 0) {
-        items.push({ label: 'Tulangan Tumpuan', dia: dU, pcs: 2 * numSpans * nC_tump * totalQty, lenPc: pjgTumpAvg, totalLen: tLenTumpTotal, weight: wTump });
-      }
-      if (nD_lap > 0) {
-        items.push({ label: 'Tulangan Lapangan', dia: dU, pcs: numSpans * nD_lap * totalQty, lenPc: pjgLapAvg, totalLen: tLenLapTotal, weight: wLap });
-      }
-      items.push({ label: 'Sengkang', dia: dS, pcs: nS_total * totalQty, lenPc: pjg1Sengkang, totalLen: tLenSgk, weight: wSgk });
+      const vol1 = b_m * h_cor_m * totalNetSpan_m;
+      const fw1 = (2 * h_cor_m + b_m) * totalNetSpan_m;
 
       const entry = {
-        nama, lantai, qty: totalQty, b, h, L: totalSpan_m * 1000, cc, penopang, sT, sLp, tPlt,
-        volTotal: vol1, fwTotal: fw1, totalW: w1_balok,
+        nama, lantai, qty: 1, b, h, L: totalSpan_m * 1000, cc, penopang, sT, sLp, tPlt,
+        spanVariations,
+        volTotal: vol1, fwTotal: fw1, totalW: totalW_balok,
         rebarItems: items
       };
 
@@ -1627,8 +1826,6 @@
       } else {
         store.balok.push(entry);
       }
-      addedEntries.push(entry);
-      batchVol += vol1; batchFw += fw1; batchW += w1_balok;
 
       if (editState.type === 'balok') {
         editState = { type: null, index: null };
@@ -1638,17 +1835,17 @@
       const h_cor_last = Math.max(0, h - tPlt);
       const L_cor_last = Math.max(0, (totalSpan_m * 1000) - (numSpans * penopang));
 
-      document.getElementById('blk-res-sum').innerHTML = resultCards(batchVol, batchFw, batchW);
+      document.getElementById('blk-res-sum').innerHTML = resultCards(vol1, fw1, totalW_balok);
       document.getElementById('blk-res-det').innerHTML = `<div class="space-y-sm text-body-md text-on-surface">
         <div class="font-headline-md text-primary font-bold border-b pb-1">📐 Hasil Perhitungan Balok ${nama} (${lantai})</div>
-        <div>Telah berhasil dihitung <b>Total Bentang ${(totalSpan_m).toFixed(2)}m (${numSpans} bentang)</b>.</div>
+        <div>Telah berhasil dihitung <b>Total Bentang ${(totalSpan_m).toFixed(2)}m (${numSpans} variasi bentang: ${spanVariations.map(s => s.asName).join(', ')})</b>.</div>
         
         <div class="bg-surface-container-low p-3 rounded-lg border border-outline-variant/60 my-2 space-y-1 text-xs font-mono-data">
           <div class="font-bold text-primary text-sm flex items-center gap-1">📊 Breakdown Perhitungan Cor & Bekisting Net Balok:</div>
-          <div>• Tinggi Balok Net ($h_{\\text{cor}}$) = ${h}mm − ${tPlt}mm = <b>${h_cor_last}mm (${h_cor_last/1000}m)</b></div>
-          <div>• Bentang Balok Net ($L_{\\text{cor}}$) = ${totalSpan_m * 1000}mm − ${numSpans * penopang}mm = <b>${L_cor_last}mm (${L_cor_last/1000}m)</b></div>
-          <div>• Rumus Vol. Cor Net = (${b}/1000) × (${h_cor_last}/1000) × (${L_cor_last}/1000) × ${totalQty} unit = <b class="text-primary">${f3(vol1)} m³</b></div>
-          <div>• Rumus Bekisting Net = [2 × (${h_cor_last}/1000) + (${b}/1000)] × (${L_cor_last}/1000) × ${totalQty} unit = <b class="text-[#166534]">${f2(fw1)} m²</b></div>
+          <div>• Tinggi Balok Net ($h_{\\text{cor}}$) = ${h}mm − ${tPlt}mm = <b>${h_cor_last}mm (${h_cor_last / 1000}m)</b></div>
+          <div>• Bentang Balok Net ($L_{\\text{cor}}$) = ${totalSpan_m * 1000}mm − ${numSpans * penopang}mm = <b>${L_cor_last}mm (${L_cor_last / 1000}m)</b></div>
+          <div>• Rumus Vol. Cor Net = (${b}/1000) × (${h_cor_last}/1000) × (${L_cor_last}/1000) = <b class="text-primary">${f3(vol1)} m³</b></div>
+          <div>• Rumus Bekisting Net = [2 × (${h_cor_last}/1000) + (${b}/1000)] × (${L_cor_last}/1000) = <b class="text-[#166534]">${f2(fw1)} m²</b></div>
         </div>
       </div>` + rebarTableHTML(items);
 
@@ -1657,60 +1854,110 @@
     }
 
     // ═══════════════════════════════════════════════════════════
-    //  PELAT CALCULATION
+    //  PELAT CALCULATION (SESUAI RUMUS RESMI SIPILCALC)
     // ═══════════════════════════════════════════════════════════
+    function calcPlateBar(bentang_m, d_mm) {
+      const dm = d_mm / 1000;
+      const kait = 12 * dm; // 2 sisi x 6d = 12d
+      const target = bentang_m + kait;
+      let nLonjor = 1;
+      while ((nLonjor * 12 - (nLonjor - 1) * 40 * dm) < target) {
+        nLonjor++;
+      }
+      const overlapCount = nLonjor - 1;
+      const overlapLen = overlapCount * 40 * dm;
+      const pjg1Btg = bentang_m + overlapLen + kait;
+      return { nLonjor, overlapCount, pjg1Btg, overlapLen, kait };
+    }
+
     function hitungPelat() {
       const nama = S('plt-nama') || 'S' + (store.pelat.length + 1);
       const lantai = S('plt-lantai') || 'Lantai 1';
-      const t = V('plt-t'), cc = V('plt-cc');
+      const t = V('plt-t'), cc = V('plt-cc') || 20;
       if (!t) return alert('Lengkapi tebal pelat t!');
 
-      const dX = V('plt-d-x'), sxT = V('plt-sx-tump'), sxL = V('plt-sx-lap');
-      const dY = V('plt-d-y'), syT = V('plt-sy-tump'), syL = V('plt-sy-lap');
+      const lapis = parseInt(document.getElementById('plt-lapis')?.value) || 2;
+      const d = V('plt-d') || 10;
+      const spasi = V('plt-spasi') || 150;
+      if (spasi <= 0) return alert('Masukkan Spasi Tulangan yang valid!');
 
       const rows = document.querySelectorAll('#plt-bentang-container .bentang-row');
       let batchVol = 0, batchFw = 0, batchW = 0;
       let addedEntries = [];
 
       rows.forEach(r => {
-        const ly = parseFloat(r.querySelector('.plt-ly-val')?.value) || 0;
-        const lx = parseFloat(r.querySelector('.plt-lx-val')?.value) || 0;
+        const ly = parseFloat(r.querySelector('.plt-ly-val')?.value) || 0; // Panjang (mm)
+        const lx = parseFloat(r.querySelector('.plt-lx-val')?.value) || 0; // Lebar (mm)
         const qty = parseFloat(r.querySelector('.plt-qty-val')?.value) || 1;
         if (!lx || !ly || lx <= 0 || ly <= 0) return;
 
-        const tumpXL = lx / 4, lapXL = lx / 2;
-        const tumpYL = ly / 4, lapYL = ly / 2;
+        const pjgPlat_m = ly / 1000; // Panjang plat (m)
+        const lbrPlat_m = lx / 1000; // Lebar plat (m)
+        const d_m = d / 1000;
 
-        const vol1 = (lx / 1000) * (ly / 1000) * (t / 1000) * (1 + WASTE_C);
-        const fw1 = (lx / 1000) * (ly / 1000) * (1 + WASTE_F);
+        // 2. Jumlah Batang Tulangan Arah X: (lebar plat / spasi) + 1
+        const nX_single = Math.floor(lx / spasi) + 1;
 
-        const ldX = calcLd(dX), ldY = calcLd(dY);
-        const pjgX = (ly + 2 * ldX) / 1000;
-        const pjgY = (lx + 2 * ldY) / 1000;
+        // 3. Jumlah Batang Tulangan Arah Y: (panjang plat / spasi) + 1
+        const nY_single = Math.floor(ly / spasi) + 1;
 
-        const nXtK = Math.ceil(tumpXL / sxT) + 1, nXtN = Math.ceil(tumpXL / sxT) + 1;
-        const nXlp = Math.ceil(lapXL / sxL);
-        const nYtK = Math.ceil(tumpYL / syT) + 1, nYtN = Math.ceil(tumpYL / syT) + 1;
-        const nYlp = Math.ceil(lapYL / syL);
+        // 8. Panjang 1 Batang Tulangan Arah X (Dasar = Panjang Plat)
+        const barX = calcPlateBar(pjgPlat_m, d);
+        const pjg1Btg_X = barX.pjg1Btg;
 
-        const tXt = (nXtK + nXtN) * pjgX, tXl = nXlp * pjgX;
-        const tYt = (nYtK + nYtN) * pjgY, tYl = nYlp * pjgY;
-        const wXt = tXt * RB[dX].W * (1 + WASTE_R), wXl = tXl * RB[dX].W * (1 + WASTE_R);
-        const wYt = tYt * RB[dY].W * (1 + WASTE_R), wYl = tYl * RB[dY].W * (1 + WASTE_R);
-        const w1 = wXt + wXl + wYt + wYl;
+        // 9. Panjang 1 Batang Tulangan Arah Y (Dasar = Lebar Plat)
+        const barY = calcPlateBar(lbrPlat_m, d);
+        const pjg1Btg_Y = barY.pjg1Btg;
+
+        // 10 & 13. Total Panjang Tulangan Arah X
+        const pcsX_total = nX_single * lapis * qty;
+        const tLenX = pjg1Btg_X * pcsX_total;
+
+        // 11 & 13. Total Panjang Tulangan Arah Y
+        const pcsY_total = nY_single * lapis * qty;
+        const tLenY = pjg1Btg_Y * pcsY_total;
+
+        // 14. Berat Besi
+        const wPerM = (d * d) / 162;
+        const wX = tLenX * wPerM;
+        const wY = tLenY * wPerM;
+        const totalW_plat = wX + wY;
+
+        // Volume Cor & Bekisting
+        const vol1 = pjgPlat_m * lbrPlat_m * (t / 1000) * qty;
+        const fw1 = pjgPlat_m * lbrPlat_m * qty;
 
         const items = [
-          { label: 'Tul. X Tumpuan', dia: dX, pcs: (nXtK + nXtN) * qty, lenPc: pjgX, totalLen: tXt * qty, weight: wXt * qty },
-          { label: 'Tul. X Lapangan', dia: dX, pcs: nXlp * qty, lenPc: pjgX, totalLen: tXl * qty, weight: wXl * qty },
-          { label: 'Tul. Y Tumpuan', dia: dY, pcs: (nYtK + nYtN) * qty, lenPc: pjgY, totalLen: tYt * qty, weight: wYt * qty },
-          { label: 'Tul. Y Lapangan', dia: dY, pcs: nYlp * qty, lenPc: pjgY, totalLen: tYl * qty, weight: wYl * qty },
+          {
+            label: `Tul. Arah X (${lapis} Lapis)`,
+            dia: d,
+            pcs: pcsX_total,
+            lenPc: pjg1Btg_X,
+            totalLen: tLenX,
+            weight: wX,
+            nLonjor: barX.nLonjor,
+            overlapCount: barX.overlapCount,
+            arah: 'X'
+          },
+          {
+            label: `Tul. Arah Y (${lapis} Lapis)`,
+            dia: d,
+            pcs: pcsY_total,
+            lenPc: pjg1Btg_Y,
+            totalLen: tLenY,
+            weight: wY,
+            nLonjor: barY.nLonjor,
+            overlapCount: barY.overlapCount,
+            arah: 'Y'
+          }
         ];
 
         const entry = {
-          nama, lantai, qty, lx, ly, t,
-          volTotal: vol1 * qty, fwTotal: fw1 * qty, totalW: w1 * qty,
+          nama, lantai, qty, lx, ly, t, cc, lapis, d, spasi,
+          volTotal: vol1, fwTotal: fw1, totalW: totalW_plat,
           rebarItems: items
         };
+
         if (editState.type === 'pelat' && editState.index !== null && editState.index >= 0) {
           store.pelat[editState.index] = entry;
         } else {
@@ -1732,11 +1979,11 @@
       document.getElementById('plt-res-sum').innerHTML = resultCards(batchVol, batchFw, batchW);
       document.getElementById('plt-res-det').innerHTML = `<div class="space-y-sm text-body-md text-on-surface">
         <div class="font-headline-md text-primary font-bold border-b pb-1">📐 Hasil Perhitungan Pelat ${nama} (${lantai})</div>
-        <div>Telah berhasil dihitung dan ditambahkan <b>${addedEntries.length} variasi dimensi</b> ke daftar terhitung.</div>
+        <div>Telah berhasil dihitung dan ditambahkan <b>${addedEntries.length} variasi dimensi (${lapis} lapis tulangan D${d}@${spasi}mm)</b> ke daftar terhitung.</div>
         
         <div class="bg-surface-container-low p-3 rounded-lg border border-outline-variant/60 my-2 space-y-1 text-xs font-mono-data">
-          <div class="font-bold text-primary text-sm flex items-center gap-1">📊 Breakdown Perhitungan Cor & Bekisting Pelat:</div>
-          <div>• Tebal Pelat ($t$) = ${lastEntry.t}mm (${lastEntry.t/1000}m)</div>
+          <div class="font-bold text-primary text-sm flex items-center gap-1">📊 Breakdown Perhitungan Pelat:</div>
+          <div>• Tebal Pelat ($t$) = ${lastEntry.t}mm (${lastEntry.t / 1000}m) | Selimut = ${lastEntry.cc}mm</div>
           <div>• Rumus Vol. Cor = (${lastEntry.lx}/1000) × (${lastEntry.ly}/1000) × (${lastEntry.t}/1000) × ${lastEntry.qty} unit = <b class="text-primary">${f3(lastEntry.volTotal)} m³</b></div>
           <div>• Rumus Bekisting = (${lastEntry.lx}/1000) × (${lastEntry.ly}/1000) × ${lastEntry.qty} unit = <b class="text-[#166534]">${f2(lastEntry.fwTotal)} m²</b></div>
         </div>
@@ -1793,15 +2040,23 @@
         if (document.getElementById('blk-lantai')) document.getElementById('blk-lantai').value = item.lantai || 'Lantai 1';
         if (document.getElementById('blk-b')) document.getElementById('blk-b').value = item.b || '';
         if (document.getElementById('blk-h')) document.getElementById('blk-h').value = item.h || '';
-        if (document.getElementById('blk-qty')) document.getElementById('blk-qty').value = item.qty || 1;
         if (document.getElementById('blk-cc')) document.getElementById('blk-cc').value = item.cc || 30;
         if (document.getElementById('blk-penopang')) document.getElementById('blk-penopang').value = item.penopang || 0;
         if (document.getElementById('blk-t-pelat')) document.getElementById('blk-t-pelat').value = item.tPlt !== undefined ? item.tPlt : 120;
 
+        const mainRebar = (item.rebarItems || []).find(r => r.label.includes('Atas Menerus') || r.label.includes('Utama'));
+        if (mainRebar && document.getElementById('blk-d-utm')) document.getElementById('blk-d-utm').value = mainRebar.dia;
+
         const container = document.getElementById('blk-bentang-container');
         if (container) {
           container.innerHTML = '';
-          addBentangRow('balok', item.L);
+          if (item.spanVariations && item.spanVariations.length) {
+            item.spanVariations.forEach(sv => {
+              addBentangRow('balok', sv.L_mm, 1, '', '', sv.asName);
+            });
+          } else {
+            addBentangRow('balok', item.L);
+          }
         }
 
         updateSubmitBtn('balok', true);
@@ -1812,6 +2067,9 @@
         if (document.getElementById('plt-lantai')) document.getElementById('plt-lantai').value = item.lantai || 'Lantai 1';
         if (document.getElementById('plt-t')) document.getElementById('plt-t').value = item.t || '';
         if (document.getElementById('plt-cc')) document.getElementById('plt-cc').value = item.cc || 20;
+        if (document.getElementById('plt-lapis')) document.getElementById('plt-lapis').value = item.lapis || 2;
+        if (document.getElementById('plt-d')) document.getElementById('plt-d').value = item.d || 10;
+        if (document.getElementById('plt-spasi')) document.getElementById('plt-spasi').value = item.spasi || 150;
 
         const container = document.getElementById('plt-bentang-container');
         if (container) {
@@ -1974,7 +2232,11 @@
       }).join('');
     }
 
-    function removeItem(type, idx) { store[type].splice(idx, 1); renderList(type); }
+    function removeItem(type, idx) {
+      store[type].splice(idx, 1);
+      renderList(type);
+      renderRekap();
+    }
 
     function resetForm(type) {
       if (type === 'kolom') {
@@ -1991,6 +2253,10 @@
         drawBalokSVG();
       } else {
         ['plt-nama', 'plt-t'].forEach(id => { if (document.getElementById(id)) document.getElementById(id).value = ''; });
+        if (document.getElementById('plt-lapis')) document.getElementById('plt-lapis').value = 2;
+        if (document.getElementById('plt-d')) document.getElementById('plt-d').value = 10;
+        if (document.getElementById('plt-spasi')) document.getElementById('plt-spasi').value = 150;
+        if (document.getElementById('plt-cc')) document.getElementById('plt-cc').value = 20;
         const container = document.getElementById('plt-bentang-container');
         if (container) { container.innerHTML = ''; addBentangRow('pelat', '', 1, 5000, 4000); }
         document.getElementById('plt-result').style.display = 'none';
@@ -2086,10 +2352,11 @@
 
       // Pembesian Per Diameter Table
       const db = {};
-      allFiltered.forEach(e => e.rebarItems.forEach(r => {
-        if (!db[r.dia]) db[r.dia] = { len: 0, w: 0 };
+      allFiltered.forEach(e => (e.rebarItems || []).forEach(r => {
+        if (!db[r.dia]) db[r.dia] = { len: 0, w: 0, btg: 0 };
         db[r.dia].len += r.totalLen;
         db[r.dia].w += r.weight;
+        db[r.dia].btg += Math.ceil(Number(r.totalLen || 0) / 12);
       }));
       const dias = Object.keys(db).sort((a, b) => +a - +b);
 
@@ -2112,7 +2379,7 @@
             </thead>
             <tbody class="divide-y divide-outline-variant/40 bg-surface-container-lowest">
               ${dias.map(d => {
-        const b12 = stk(db[d].len);
+        const b12 = db[d].btg;
         gL += db[d].len; gW += db[d].w; gB += b12;
         return `<tr>
                   <td class="py-2.5 px-4 font-bold text-primary">D${d}</td>
@@ -2333,14 +2600,14 @@
 
     // ── 3. PELAT SVG DRAWING ──
     function drawPelatSVG() {
-      const lx = parseFloat(document.getElementById('plt-lx')?.value) || 4000;
-      const ly = parseFloat(document.getElementById('plt-ly')?.value) || 5000;
+      const firstRow = document.querySelector('#plt-bentang-container .bentang-row');
+      const ly = parseFloat(firstRow?.querySelector('.plt-ly-val')?.value) || 5000;
+      const lx = parseFloat(firstRow?.querySelector('.plt-lx-val')?.value) || 4000;
       const t = parseFloat(document.getElementById('plt-t')?.value) || 120;
       const cc = parseFloat(document.getElementById('plt-cc')?.value) || 20;
-      const dX = parseFloat(document.getElementById('plt-d-x')?.value) || 10;
-      const dY = parseFloat(document.getElementById('plt-d-y')?.value) || 8;
-      const sx = parseFloat(document.getElementById('plt-sx-tump')?.value) || 150;
-      const sy = parseFloat(document.getElementById('plt-sy-tump')?.value) || 200;
+      const lapis = parseInt(document.getElementById('plt-lapis')?.value) || 2;
+      const d = parseFloat(document.getElementById('plt-d')?.value) || 10;
+      const spasi = parseFloat(document.getElementById('plt-spasi')?.value) || 150;
 
       const svg = document.getElementById('plt-svg-canvas');
       if (!svg) return;
@@ -2351,21 +2618,23 @@
       const y0 = (240 - hPx) / 2;
 
       const ccPx = Math.min(Math.max(5, cc * 0.25), hPx * 0.2);
-      const rXPx = Math.max(3, Math.min(6, (dX / 2) * 0.5));
-      const rYPx = Math.max(2.5, Math.min(5, (dY / 2) * 0.5));
+      const rXPx = Math.max(3, Math.min(6, (d / 2) * 0.5));
+      const rYPx = Math.max(2.5, Math.min(5, (d / 2) * 0.5));
 
       let html = `<!-- Slab Section Concrete Base -->
       <rect x="${x0}" y="${y0}" width="${wPx}" height="${hPx}" fill="#e2e8f0" stroke="#64748b" stroke-width="2" rx="3" />`;
 
-      // Top rebar layer (Tumpuan X - line, Y - dots)
-      const topY = y0 + ccPx + rXPx;
-      html += `<line x1="${x0 + 8}" y1="${topY}" x2="${x0 + wPx - 8}" y2="${topY}" stroke="#2563eb" stroke-width="2" />`;
-      for (let i = 0; i < 7; i++) {
-        const cx = x0 + 15 + i * 23;
-        html += `<circle cx="${cx}" cy="${topY + rXPx + rYPx}" r="${rYPx}" fill="#d97706" stroke="#78350f" stroke-width="1" />`;
+      if (lapis === 2) {
+        // Top rebar layer
+        const topY = y0 + ccPx + rXPx;
+        html += `<line x1="${x0 + 8}" y1="${topY}" x2="${x0 + wPx - 8}" y2="${topY}" stroke="#2563eb" stroke-width="2" />`;
+        for (let i = 0; i < 7; i++) {
+          const cx = x0 + 15 + i * 23;
+          html += `<circle cx="${cx}" cy="${topY + rXPx + rYPx}" r="${rYPx}" fill="#d97706" stroke="#78350f" stroke-width="1" />`;
+        }
       }
 
-      // Bottom rebar layer (Lapangan X - line, Y - dots)
+      // Bottom rebar layer
       const botY = y0 + hPx - ccPx - rXPx;
       html += `<line x1="${x0 + 8}" y1="${botY}" x2="${x0 + wPx - 8}" y2="${botY}" stroke="#2563eb" stroke-width="2" />`;
       for (let i = 0; i < 7; i++) {
@@ -2374,9 +2643,9 @@
       }
 
       // Dimensions & Labels
-      html += `<text x="120" y="${y0 - 8}" fill="#475569" font-family="Inter" font-size="11" text-anchor="middle" font-weight="600">Bentang lx = ${lx} mm | ly = ${ly} mm</text>`;
+      html += `<text x="120" y="${y0 - 8}" fill="#475569" font-family="Inter" font-size="11" text-anchor="middle" font-weight="600">Bentang ly = ${ly} mm | lx = ${lx} mm</text>`;
       html += `<text x="${x0 - 8}" y="120" fill="#475569" font-family="Inter" font-size="11" text-anchor="middle" font-weight="600" transform="rotate(-90 ${x0 - 8} 120)">t = ${t} mm</text>`;
-      html += `<text x="120" y="${y0 + hPx + 16}" fill="#2563eb" font-family="Inter" font-size="10" text-anchor="middle" font-weight="500">Tul. X (D${dX}@${sx}mm) | Tul. Y (D${dY}@${sy}mm)</text>`;
+      html += `<text x="120" y="${y0 + hPx + 16}" fill="#2563eb" font-family="Inter" font-size="10" text-anchor="middle" font-weight="600">${lapis} Lapis Tulangan (D${d}@${spasi}mm)</text>`;
 
       svg.innerHTML = html;
     }
@@ -2409,8 +2678,6 @@
       const fontHeader = { name: 'Arial', size: 10, bold: true, color: { argb: 'FFFFFF' } };
       const fontBold = { name: 'Arial', size: 10, bold: true };
       const fontRegular = { name: 'Arial', size: 10 };
-      const fontYellowInput = { name: 'Arial', size: 10, bold: true, color: { argb: 'FFD97706' } }; // Gold/Amber Yellow font for manual inputs
-      const fillYellowInput = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFDF6B2' } }; // Soft yellow cell background for manual inputs
 
       const thinBorder = {
         top: { style: 'thin', color: { argb: COLOR_BORDER } },
@@ -2422,12 +2689,9 @@
       // ── SHEET 1: REKAPITULASI PROYEK ──
       const wsRekap = workbook.addWorksheet('REKAPITULASI PROYEK', {
         views: [{
-          view: 'pageBreakPreview',
-          showGridLines: true,
-          state: 'frozen',
-          xSplit: 3,
-          ySplit: 3,
-          activeCell: 'D4'
+          state: 'normal',
+          style: 'pageBreakPreview',
+          showGridLines: true
         }]
       });
       wsRekap.columns = [
@@ -2450,7 +2714,7 @@
 
       wsRekap.mergeCells('A2:G2');
       const t2 = wsRekap.getCell('A2');
-      t2.value = 'Tanggal Export: ' + new Date().toLocaleString('id-ID') + ' | Page Break Preview & Freeze Panes Auto Enabled';
+      t2.value = 'Tanggal Export: ' + new Date().toLocaleString('id-ID') + ' | Page Break Preview Auto Enabled';
       t2.font = { name: 'Arial', size: 9, italic: true, color: { argb: '505F76' } };
       t2.alignment = { vertical: 'middle', horizontal: 'center' };
       wsRekap.getRow(2).height = 20;
@@ -2467,9 +2731,35 @@
         c.border = thinBorder;
       });
 
-      const rKol = wsRekap.addRow([1, 'KOLOM BETON', store.kolom.length, { formula: "=SUM('KOLOM'!P4:P9999)", result: store.kolom.reduce((s,e)=>s+e.volTotal,0) }, { formula: "=SUM('KOLOM'!Q4:Q9999)", result: store.kolom.reduce((s,e)=>s+e.fwTotal,0) }, { formula: "=SUM('KOLOM'!T4:T9999)", result: store.kolom.reduce((s,e)=>s+e.totalW,0) }, { formula: "=IF(F5>0, ROUNDUP(F5/12, 0), 0)" }]);
-      const rBlk = wsRekap.addRow([2, 'BALOK BETON', store.balok.length, { formula: "=SUM('BALOK'!P4:P9999)", result: store.balok.reduce((s,e)=>s+e.volTotal,0) }, { formula: "=SUM('BALOK'!Q4:Q9999)", result: store.balok.reduce((s,e)=>s+e.fwTotal,0) }, { formula: "=SUM('BALOK'!T4:T9999)", result: store.balok.reduce((s,e)=>s+e.totalW,0) }, { formula: "=IF(F6>0, ROUNDUP(F6/12, 0), 0)" }]);
-      const rPlt = wsRekap.addRow([3, 'PELAT BETON', store.pelat.length, { formula: "=SUM('PELAT'!K4:K9999)", result: store.pelat.reduce((s,e)=>s+e.volTotal,0) }, { formula: "=SUM('PELAT'!L4:L9999)", result: store.pelat.reduce((s,e)=>s+e.fwTotal,0) }, { formula: "=SUM('PELAT'!O4:O9999)", result: store.pelat.reduce((s,e)=>s+e.totalW,0) }, { formula: "=IF(F7>0, ROUNDUP(F7/12, 0), 0)" }]);
+      const rKol = wsRekap.addRow([
+        1,
+        'KOLOM BETON',
+        store.kolom.length,
+        { formula: "=SUM('KOLOM'!P4:P9999)", result: store.kolom.reduce((s, e) => s + e.volTotal, 0) },
+        { formula: "=SUM('KOLOM'!Q4:Q9999)", result: store.kolom.reduce((s, e) => s + e.fwTotal, 0) },
+        { formula: "=SUM('KOLOM'!T4:T9999)", result: store.kolom.reduce((s, e) => s + e.totalW, 0) },
+        { formula: "=SUM('KOLOM'!U4:U9999)", result: store.kolom.reduce((s, e) => s + (e.rebarItems || []).reduce((acc, r) => acc + Math.ceil(r.totalLen / 12), 0), 0) }
+      ]);
+
+      const rBlk = wsRekap.addRow([
+        2,
+        'BALOK BETON',
+        store.balok.length,
+        { formula: "=SUM('BALOK'!P4:P9999)", result: store.balok.reduce((s, e) => s + e.volTotal, 0) },
+        { formula: "=SUM('BALOK'!Q4:Q9999)", result: store.balok.reduce((s, e) => s + e.fwTotal, 0) },
+        { formula: "=SUM('BALOK'!T4:T9999)", result: store.balok.reduce((s, e) => s + e.totalW, 0) },
+        { formula: "=SUM('BALOK'!U4:U9999)", result: store.balok.reduce((s, e) => s + (e.rebarItems || []).reduce((acc, r) => acc + Math.ceil(r.totalLen / 12), 0), 0) }
+      ]);
+
+      const rPlt = wsRekap.addRow([
+        3,
+        'PELAT BETON',
+        store.pelat.length,
+        { formula: "=SUM('PELAT'!K4:K9999)", result: store.pelat.reduce((s, e) => s + e.volTotal, 0) },
+        { formula: "=SUM('PELAT'!L4:L9999)", result: store.pelat.reduce((s, e) => s + e.fwTotal, 0) },
+        { formula: "=SUM('PELAT'!O4:O9999)", result: store.pelat.reduce((s, e) => s + e.totalW, 0) },
+        { formula: "=SUM('PELAT'!P4:P9999)", result: store.pelat.reduce((s, e) => s + (e.rebarItems || []).reduce((acc, r) => acc + Math.ceil(r.totalLen / 12), 0), 0) }
+      ]);
 
       [rKol, rBlk, rPlt].forEach((r) => {
         r.font = fontRegular;
@@ -2519,19 +2809,28 @@
       });
 
       const allRebarItems = [];
-      allStore.forEach(e => e.rebarItems.forEach(r => allRebarItems.push(r)));
+      allStore.forEach(e => (e.rebarItems || []).forEach(r => allRebarItems.push(r)));
       const uniqueDias = [...new Set(allRebarItems.map(r => r.dia))].sort((a, b) => Number(a) - Number(b));
 
+      const startDiaRow = hRow3.number + 1;
       uniqueDias.forEach((d, idx) => {
-        const wPerM = RB[d] ? RB[d].W : 0;
-        const rowNum = hRow3.number + idx + 1;
+        const wPerM = (d * d) / 162;
         const rDia = wsRekap.addRow([
           idx + 1,
           `D${d}`,
           wPerM,
-          { formula: `=SUMIF('BALOK'!E:E, ${d}, 'BALOK'!S:S) + SUMIF('KOLOM'!E:E, ${d}, 'KOLOM'!S:S) + SUMIF('PELAT'!E:E, ${d}, 'PELAT'!N:N)` },
-          { formula: `=D${rowNum}*C${rowNum}` },
-          { formula: `=IF(D${rowNum}>0, ROUNDUP(D${rowNum}/12, 0), 0)` }
+          {
+            formula: `=SUMIF('BALOK'!E:E, ${d}, 'BALOK'!S:S) + SUMIF('KOLOM'!E:E, ${d}, 'KOLOM'!S:S) + SUMIF('PELAT'!E:E, ${d}, 'PELAT'!N:N)`,
+            result: allStore.reduce((acc, e) => acc + (e.rebarItems || []).filter(r => r.dia === d).reduce((s, r) => s + r.totalLen, 0), 0)
+          },
+          {
+            formula: `=SUMIF('BALOK'!E:E, ${d}, 'BALOK'!T:T) + SUMIF('KOLOM'!E:E, ${d}, 'KOLOM'!T:T) + SUMIF('PELAT'!E:E, ${d}, 'PELAT'!O:O)`,
+            result: allStore.reduce((acc, e) => acc + (e.rebarItems || []).filter(r => r.dia === d).reduce((s, r) => s + r.weight, 0), 0)
+          },
+          {
+            formula: `=SUMIF('BALOK'!E:E, ${d}, 'BALOK'!U:U) + SUMIF('KOLOM'!E:E, ${d}, 'KOLOM'!U:U) + SUMIF('PELAT'!E:E, ${d}, 'PELAT'!P:P)`,
+            result: allStore.reduce((acc, e) => acc + (e.rebarItems || []).filter(r => r.dia === d).reduce((s, r) => s + Math.ceil(Number(r.totalLen || 0) / 12), 0), 0)
+          }
         ]);
         rDia.font = fontRegular;
         rDia.height = 20;
@@ -2546,20 +2845,47 @@
         rDia.eachCell(cell => cell.border = thinBorder);
       });
 
+      const endDiaRow = hRow3.number + uniqueDias.length;
+      if (uniqueDias.length > 0) {
+        const totDiaRow = wsRekap.addRow([
+          '',
+          'GRAND TOTAL',
+          '',
+          { formula: `=SUM(D${startDiaRow}:D${endDiaRow})`, result: allStore.reduce((acc, e) => acc + (e.rebarItems || []).reduce((s, r) => s + r.totalLen, 0), 0) },
+          { formula: `=SUM(E${startDiaRow}:E${endDiaRow})`, result: allStore.reduce((acc, e) => acc + (e.rebarItems || []).reduce((s, r) => s + r.weight, 0), 0) },
+          { formula: `=SUM(F${startDiaRow}:F${endDiaRow})`, result: allStore.reduce((acc, e) => acc + (e.rebarItems || []).reduce((s, r) => s + Math.ceil(Number(r.totalLen || 0) / 12), 0), 0) }
+        ]);
+        totDiaRow.font = fontBold;
+        totDiaRow.height = 24;
+        totDiaRow.getCell(4).numFmt = '#,##0.00';
+        totDiaRow.getCell(5).numFmt = '#,##0.0';
+        totDiaRow.getCell(6).numFmt = '#,##0';
+        totDiaRow.eachCell(cell => {
+          cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: COLOR_LIGHT_BLUE } };
+          cell.border = {
+            top: { style: 'medium', color: { argb: COLOR_NAVY } },
+            bottom: { style: 'double', color: { argb: COLOR_NAVY } },
+            left: { style: 'thin', color: { argb: COLOR_BORDER } },
+            right: { style: 'thin', color: { argb: COLOR_BORDER } }
+          };
+        });
+      }
+
       // ── SHEET 2: BALOK ──
       const wsBlk = workbook.addWorksheet('BALOK', {
         views: [{
-          view: 'pageBreakPreview',
-          showGridLines: true,
           state: 'frozen',
           xSplit: 4,
           ySplit: 3,
-          activeCell: 'E4'
+          topLeftCell: 'E4',
+          activeCell: 'E4',
+          style: 'pageBreakPreview',
+          showGridLines: true
         }]
       });
       wsBlk.columns = [
         { key: 'no', width: 6 }, { key: 'nama', width: 14 }, { key: 'lantai', width: 14 },
-        { key: 'kode', width: 24 }, { key: 'dia', width: 10 }, { key: 'qty', width: 12 },
+        { key: 'kode', width: 26 }, { key: 'dia', width: 10 }, { key: 'qty', width: 12 },
         { key: 'pcs', width: 12 }, { key: 'b', width: 12 }, { key: 'h', width: 12 },
         { key: 'cc', width: 14 }, { key: 'tPlt', width: 14 }, { key: 'penopang', width: 14 },
         { key: 'L', width: 14 }, { key: 'sT', width: 14 }, { key: 'sLp', width: 14 },
@@ -2592,7 +2918,7 @@
 
       let rIdxB = 4;
       store.balok.forEach((item, idx) => {
-        item.rebarItems.forEach((sub, sIdx) => {
+        (item.rebarItems || []).forEach((sub, sIdx) => {
           const cR = rIdxB;
           const bRow = wsBlk.getRow(cR);
           const isFirst = sIdx === 0;
@@ -2604,21 +2930,23 @@
           let pcsVal = sub.pcs;
 
           if (sub.label.includes('Sengkang')) {
+            const numSpans = (item.spanVariations && item.spanVariations.length) ? item.spanVariations.length : 1;
             formulaPjg = `=2*((H${cR}-2*J${cR})/1000) + 2*((I${cR}-2*J${cR})/1000) + 12*(E${cR}/1000)`;
-            pcsVal = { formula: `=IF(AND(N${cR}>0, O${cR}>0), ROUNDUP((((M${cR}-L${cR})*0.5)/(N${cR}/1000)) + (((M${cR}-L${cR})*0.5)/(O${cR}/1000)), 0), ${sub.pcs}) * F${cR}`, result: sub.pcs };
+            pcsVal = { formula: `=IF(AND(N${cR}>0, O${cR}>0), ROUNDUP((((M${cR}-(L${cR}*${numSpans}))*0.5)/N${cR}) + (((M${cR}-(L${cR}*${numSpans}))*0.5)/O${cR}), 0), ${sub.pcs}) * F${cR}`, result: sub.pcs };
           } else if (sub.label.includes('Atas Menerus')) {
-            formulaPjg = `=M${cR}/1000 + 40*(E${cR}/1000) + 24*(E${cR}/1000)`;
+            formulaPjg = `=(M${cR}/1000) + 40*(E${cR}/1000) + 24*(E${cR}/1000)`;
           } else if (sub.label.includes('Tumpuan')) {
-            formulaPjg = `=2 * (((M${cR}/1000)/4) + 40*(E${cR}/1000))`;
+            formulaPjg = `=(((M${cR}/1000)/4) + 40*(E${cR}/1000))`;
           } else if (sub.label.includes('Lapangan')) {
-            formulaPjg = `=(M${cR}/1000)/2 + 40*(E${cR}/1000)`;
+            formulaPjg = `=((M${cR}/1000)/2) + 40*(E${cR}/1000)`;
           } else if (sub.label.includes('Bawah Menerus')) {
-            formulaPjg = `=M${cR}/1000 + 40*(E${cR}/1000) + 24*(E${cR}/1000)`;
+            formulaPjg = `=(M${cR}/1000) + 40*(E${cR}/1000) + 24*(E${cR}/1000)`;
           } else if (sub.label.includes('Pinggang')) {
-            formulaPjg = `=M${cR}/1000 + 40*(E${cR}/1000)`;
+            formulaPjg = `=(M${cR}/1000) + 40*(E${cR}/1000)`;
           }
 
           const wPerM = (sub.dia * sub.dia) / 162;
+          const spanLength = sub.spanL || item.L;
 
           bRow.values = [
             isFirst ? idx + 1 : '',
@@ -2626,14 +2954,14 @@
             isFirst ? item.lantai : '',
             sub.label,
             sub.dia,
-            item.qty || 1,
+            1,
             pcsVal,
             item.b,
             item.h,
             item.cc || 30,
-            item.tPlt || 120,
+            item.tPlt !== undefined ? item.tPlt : 120,
             item.penopang || 0,
-            item.L,
+            spanLength,
             sub.label.includes('Sengkang') ? sT_val : (item.sT || 0),
             sub.label.includes('Sengkang') ? sLp_val : (item.sLp || 0),
             isFirst ? { formula: `=(H${cR}/1000)*(MAX(0, I${cR}-K${cR})/1000)*(MAX(0, M${cR}-L${cR})/1000)*F${cR}`, result: item.volTotal } : 0,
@@ -2641,7 +2969,7 @@
             { formula: formulaPjg, result: sub.lenPc },
             { formula: `=G${cR}*R${cR}`, result: sub.totalLen },
             { formula: `=S${cR}*${wPerM}`, result: sub.weight },
-            { formula: `=IF(S${cR}>0, ROUNDUP(S${cR}/12, 0), 0)`, result: Math.ceil(sub.totalLen / 12) }
+            { formula: `=IF(S${cR}>0, ROUNDUP(S${cR}/12, 0), 0)`, result: Math.ceil(Number(sub.totalLen || 0) / 12) }
           ];
 
           bRow.font = fontRegular;
@@ -2667,12 +2995,13 @@
       // ── SHEET 3: KOLOM ──
       const wsKol = workbook.addWorksheet('KOLOM', {
         views: [{
-          view: 'pageBreakPreview',
-          showGridLines: true,
           state: 'frozen',
           xSplit: 4,
           ySplit: 3,
-          activeCell: 'E4'
+          topLeftCell: 'E4',
+          activeCell: 'E4',
+          style: 'pageBreakPreview',
+          showGridLines: true
         }]
       });
       wsKol.columns = [
@@ -2710,7 +3039,7 @@
 
       let rIdxK = 4;
       store.kolom.forEach((item, idx) => {
-        item.rebarItems.forEach((sub, sIdx) => {
+        (item.rebarItems || []).forEach((sub, sIdx) => {
           const cR = rIdxK;
           const kRow = wsKol.getRow(cR);
           const isFirst = sIdx === 0;
@@ -2725,7 +3054,7 @@
           let pcsVal = sub.pcs;
 
           if (sub.label.includes('Utama')) {
-            formulaPjg = `=L${cR}/1000 + 40*(E${cR}/1000)`;
+            formulaPjg = `=(L${cR}/1000) + 40*(E${cR}/1000)`;
           } else if (sub.label.includes('Sengkang')) {
             formulaPjg = `=2*((H${cR}-2*J${cR})/1000) + 2*((I${cR}-2*J${cR})/1000) + 12*(E${cR}/1000)`;
             pcsVal = { formula: `=IF(N${cR}>0, ROUNDUP(L${cR}/N${cR}, 0) * F${cR}, ${sub.pcs})`, result: sub.pcs };
@@ -2747,9 +3076,9 @@
             item.b,
             item.h,
             item.cc || 40,
-            item.tPlt || 120,
+            item.tPlt !== undefined ? item.tPlt : 120,
             item.L,
-            { formula: `=MAX(0, L${cR} - K${cR})`, result: Math.max(0, item.L - (item.tPlt || 120)) },
+            { formula: `=MAX(0, L${cR} - K${cR})`, result: Math.max(0, item.L - (item.tPlt !== undefined ? item.tPlt : 120)) },
             isSgkRow ? sS_val : (item.sS || 0),
             isCrossRow ? sCross_val : (item.sCross || 0),
             isFirst ? { formula: `=(H${cR}/1000)*(I${cR}/1000)*(M${cR}/1000)*F${cR}`, result: item.volTotal } : 0,
@@ -2757,7 +3086,7 @@
             { formula: formulaPjg, result: sub.lenPc },
             { formula: `=G${cR}*R${cR}`, result: sub.totalLen },
             { formula: `=S${cR}*${wPerM}`, result: sub.weight },
-            { formula: `=IF(S${cR}>0, ROUNDUP(S${cR}/12, 0), 0)`, result: Math.ceil(sub.totalLen / 12) }
+            { formula: `=IF(S${cR}>0, ROUNDUP(S${cR}/12, 0), 0)`, result: Math.ceil(Number(sub.totalLen || 0) / 12) }
           ];
 
           kRow.font = fontRegular;
@@ -2783,12 +3112,13 @@
       // ── SHEET 4: PELAT ──
       const wsPlt = workbook.addWorksheet('PELAT', {
         views: [{
-          view: 'pageBreakPreview',
-          showGridLines: true,
           state: 'frozen',
           xSplit: 4,
           ySplit: 3,
-          activeCell: 'E4'
+          topLeftCell: 'E4',
+          activeCell: 'E4',
+          style: 'pageBreakPreview',
+          showGridLines: true
         }]
       });
       wsPlt.columns = [
@@ -2800,7 +3130,7 @@
         { key: 'btg12', width: 14 }
       ];
 
-            wsPlt.mergeCells('A1:P1');
+      wsPlt.mergeCells('A1:P1');
       const pT = wsPlt.getCell('A1');
       pT.value = 'RINCIAN PERHITUNGAN PELAT (EXCEL DYNAMIC FORMULA)';
       pT.font = fontTitle;
@@ -2824,7 +3154,7 @@
 
       let rIdxP = 4;
       store.pelat.forEach((item, idx) => {
-        item.rebarItems.forEach((sub, sIdx) => {
+        (item.rebarItems || []).forEach((sub, sIdx) => {
           const cR = rIdxP;
           const pRow = wsPlt.getRow(cR);
           const isFirst = sIdx === 0;
@@ -2832,15 +3162,15 @@
           let formulaPjg = '';
           let pcsVal = sub.pcs;
 
-          if (sub.label.includes('Tul. X')) {
-            formulaPjg = `=(H${cR} + 2*(12*E${cR}))/1000`;
-            pcsVal = { formula: `=IF(I${cR}>0, ROUNDUP(I${cR}/${item.sx || 150}, 0) * F${cR}, ${sub.pcs})`, result: sub.pcs };
+          if (sub.label.includes('Arah X') || sub.label.includes('Tul. X')) {
+            formulaPjg = `=((H${cR}/1000) + (${sub.overlapCount || 0} * 40 * (E${cR}/1000)) + (12 * (E${cR}/1000)))`;
+            pcsVal = { formula: `=(INT(I${cR} / ${item.spasi || 150}) + 1) * ${item.lapis || 2} * F${cR}`, result: sub.pcs };
           } else {
-            formulaPjg = `=(I${cR} + 2*(12*E${cR}))/1000`;
-            pcsVal = { formula: `=IF(H${cR}>0, ROUNDUP(H${cR}/${item.sy || 150}, 0) * F${cR}, ${sub.pcs})`, result: sub.pcs };
+            formulaPjg = `=((I${cR}/1000) + (${sub.overlapCount || 0} * 40 * (E${cR}/1000)) + (12 * (E${cR}/1000)))`;
+            pcsVal = { formula: `=(INT(H${cR} / ${item.spasi || 150}) + 1) * ${item.lapis || 2} * F${cR}`, result: sub.pcs };
           }
 
-          const wPerM = RB[sub.dia] ? RB[sub.dia].W : 0;
+          const wPerM = (sub.dia * sub.dia) / 162;
 
           pRow.values = [
             isFirst ? idx + 1 : '',
@@ -2858,7 +3188,7 @@
             { formula: formulaPjg, result: sub.lenPc },
             { formula: `=G${cR}*M${cR}`, result: sub.totalLen },
             { formula: `=N${cR}*${wPerM}`, result: sub.weight },
-            { formula: `=IF(N${cR}>0, ROUNDUP(N${cR}/12, 0), 0)`, result: Math.ceil(sub.totalLen / 12) }
+            { formula: `=IF(N${cR}>0, ROUNDUP(N${cR}/12, 0), 0)`, result: Math.ceil(Number(sub.totalLen || 0) / 12) }
           ];
 
           pRow.font = fontRegular;
@@ -2881,7 +3211,6 @@
         });
       });
 
-      // File Export Generation
       const buffer = await workbook.xlsx.writeBuffer();
       const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
       saveAs(blob, `SIPILCALC_Export_Proyek_${new Date().toISOString().slice(0, 10)}.xlsx`);
@@ -2907,7 +3236,7 @@
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0);
             resolve(canvas.toDataURL('image/png'));
-          } catch(e) { resolve('screen.png'); }
+          } catch (e) { resolve('screen.png'); }
         };
         img.onerror = () => resolve('screen.png');
         img.src = 'screen.png';
@@ -3065,7 +3394,7 @@
               <table class="report-table">
                 <thead>
                   <tr>
-                    <th colspan="4">Elemen Balok: ${item.nama} (${item.qty} unit) | Dimensi: ${item.b}×${item.h} mm | Bentang Net: ${netL/1000}m</th>
+                    <th colspan="4">Elemen Balok: ${item.nama} (${item.qty} unit) | Dimensi: ${item.b}×${item.h} mm | Bentang Net: ${netL / 1000}m</th>
                     <th class="text-right">Vol: ${f3(item.volTotal)} m³</th>
                     <th class="text-right" colspan="2">Bekisting: ${f2(item.fwTotal)} m²</th>
                   </tr>
@@ -3128,7 +3457,7 @@
               <table class="report-table">
                 <thead>
                   <tr>
-                    <th colspan="4">Elemen Kolom: ${item.nama} (${item.qty} unit) | Dimensi: ${item.b}×${item.h} mm | Tinggi Net: ${netH/1000}m</th>
+                    <th colspan="4">Elemen Kolom: ${item.nama} (${item.qty} unit) | Dimensi: ${item.b}×${item.h} mm | Tinggi Net: ${netH / 1000}m</th>
                     <th class="text-right">Vol: ${f3(item.volTotal)} m³</th>
                     <th class="text-right" colspan="2">Bekisting: ${f2(item.fwTotal)} m²</th>
                   </tr>
@@ -3305,23 +3634,23 @@
               <tr>
                 <td>Kolom Struktur</td>
                 <td class="text-center">${store.kolom.length} tipe</td>
-                <td class="text-right font-bold">${f3(store.kolom.reduce((s,e) => s + e.volTotal, 0))}</td>
-                <td class="text-right font-bold">${f2(store.kolom.reduce((s,e) => s + e.fwTotal, 0))}</td>
-                <td class="text-right font-bold">${f1(store.kolom.reduce((s,e) => s + e.totalW, 0))}</td>
+                <td class="text-right font-bold">${f3(store.kolom.reduce((s, e) => s + e.volTotal, 0))}</td>
+                <td class="text-right font-bold">${f2(store.kolom.reduce((s, e) => s + e.fwTotal, 0))}</td>
+                <td class="text-right font-bold">${f1(store.kolom.reduce((s, e) => s + e.totalW, 0))}</td>
               </tr>
               <tr>
                 <td>Balok Struktur</td>
                 <td class="text-center">${store.balok.length} tipe</td>
-                <td class="text-right font-bold">${f3(store.balok.reduce((s,e) => s + e.volTotal, 0))}</td>
-                <td class="text-right font-bold">${f2(store.balok.reduce((s,e) => s + e.fwTotal, 0))}</td>
-                <td class="text-right font-bold">${f1(store.balok.reduce((s,e) => s + e.totalW, 0))}</td>
+                <td class="text-right font-bold">${f3(store.balok.reduce((s, e) => s + e.volTotal, 0))}</td>
+                <td class="text-right font-bold">${f2(store.balok.reduce((s, e) => s + e.fwTotal, 0))}</td>
+                <td class="text-right font-bold">${f1(store.balok.reduce((s, e) => s + e.totalW, 0))}</td>
               </tr>
               <tr>
                 <td>Pelat Lantai</td>
                 <td class="text-center">${store.pelat.length} tipe</td>
-                <td class="text-right font-bold">${f3(store.pelat.reduce((s,e) => s + e.volTotal, 0))}</td>
-                <td class="text-right font-bold">${f2(store.pelat.reduce((s,e) => s + e.fwTotal, 0))}</td>
-                <td class="text-right font-bold">${f1(store.pelat.reduce((s,e) => s + e.totalW, 0))}</td>
+                <td class="text-right font-bold">${f3(store.pelat.reduce((s, e) => s + e.volTotal, 0))}</td>
+                <td class="text-right font-bold">${f2(store.pelat.reduce((s, e) => s + e.fwTotal, 0))}</td>
+                <td class="text-right font-bold">${f1(store.pelat.reduce((s, e) => s + e.totalW, 0))}</td>
               </tr>
               <tr class="bg-total">
                 <td>GRAND TOTAL PROYEK</td>
@@ -3551,36 +3880,13 @@
       if (overlay) overlay.classList.toggle('hidden');
     }
 
-    function switchTab(tabName, btn) {
-      document.querySelectorAll('.panel').forEach(p => p.classList.add('hidden'));
-
-      const targetPanel = document.getElementById('panel-' + tabName);
-      if (targetPanel) targetPanel.classList.remove('hidden');
-
-      document.querySelectorAll('.tab-btn').forEach(b => {
-        b.classList.remove('bg-primary-container', 'text-on-primary-container', 'border-l-4', 'border-primary', 'rounded-r-lg', 'shadow-sm');
-        b.classList.add('text-secondary', 'rounded-lg');
-      });
-
-      if (btn) {
-        btn.classList.remove('text-secondary', 'rounded-lg');
-        btn.classList.add('bg-primary-container', 'text-on-primary-container', 'border-l-4', 'border-primary', 'rounded-r-lg', 'shadow-sm');
-      }
-
-      if (window.innerWidth < 768) {
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('sidebar-overlay');
-        if (sidebar) sidebar.classList.add('-translate-x-full');
-        if (overlay) overlay.classList.add('hidden');
-      }
-    }
-
     // Init
     loadAutoLocalStorage();
     addBentangRow('kolom', 4000, 1);
     addBentangRow('balok', 5500, 1);
     addBentangRow('pelat', '', 1, 5000, 4000);
     ['kolom', 'balok', 'pelat'].forEach(t => renderList(t));
+    renderRekap();
     drawKolomSVG();
     drawBalokSVG();
     drawPelatSVG();

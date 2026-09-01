@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "npx electron .",
-    "dev": "npx electron .",
+    "dev": "npx http-server -o",
     "build:exe": "npx electron-packager . SIPILCALC-Desktop --platform=win32 --arch=x64 --out=dist --overwrite"
   },
   "keywords": [
