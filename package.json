@@ -1,12 +1,36 @@
 {
   "name": "sipilcalc-engineering-system",
-  "version": "2.5.0",
+  "version": "3.0.0",
   "description": "SIPILCALC Engineering System (Structural Concrete Estimation)",
   "main": "main.js",
   "scripts": {
-    "start": "npx electron .",
+    "start": "electron .",
     "dev": "npx http-server -o",
-    "build:exe": "npx electron-packager . SIPILCALC-Desktop --platform=win32 --arch=x64 --out=dist --overwrite"
+    "build": "electron-builder --win"
+  },
+  "build": {
+    "appId": "com.sipilcalc.app",
+    "productName": "SIPILCALC",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "icon": "screen.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "SIPILCALC"
+    },
+    "portable": {
+      "artifactName": "SIPILCALC-Standalone.exe"
+    }
   },
   "keywords": [
     "sipilcalc",
@@ -15,5 +39,10 @@
     "civil-engineering"
   ],
   "author": "SIPILCALC Team",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^28.2.0",
+    "electron-builder": "^24.13.3",
+    "http-server": "^14.1.1"
+  }
 }

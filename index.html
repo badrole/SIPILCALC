@@ -143,8 +143,10 @@
       position: relative;
       width: 210mm;
       min-height: 297mm;
+      height: 297mm;
+      max-height: 297mm;
       padding: 20mm 20mm 20mm 30mm;
-      /* Margin: Kiri 3cm (30mm), Atas/Kanan/Bawah 2cm (20mm) */
+      /* Margin Standar: Kiri 30mm (3cm), Atas/Kanan/Bawah 20mm (2cm) */
       margin: 0 auto 20px auto;
       background: #ffffff;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
@@ -159,9 +161,11 @@
     }
 
     .cover-border {
-      height: 257mm;
+      min-height: 254mm;
+      height: 254mm;
+      max-height: 254mm;
       border: 3px double #004ac6;
-      padding: 25mm 15mm 15mm 15mm;
+      padding: 20mm 15mm 15mm 15mm;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -357,30 +361,70 @@
       color: #004ac6;
     }
 
+    @page {
+      size: A4 portrait;
+      margin: 0;
+    }
+
     @media print {
+
+      *,
+      *:before,
+      *:after {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+        box-sizing: border-box !important;
+      }
+
+      html,
+      body {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 210mm !important;
+        background: #ffffff !important;
+      }
+
       body>*:not(#pdf-print-wrapper) {
         display: none !important;
       }
 
       #pdf-print-wrapper {
         display: block !important;
-        position: absolute !important;
-        left: 0 !important;
-        top: 0 !important;
-        width: 100% !important;
+        position: static !important;
+        width: 210mm !important;
+        margin: 0 !important;
+        padding: 0 !important;
         background: #ffffff !important;
       }
 
       .print-page {
+        width: 210mm !important;
+        min-height: 297mm !important;
+        height: 297mm !important;
+        max-height: 297mm !important;
+        padding: 20mm 20mm 20mm 30mm !important;
         margin: 0 !important;
         box-shadow: none !important;
         page-break-after: always !important;
         break-after: page !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
       }
 
-      @page {
-        size: A4 portrait;
-        margin: 0;
+      .cover-border {
+        min-height: 254mm !important;
+        height: 254mm !important;
+        max-height: 254mm !important;
+      }
+
+      .formula-box,
+      .report-table,
+      .page-header-title {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
       }
     }
   </style>
@@ -785,7 +829,7 @@
                     class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data text-on-surface text-right" />
                 </div>
                 <div><label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs">Penopang / Lebar
-                    Kolom (mm)</label><input type="number" id="blk-penopang" placeholder="600" oninput="drawBalokSVG()"
+                    Kolom (mm)</label><input type="number" id="blk-penopang" placeholder="600" value="600" oninput="drawBalokSVG()"
                     class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data text-on-surface text-right" />
                 </div>
                 <!-- Dynamic Bentang Container -->
@@ -871,7 +915,7 @@
                     class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data text-right" />
                 </div>
                 <div><label class="block font-label-sm text-label-sm text-secondary mb-xs">Spasi Lapangan
-                    (mm)</label><input type="number" id="blk-s-lap" value="200" oninput="drawBalokSVG()"
+                    (mm)</label><input type="number" id="blk-s-lap" value="150" oninput="drawBalokSVG()"
                     class="w-full bg-surface-bright border border-outline-variant rounded-DEFAULT px-3 py-2 font-mono-data text-right" />
                 </div>
               </div>
@@ -1551,6 +1595,26 @@
     }
 
     // ═══════════════════════════════════════════════════════════
+    //  HELPER BENGKOKAN KAIT STANDAR SNI (90° & 135°)
+    // ═══════════════════════════════════════════════════════════
+    // Panjang 1 sisi kait 90° (dalam meter):
+    // Jika d >= 19mm -> 12d
+    // Jika d <= 16mm -> MAX(6d, 75mm)
+    function getHook90_m(dia_mm) {
+      if (dia_mm >= 19) {
+        return (12 * dia_mm) / 1000;
+      } else {
+        return Math.max(6 * dia_mm, 75) / 1000;
+      }
+    }
+
+    // Panjang 1 sisi kait 135° untuk sengkang (dalam meter):
+    // d <= 25mm -> MAX(6d, 75mm)
+    function getHook135_m(dia_mm) {
+      return Math.max(6 * dia_mm, 75) / 1000;
+    }
+
+    // ═══════════════════════════════════════════════════════════
     //  KOLOM CALCULATION (SESUAI RUMUS BARU.MD)
     // ═══════════════════════════════════════════════════════════
     function hitungKolom() {
@@ -1592,12 +1656,13 @@
         const wU_per_m = (dU * dU) / 162; // Berat per meter (kg/m)
         const wU = tLenU * wU_per_m; // Total berat (kg)
 
-        // 2. Tulangan Sengkang Kolom (Rumus: Panjang 1 sengkang = 2(B-2c) + 2(L-2c) + 12(ds/1000))
+        // 2. Tulangan Sengkang Kolom (Rumus: Panjang 1 sengkang = 2(B-2c) + 2(L-2c) + 2*Hook135)
         const sS_m = sS / 1000;
         const dS_m = dS / 1000;
         const nS_perKolom = Math.ceil(H_m / sS_m); // Jumlah sengkang per kolom = ROUNDUP(H / s ; 0)
         const nS_Total = nS_perKolom * qty;
-        const pjgS = 2 * (b_m - 2 * c_m) + 2 * (h_m - 2 * c_m) + 12 * dS_m; // Panjang 1 sengkang (m)
+        const hook135_kol = 2 * getHook135_m(dS);
+        const pjgS = 2 * (b_m - 2 * c_m) + 2 * (h_m - 2 * c_m) + hook135_kol; // Panjang 1 sengkang (m)
         const tLenS = nS_Total * pjgS;
         const wS_per_m = (dS * dS) / 162;
         const wS = tLenS * wS_per_m;
@@ -1670,7 +1735,7 @@
       const lantai = S('blk-lantai') || 'Lantai 1';
       const b = V('blk-b'), h = V('blk-h');
       const cc = V('blk-cc') || 30;
-      const penopang = parseFloat(document.getElementById('blk-penopang')?.value) || 0;
+      const penopang = parseFloat(document.getElementById('blk-penopang')?.value) || 600;
       const tPlt = V('blk-t-pelat') || 0;
 
       const dU = V('blk-d-utm') || 16, dS = V('blk-d-sgk') || 8, dP = V('blk-d-pgng') || 10;
@@ -1679,7 +1744,7 @@
       const nC_tump = V('blk-n-tump') || 0;
       const nD_lap = V('blk-n-lap-extra') || 0;
       const nF_pgng = V('blk-n-pgng') || 0;
-      const sT = V('blk-s-tump') || 100, sLp = V('blk-s-lap') || 200;
+      const sT = V('blk-s-tump') || 100, sLp = V('blk-s-lap') || 150;
 
       if (!b || !h) return alert('Isi Dimensi Balok (Lebar b & Tinggi h) terlebih dahulu!');
 
@@ -1707,13 +1772,15 @@
       const totalSpan_m = spanVariations.reduce((a, b) => a + b.L_m, 0);
       const numSpans = spanVariations.length;
 
-      // 1. Tulangan Atas Menerus (Panjang 1 btg = total bentang + 40d + 24d)
-      const pjgAtasMen = totalSpan_m + (40 * dU_m) + (24 * dU_m);
+      // 1. Tulangan Atas Menerus (Panjang 1 btg = total bentang + 40d + 2*hook90)
+      const hook90_atas = 2 * getHook90_m(dU);
+      const pjgAtasMen = totalSpan_m + (40 * dU_m) + hook90_atas;
       const tLenAtasMen = pjgAtasMen * nB_atas;
       const wAtasMen = tLenAtasMen * ((dU * dU) / 162);
 
-      // 2. Tulangan Bawah Menerus (Panjang 1 btg = total bentang + 40d + 24d)
-      const pjgBawahMen = totalSpan_m + (40 * dU_m) + (24 * dU_m);
+      // 2. Tulangan Bawah Menerus (Panjang 1 btg = total bentang + 40d + 2*hook90)
+      const hook90_bawah = 2 * getHook90_m(dU);
+      const pjgBawahMen = totalSpan_m + (40 * dU_m) + hook90_bawah;
       const tLenBawahMen = pjgBawahMen * nE_bawah;
       const wBawahMen = tLenBawahMen * ((dU * dU) / 162);
 
@@ -1795,7 +1862,8 @@
         });
       }
 
-      const pjg1Sengkang = 2 * (b_m - 2 * c_m) + 2 * (h_m - 2 * c_m) + 12 * dS_m;
+      const hook135_sgk = 2 * getHook135_m(dS);
+      const pjg1Sengkang = 2 * (b_m - 2 * c_m) + 2 * (h_m - 2 * c_m) + hook135_sgk;
       const tLenSgk = nS_total * pjg1Sengkang;
       const wSgk = tLenSgk * ((dS * dS) / 162);
 
@@ -2714,7 +2782,7 @@
 
       wsRekap.mergeCells('A2:G2');
       const t2 = wsRekap.getCell('A2');
-      t2.value = 'Tanggal Export: ' + new Date().toLocaleString('id-ID') + ' | Page Break Preview Auto Enabled';
+      t2.value = 'Tanggal Export: ' + new Date().toLocaleString('id-ID');
       t2.font = { name: 'Arial', size: 9, italic: true, color: { argb: '505F76' } };
       t2.alignment = { vertical: 'middle', horizontal: 'center' };
       wsRekap.getRow(2).height = 20;
@@ -2931,16 +2999,16 @@
 
           if (sub.label.includes('Sengkang')) {
             const numSpans = (item.spanVariations && item.spanVariations.length) ? item.spanVariations.length : 1;
-            formulaPjg = `=2*((H${cR}-2*J${cR})/1000) + 2*((I${cR}-2*J${cR})/1000) + 12*(E${cR}/1000)`;
+            formulaPjg = `=2*((H${cR}-2*J${cR})/1000) + 2*((I${cR}-2*J${cR})/1000) + 2*(MAX(6*E${cR}, 75)/1000)`;
             pcsVal = { formula: `=IF(AND(N${cR}>0, O${cR}>0), ROUNDUP((((M${cR}-(L${cR}*${numSpans}))*0.5)/N${cR}) + (((M${cR}-(L${cR}*${numSpans}))*0.5)/O${cR}), 0), ${sub.pcs}) * F${cR}`, result: sub.pcs };
           } else if (sub.label.includes('Atas Menerus')) {
-            formulaPjg = `=(M${cR}/1000) + 40*(E${cR}/1000) + 24*(E${cR}/1000)`;
+            formulaPjg = `=(M${cR}/1000) + 40*(E${cR}/1000) + 2*(IF(E${cR}>=19, 12*E${cR}, MAX(6*E${cR}, 75))/1000)`;
           } else if (sub.label.includes('Tumpuan')) {
             formulaPjg = `=(((M${cR}/1000)/4) + 40*(E${cR}/1000))`;
           } else if (sub.label.includes('Lapangan')) {
             formulaPjg = `=((M${cR}/1000)/2) + 40*(E${cR}/1000)`;
           } else if (sub.label.includes('Bawah Menerus')) {
-            formulaPjg = `=(M${cR}/1000) + 40*(E${cR}/1000) + 24*(E${cR}/1000)`;
+            formulaPjg = `=(M${cR}/1000) + 40*(E${cR}/1000) + 2*(IF(E${cR}>=19, 12*E${cR}, MAX(6*E${cR}, 75))/1000)`;
           } else if (sub.label.includes('Pinggang')) {
             formulaPjg = `=(M${cR}/1000) + 40*(E${cR}/1000)`;
           }
@@ -3056,7 +3124,7 @@
           if (sub.label.includes('Utama')) {
             formulaPjg = `=(L${cR}/1000) + 40*(E${cR}/1000)`;
           } else if (sub.label.includes('Sengkang')) {
-            formulaPjg = `=2*((H${cR}-2*J${cR})/1000) + 2*((I${cR}-2*J${cR})/1000) + 12*(E${cR}/1000)`;
+            formulaPjg = `=2*((H${cR}-2*J${cR})/1000) + 2*((I${cR}-2*J${cR})/1000) + 2*(MAX(6*E${cR}, 75)/1000)`;
             pcsVal = { formula: `=IF(N${cR}>0, ROUNDUP(L${cR}/N${cR}, 0) * F${cR}, ${sub.pcs})`, result: sub.pcs };
           } else if (sub.label.includes('Crosstie')) {
             formulaPjg = `=((H${cR}-2*J${cR})/1000) + ((I${cR}-2*J${cR})/1000) + 24*(E${cR}/1000)`;
@@ -3254,10 +3322,12 @@
 
           (item.rebarItems || []).forEach(r => {
             if (!rebarByDiaProject[r.dia]) {
-              rebarByDiaProject[r.dia] = { len: 0, w: 0 };
+              rebarByDiaProject[r.dia] = { len: 0, w: 0, btg: 0 };
             }
+            const b12 = Math.ceil((r.totalLen || 0) / 12);
             rebarByDiaProject[r.dia].len += (r.totalLen || 0);
             rebarByDiaProject[r.dia].w += (r.weight || 0);
+            rebarByDiaProject[r.dia].btg += b12;
           });
         });
       });
@@ -3305,59 +3375,98 @@
           </div>
 
           <p class="section-desc">
-            Seluruh dimensi input yang dimasukkan dalam satuan milimeter (mm) dikonversi ke meter (m) dengan membagi 1.000 (karena 1 m = 1.000 mm). Kalkulasi dilaksanakan secara presisi dengan acuan teknis standar baku sebagai berikut:
+            Seluruh kalkulasi perhitungan volume struktur dan pembesian dilaksanakan secara presisi dengan acuan teknis standar baku sebagai berikut:
           </p>
 
           <div class="formula-box">
             <div class="box-title">A. Perhitungan Balok (Beton Cor Net, Bekisting Net & Pembesian)</div>
             <div class="formula-item-label">• Volume Cor Net Balok (m³):</div>
             <div class="formula-code-block">
-              ∑ [ (Lebar / 1.000) × ((Tinggi − Tebal Pelat) / 1.000) × ((Bentang − Penopang) / 1.000) × Qty ]
+              ∑ [ Lebar × (Tinggi − Tebal Pelat) × (Bentang − Penopang) × Qty ]
             </div>
             <div class="formula-item-label">• Luas Bekisting Net Balok (m²):</div>
             <div class="formula-code-block">
-              ∑ [ (2 × ((Tinggi − Tebal Pelat) / 1.000) + (Lebar / 1.000)) × ((Bentang − Penopang) / 1.000) × Qty ]
+              ∑ [ (2 × (Tinggi − Tebal Pelat) + Lebar) × (Bentang − Penopang) × Qty ]
             </div>
-            <div class="formula-sub">• <b>Tulangan Atas & Bawah Menerus (m):</b> Total Bentang + 40d + 24d</div>
-            <div class="formula-sub">• <b>Tulangan Pinggang (m):</b> Total Bentang + 40d</div>
-            <div class="formula-sub">• <b>Tulangan Tumpuan (m):</b> (Panjang Bentang / 4) + 40d (kiri & kanan per bentang)</div>
-            <div class="formula-sub">• <b>Tulangan Lapangan (m):</b> (Panjang Bentang / 2) + 40d (per bentang)</div>
-            <div class="formula-sub">• <b>Panjang 1 Sengkang (m):</b> 2(B − 2c) + 2(H − 2c) + 12(ds / 1000)</div>
+            <div class="formula-sub">• <b>Tulangan Atas & Bawah Menerus:</b> Total Bentang + 40d + 2 × Kait 90° [d ≥ 19: 12d, d ≤ 16: MAX(6d, 75mm)]</div>
+            <div class="formula-sub">• <b>Tulangan Pinggang:</b> Total Bentang + 40d</div>
+            <div class="formula-sub">• <b>Tulangan Tumpuan:</b> (Panjang Bentang / 4) + 40d (kiri & kanan per bentang)</div>
+            <div class="formula-sub">• <b>Tulangan Lapangan:</b> (Panjang Bentang / 2) + 40d (per bentang)</div>
+            <div class="formula-sub">• <b>Panjang 1 Sengkang (Kait 135°):</b> 2(B − 2c) + 2(H − 2c) + 2 × MAX(6d, 75mm)</div>
+            <div class="formula-sub">• <b>Jumlah Sengkang:</b> ROUNDUP( (Area Tumpuan / Spasi Tumpuan) + (Area Lapangan / Spasi Lapangan) )</div>
           </div>
 
           <div class="formula-box">
             <div class="box-title">B. Perhitungan Kolom (Beton Cor Net, Bekisting Net & Pembesian)</div>
             <div class="formula-item-label">• Volume Cor Net Kolom (m³):</div>
             <div class="formula-code-block">
-              (Lebar / 1.000) × (Panjang / 1.000) × ((Tinggi − Tebal Pelat) / 1.000) × Qty
+              Lebar × Panjang × (Tinggi − Tebal Pelat) × Qty
             </div>
             <div class="formula-item-label">• Luas Bekisting Net Kolom (m²):</div>
             <div class="formula-code-block">
-              2 × [ (Lebar / 1.000) + (Panjang / 1.000) ] × ((Tinggi − Tebal Pelat) / 1.000) × Qty
+              2 × (Lebar + Panjang) × (Tinggi − Tebal Pelat) × Qty
             </div>
-            <div class="formula-sub">• <b>Tulangan Utama Kolom (m):</b> Tinggi Kolom + 40d</div>
-            <div class="formula-sub">• <b>Panjang 1 Sengkang (m):</b> 2(B − 2c) + 2(L − 2c) + 12(ds / 1000)</div>
-            <div class="formula-sub">• <b>Panjang 1 Crosstie (m):</b> (B − 2c) + (L − 2c) + 24(dc / 1000)</div>
+            <div class="formula-sub">• <b>Tulangan Utama Kolom:</b> Tinggi Kolom + 40d</div>
+            <div class="formula-sub">• <b>Panjang 1 Sengkang (Kait 135°):</b> 2(B − 2c) + 2(L − 2c) + 2 × MAX(6d, 75mm)</div>
+            <div class="formula-sub">• <b>Panjang 1 Crosstie:</b> (B − 2c) + (L − 2c) + 24d</div>
+            <div class="formula-sub">• <b>Jumlah Sengkang & Crosstie:</b> ROUNDUP( Tinggi Efektif / Spasi )</div>
           </div>
 
           <div class="formula-box">
             <div class="box-title">C. Perhitungan Pelat Lantai</div>
-            <div class="formula-item-label">• Volume Cor Pelat (m³): (Bentang LX / 1.000) × (Bentang LY / 1.000) × (Tebal Pelat / 1.000) × Qty</div>
-            <div class="formula-item-label">• Luas Bekisting Pelat (m²): (Bentang LX / 1.000) × (Bentang LY / 1.000) × Qty</div>
+            <div class="formula-item-label">• Volume Cor Pelat (m³): Bentang LX × Bentang LY × Tebal Pelat × Qty</div>
+            <div class="formula-item-label">• Luas Bekisting Pelat (m²): Bentang LX × Bentang LY × Qty</div>
           </div>
 
           <div class="formula-box">
             <div class="box-title">D. Perhitungan Berat Besi & Kebutuhan Batang (12m)</div>
             <div class="formula-sub">• <b>Berat Besi Per Meter (kg/m):</b> d² / 162</div>
             <div class="formula-sub">• <b>Berat Total Besi (kg):</b> Total Panjang Besi (m) × (d² / 162)</div>
-            <div class="formula-sub">• <b>Kebutuhan Batang (12m):</b> CEIL ( Total Panjang Besi / 12 meter )</div>
+            <div class="formula-sub">• <b>Kebutuhan Batang 12m:</b> Penjumlahan kebutuhan batang per sub-tipe tulangan (∑ [ CEIL( Panjang Sub-Tulangan / 12 ) ])</div>
           </div>
         </div>
       </div>
       `;
 
-      // ── 3. RINCIAN DATA DETIL PER LANTAI & PER ELEMEN (TERMASUK DETAIL TULANGAN PER SUB-ITEM & SUBTOTAL AKURAT) ──
+      // ── 3. RINCIAN DATA DETIL PER LANTAI & PER ELEMEN DENGAN SMART A4 PAGINATION ──
       let pageCounter = 3;
+      let currentPageContent = '';
+      let currentPageHeader = '';
+      let currentHeightMM = 0;
+      const MAX_PAGE_HEIGHT_MM = 220; // Batas tinggi aman per halaman (margin bawah 20mm tidak pernah terlanggar)
+
+      function flushPage() {
+        if (currentPageContent.trim() !== '') {
+          pagesHTML += `
+          <div class="print-page content-page">
+            <img src="${logoDataUrl}" class="watermark-bg" alt="Watermark" />
+            <div class="page-content-wrapper">
+              <div class="page-header-title">
+                <h2>${currentPageHeader}</h2>
+                <span class="page-num-tag">Halaman ${pageCounter++}</span>
+              </div>
+              ${currentPageContent}
+            </div>
+          </div>
+          `;
+        }
+        currentPageContent = '';
+        currentHeightMM = 20;
+      }
+
+      function startNewPage(headerTitle) {
+        flushPage();
+        currentPageHeader = headerTitle;
+      }
+
+      function addBlock(blockHTML, estimatedHeightMM, sectionTitle) {
+        if (currentHeightMM + estimatedHeightMM > MAX_PAGE_HEIGHT_MM && currentPageContent.trim() !== '') {
+          startNewPage(sectionTitle + ' (Lanjutan)');
+        }
+        currentPageContent += blockHTML;
+        currentHeightMM += estimatedHeightMM;
+      }
+
       floors.forEach(flr => {
         const kList = store.kolom.filter(e => (e.lantai || 'Lantai 1') === flr);
         const bList = store.balok.filter(e => (e.lantai || 'Lantai 1') === flr);
@@ -3369,19 +3478,14 @@
         let floorTotalW = 0;
         let floorTotalB12 = 0;
 
-        pagesHTML += `
-        <div class="print-page content-page">
-          <img src="${logoDataUrl}" class="watermark-bg" alt="Watermark" />
-          <div class="page-content-wrapper">
-            <div class="page-header-title">
-              <h2>2. RINCIAN ELEMEN PERHITUNGAN STRUKTUR — ${flr.toUpperCase()}</h2>
-              <span class="page-num-tag">Halaman ${pageCounter++}</span>
-            </div>
-        `;
+        const floorTitle = `2. RINCIAN ELEMEN PERHITUNGAN STRUKTUR — ${flr.toUpperCase()}`;
+        startNewPage(floorTitle);
 
         // A. BALOK IN THIS FLOOR
         if (bList.length) {
-          pagesHTML += `<div class="table-group-title">Balok ${flr} (${bList.length} Tipe Elemen)</div>`;
+          const balokGroupTitle = `<div class="table-group-title">Balok ${flr} (${bList.length} Tipe Elemen)</div>`;
+          addBlock(balokGroupTitle, 12, floorTitle);
+
           bList.forEach(item => {
             const netL = Math.max(0, item.L - (item.penopang || 0));
             floorVolCor += (item.volTotal || 0);
@@ -3389,8 +3493,30 @@
             floorTotalW += (item.totalW || 0);
 
             let subLen = 0, subW = 0, subB12 = 0;
+            let rowsHTML = '';
 
-            pagesHTML += `
+            (item.rebarItems || []).forEach(r => {
+              const b12 = Math.ceil(r.totalLen / 12);
+              subLen += (r.totalLen || 0);
+              subW += (r.weight || 0);
+              subB12 += b12;
+              floorTotalLen += (r.totalLen || 0);
+              floorTotalB12 += b12;
+
+              rowsHTML += `
+                <tr>
+                  <td>${r.label}</td>
+                  <td class="text-center font-bold">D${r.dia}</td>
+                  <td class="text-right">${r.pcs}</td>
+                  <td class="text-right">${f2(r.lenPc)}</td>
+                  <td class="text-right">${f2(r.totalLen)}</td>
+                  <td class="text-right font-bold">${f1(r.weight)}</td>
+                  <td class="text-right">${b12}</td>
+                </tr>
+              `;
+            });
+
+            const tableHTML = `
               <table class="report-table">
                 <thead>
                   <tr>
@@ -3409,7 +3535,36 @@
                   </tr>
                 </thead>
                 <tbody>
+                  ${rowsHTML}
+                  <tr class="bg-total">
+                    <td colspan="4">SUBTOTAL BESI ${item.nama}</td>
+                    <td class="text-right">${f2(subLen)} m</td>
+                    <td class="text-right">${f1(subW)} kg</td>
+                    <td class="text-right">${subB12} btg</td>
+                  </tr>
+                </tbody>
+              </table>
             `;
+
+            const estH = 30 + ((item.rebarItems || []).length * 7.5);
+            addBlock(tableHTML, estH, floorTitle);
+          });
+        }
+
+        // B. KOLOM IN THIS FLOOR
+        if (kList.length) {
+          const kolomGroupTitle = `<div class="table-group-title">Kolom ${flr} (${kList.length} Tipe Elemen)</div>`;
+          addBlock(kolomGroupTitle, 12, floorTitle);
+
+          kList.forEach(item => {
+            const netH = Math.max(0, item.L - (item.tPlt || 0));
+            floorVolCor += (item.volTotal || 0);
+            floorBekisting += (item.fwTotal || 0);
+            floorTotalW += (item.totalW || 0);
+
+            let subLen = 0, subW = 0, subB12 = 0;
+            let rowsHTML = '';
+
             (item.rebarItems || []).forEach(r => {
               const b12 = Math.ceil(r.totalLen / 12);
               subLen += (r.totalLen || 0);
@@ -3418,7 +3573,7 @@
               floorTotalLen += (r.totalLen || 0);
               floorTotalB12 += b12;
 
-              pagesHTML += `
+              rowsHTML += `
                 <tr>
                   <td>${r.label}</td>
                   <td class="text-center font-bold">D${r.dia}</td>
@@ -3430,30 +3585,8 @@
                 </tr>
               `;
             });
-            pagesHTML += `
-                <tr class="bg-total">
-                  <td colspan="4">SUBTOTAL BESI ${item.nama}</td>
-                  <td class="text-right">${f2(subLen)} m</td>
-                  <td class="text-right">${f1(subW)} kg</td>
-                  <td class="text-right">${subB12} btg</td>
-                </tr>
-              </tbody>
-            </table>`;
-          });
-        }
 
-        // B. KOLOM IN THIS FLOOR
-        if (kList.length) {
-          pagesHTML += `<div class="table-group-title">Kolom ${flr} (${kList.length} Tipe Elemen)</div>`;
-          kList.forEach(item => {
-            const netH = Math.max(0, item.L - (item.tPlt || 0));
-            floorVolCor += (item.volTotal || 0);
-            floorBekisting += (item.fwTotal || 0);
-            floorTotalW += (item.totalW || 0);
-
-            let subLen = 0, subW = 0, subB12 = 0;
-
-            pagesHTML += `
+            const tableHTML = `
               <table class="report-table">
                 <thead>
                   <tr>
@@ -3472,7 +3605,35 @@
                   </tr>
                 </thead>
                 <tbody>
+                  ${rowsHTML}
+                  <tr class="bg-total">
+                    <td colspan="4">SUBTOTAL BESI ${item.nama}</td>
+                    <td class="text-right">${f2(subLen)} m</td>
+                    <td class="text-right">${f1(subW)} kg</td>
+                    <td class="text-right">${subB12} btg</td>
+                  </tr>
+                </tbody>
+              </table>
             `;
+
+            const estH = 30 + ((item.rebarItems || []).length * 7.5);
+            addBlock(tableHTML, estH, floorTitle);
+          });
+        }
+
+        // C. PELAT IN THIS FLOOR
+        if (pList.length) {
+          const pelatGroupTitle = `<div class="table-group-title">Pelat ${flr} (${pList.length} Tipe Panel)</div>`;
+          addBlock(pelatGroupTitle, 12, floorTitle);
+
+          pList.forEach(item => {
+            floorVolCor += (item.volTotal || 0);
+            floorBekisting += (item.fwTotal || 0);
+            floorTotalW += (item.totalW || 0);
+
+            let subLen = 0, subW = 0, subB12 = 0;
+            let rowsHTML = '';
+
             (item.rebarItems || []).forEach(r => {
               const b12 = Math.ceil(r.totalLen / 12);
               subLen += (r.totalLen || 0);
@@ -3481,7 +3642,7 @@
               floorTotalLen += (r.totalLen || 0);
               floorTotalB12 += b12;
 
-              pagesHTML += `
+              rowsHTML += `
                 <tr>
                   <td>${r.label}</td>
                   <td class="text-center font-bold">D${r.dia}</td>
@@ -3493,29 +3654,8 @@
                 </tr>
               `;
             });
-            pagesHTML += `
-                <tr class="bg-total">
-                  <td colspan="4">SUBTOTAL BESI ${item.nama}</td>
-                  <td class="text-right">${f2(subLen)} m</td>
-                  <td class="text-right">${f1(subW)} kg</td>
-                  <td class="text-right">${subB12} btg</td>
-                </tr>
-              </tbody>
-            </table>`;
-          });
-        }
 
-        // C. PELAT IN THIS FLOOR
-        if (pList.length) {
-          pagesHTML += `<div class="table-group-title">Pelat ${flr} (${pList.length} Tipe Panel)</div>`;
-          pList.forEach(item => {
-            floorVolCor += (item.volTotal || 0);
-            floorBekisting += (item.fwTotal || 0);
-            floorTotalW += (item.totalW || 0);
-
-            let subLen = 0, subW = 0, subB12 = 0;
-
-            pagesHTML += `
+            const tableHTML = `
               <table class="report-table">
                 <thead>
                   <tr>
@@ -3534,41 +3674,24 @@
                   </tr>
                 </thead>
                 <tbody>
+                  ${rowsHTML}
+                  <tr class="bg-total">
+                    <td colspan="4">SUBTOTAL BESI ${item.nama}</td>
+                    <td class="text-right">${f2(subLen)} m</td>
+                    <td class="text-right">${f1(subW)} kg</td>
+                    <td class="text-right">${subB12} btg</td>
+                  </tr>
+                </tbody>
+              </table>
             `;
-            (item.rebarItems || []).forEach(r => {
-              const b12 = Math.ceil(r.totalLen / 12);
-              subLen += (r.totalLen || 0);
-              subW += (r.weight || 0);
-              subB12 += b12;
-              floorTotalLen += (r.totalLen || 0);
-              floorTotalB12 += b12;
 
-              pagesHTML += `
-                <tr>
-                  <td>${r.label}</td>
-                  <td class="text-center font-bold">D${r.dia}</td>
-                  <td class="text-right">${r.pcs}</td>
-                  <td class="text-right">${f2(r.lenPc)}</td>
-                  <td class="text-right">${f2(r.totalLen)}</td>
-                  <td class="text-right font-bold">${f1(r.weight)}</td>
-                  <td class="text-right">${b12}</td>
-                </tr>
-              `;
-            });
-            pagesHTML += `
-                <tr class="bg-total">
-                  <td colspan="4">SUBTOTAL BESI ${item.nama}</td>
-                  <td class="text-right">${f2(subLen)} m</td>
-                  <td class="text-right">${f1(subW)} kg</td>
-                  <td class="text-right">${subB12} btg</td>
-                </tr>
-              </tbody>
-            </table>`;
+            const estH = 30 + ((item.rebarItems || []).length * 7.5);
+            addBlock(tableHTML, estH, floorTitle);
           });
         }
 
         // D. SUMMARY TABLE FOR THIS FLOOR
-        pagesHTML += `
+        const summaryHTML = `
           <div class="table-group-title" style="margin-top: 15px; border-top: 2px solid #004ac6; padding-top: 8px;">
             RINGKASAN TOTAL SELURUH ELEMEN — ${flr.toUpperCase()}
           </div>
@@ -3595,98 +3718,85 @@
             </tbody>
           </table>
         `;
-
-        pagesHTML += `
-          </div>
-        </div>
-        `;
+        addBlock(summaryHTML, 36, floorTitle);
       });
+
+      // Flush last floor page before starting section 3
+      flushPage();
 
       // ── 4. HALAMAN REKAPITULASI AKHIR PROYEK & REKAPITULASI BESI PER DIAMETER ──
       const sortedDias = Object.keys(rebarByDiaProject).sort((a, b) => Number(a) - Number(b));
+      const rekapTitle = '3. REKAPITULASI TOTAL PROYEK & KEBUTUHAN BESI TULANGAN';
+      startNewPage(rekapTitle);
 
-      pagesHTML += `
-      <div class="print-page content-page">
-        <img src="${logoDataUrl}" class="watermark-bg" alt="Watermark" />
-        <div class="page-content-wrapper">
-          <div class="page-header-title">
-            <h2>3. REKAPITULASI TOTAL PROYEK & KEBUTUHAN BESI TULANGAN</h2>
-            <span class="page-num-tag">Halaman ${pageCounter++}</span>
-          </div>
+      let rekap1HTML = `
+        <p class="section-desc">
+          Berikut adalah tabel rekapitulasi akhir seluruh hasil perhitungan volume cor beton, luas bekisting, dan rincian kebutuhan besi tulangan per diameter standar (batang 12 meter) untuk seluruh proyek:
+        </p>
 
-          <p class="section-desc">
-            Berikut adalah tabel rekapitulasi akhir seluruh hasil perhitungan volume cor beton, luas bekisting, dan rincian kebutuhan besi tulangan per diameter standar (batang 12 meter) untuk seluruh proyek:
-          </p>
-
-          <!-- TABEL 1: REKAP ELEMEN STRUKTUR -->
-          <div class="table-group-title">A. Rekapitulasi Total Volume Cor, Bekisting & Besi Per Elemen</div>
-          <table class="report-table">
-            <thead>
-              <tr>
-                <th>Elemen Struktur</th>
-                <th class="text-center">Jumlah Tipe</th>
-                <th class="text-right">Volume Cor Net (m³)</th>
-                <th class="text-right">Luas Bekisting Net (m²)</th>
-                <th class="text-right">Total Berat Besi (kg)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Kolom Struktur</td>
-                <td class="text-center">${store.kolom.length} tipe</td>
-                <td class="text-right font-bold">${f3(store.kolom.reduce((s, e) => s + e.volTotal, 0))}</td>
-                <td class="text-right font-bold">${f2(store.kolom.reduce((s, e) => s + e.fwTotal, 0))}</td>
-                <td class="text-right font-bold">${f1(store.kolom.reduce((s, e) => s + e.totalW, 0))}</td>
-              </tr>
-              <tr>
-                <td>Balok Struktur</td>
-                <td class="text-center">${store.balok.length} tipe</td>
-                <td class="text-right font-bold">${f3(store.balok.reduce((s, e) => s + e.volTotal, 0))}</td>
-                <td class="text-right font-bold">${f2(store.balok.reduce((s, e) => s + e.fwTotal, 0))}</td>
-                <td class="text-right font-bold">${f1(store.balok.reduce((s, e) => s + e.totalW, 0))}</td>
-              </tr>
-              <tr>
-                <td>Pelat Lantai</td>
-                <td class="text-center">${store.pelat.length} tipe</td>
-                <td class="text-right font-bold">${f3(store.pelat.reduce((s, e) => s + e.volTotal, 0))}</td>
-                <td class="text-right font-bold">${f2(store.pelat.reduce((s, e) => s + e.fwTotal, 0))}</td>
-                <td class="text-right font-bold">${f1(store.pelat.reduce((s, e) => s + e.totalW, 0))}</td>
-              </tr>
-              <tr class="bg-total">
-                <td>GRAND TOTAL PROYEK</td>
-                <td class="text-center">${totalItems} item</td>
-                <td class="text-right">${f3(totalVolCor)} m³</td>
-                <td class="text-right">${f2(totalBekisting)} m²</td>
-                <td class="text-right">${f1(totalBeratBesi)} kg</td>
-              </tr>
-            </tbody>
-          </table>
-
-          <!-- TABEL 2: REKAP KEBUTUHAN BESI PER DIAMETER -->
-          <div class="table-group-title">B. Rekapitulasi Kebutuhan Besi Tulangan Per Diameter (Standard Batang 12m)</div>
-          <table class="report-table">
-            <thead>
-              <tr>
-                <th>Diameter Besi</th>
-                <th class="text-center">Berat Jenis Spesifik</th>
-                <th class="text-right">Total Panjang (m)</th>
-                <th class="text-right">Total Berat (kg)</th>
-                <th class="text-right">Kebutuhan Batang (12m)</th>
-              </tr>
-            </thead>
-            <tbody>
+        <!-- TABEL 1: REKAP ELEMEN STRUKTUR -->
+        <div class="table-group-title">A. Rekapitulasi Total Volume Cor, Bekisting & Besi Per Elemen</div>
+        <table class="report-table">
+          <thead>
+            <tr>
+              <th>Elemen Struktur</th>
+              <th class="text-center">Jumlah Tipe</th>
+              <th class="text-right">Volume Cor Net (m³)</th>
+              <th class="text-right">Luas Bekisting Net (m²)</th>
+              <th class="text-right">Total Berat Besi (kg)</th>
+              <th class="text-right">Kebutuhan Batang (12m)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Kolom Struktur</td>
+              <td class="text-center">${store.kolom.length} tipe</td>
+              <td class="text-right font-bold">${f3(store.kolom.reduce((s, e) => s + e.volTotal, 0))}</td>
+              <td class="text-right font-bold">${f2(store.kolom.reduce((s, e) => s + e.fwTotal, 0))}</td>
+              <td class="text-right font-bold">${f1(store.kolom.reduce((s, e) => s + e.totalW, 0))}</td>
+              <td class="text-right font-bold">${store.kolom.reduce((s, e) => s + (e.rebarItems || []).reduce((acc, r) => acc + Math.ceil(r.totalLen / 12), 0), 0)} btg</td>
+            </tr>
+            <tr>
+              <td>Balok Struktur</td>
+              <td class="text-center">${store.balok.length} tipe</td>
+              <td class="text-right font-bold">${f3(store.balok.reduce((s, e) => s + e.volTotal, 0))}</td>
+              <td class="text-right font-bold">${f2(store.balok.reduce((s, e) => s + e.fwTotal, 0))}</td>
+              <td class="text-right font-bold">${f1(store.balok.reduce((s, e) => s + e.totalW, 0))}</td>
+              <td class="text-right font-bold">${store.balok.reduce((s, e) => s + (e.rebarItems || []).reduce((acc, r) => acc + Math.ceil(r.totalLen / 12), 0), 0)} btg</td>
+            </tr>
+            <tr>
+              <td>Pelat Lantai</td>
+              <td class="text-center">${store.pelat.length} tipe</td>
+              <td class="text-right font-bold">${f3(store.pelat.reduce((s, e) => s + e.volTotal, 0))}</td>
+              <td class="text-right font-bold">${f2(store.pelat.reduce((s, e) => s + e.fwTotal, 0))}</td>
+              <td class="text-right font-bold">${f1(store.pelat.reduce((s, e) => s + e.totalW, 0))}</td>
+              <td class="text-right font-bold">${store.pelat.reduce((s, e) => s + (e.rebarItems || []).reduce((acc, r) => acc + Math.ceil(r.totalLen / 12), 0), 0)} btg</td>
+            </tr>
+            <tr class="bg-total">
+              <td>GRAND TOTAL PROYEK</td>
+              <td class="text-center">${totalItems} item</td>
+              <td class="text-right">${f3(totalVolCor)} m³</td>
+              <td class="text-right">${f2(totalBekisting)} m²</td>
+              <td class="text-right">${f1(totalBeratBesi)} kg</td>
+              <td class="text-right">${Object.values(rebarByDiaProject).reduce((acc, r) => acc + (r.btg || 0), 0)} btg</td>
+            </tr>
+          </tbody>
+        </table>
       `;
+      addBlock(rekap1HTML, 65, rekapTitle);
 
+      // TABEL 2: REKAP KEBUTUHAN BESI PER DIAMETER
       let totalLenProj = 0, totalWProj = 0, totalBtgProj = 0;
+      let diaRowsHTML = '';
       sortedDias.forEach(d => {
         const lenD = rebarByDiaProject[d].len;
         const wD = rebarByDiaProject[d].w;
-        const btgD = Math.ceil(lenD / 12);
+        const btgD = rebarByDiaProject[d].btg || 0;
         totalLenProj += lenD;
         totalWProj += wD;
         totalBtgProj += btgD;
 
-        pagesHTML += `
+        diaRowsHTML += `
           <tr>
             <td class="font-bold">Besi Polos / Ulir D${d}</td>
             <td class="text-center">${f3(RB[d]?.W || 0)} kg/m</td>
@@ -3697,29 +3807,36 @@
         `;
       });
 
-      pagesHTML += `
-              <tr class="bg-total">
-                <td>TOTAL SELURUH DIAMETER BESI</td>
-                <td class="text-center">-</td>
-                <td class="text-right">${f2(totalLenProj)} m</td>
-                <td class="text-right">${f1(totalWProj)} kg</td>
-                <td class="text-right">${totalBtgProj} btg (12m)</td>
-              </tr>
-            </tbody>
-          </table>
+      let rekap2HTML = `
+        <div class="table-group-title">B. Rekapitulasi Kebutuhan Besi Tulangan Per Diameter (Standard Batang 12m)</div>
+        <table class="report-table">
+          <thead>
+            <tr>
+              <th>Diameter Besi</th>
+              <th class="text-center">Berat Jenis Spesifik</th>
+              <th class="text-right">Total Panjang (m)</th>
+              <th class="text-right">Total Berat (kg)</th>
+              <th class="text-right">Kebutuhan Batang (12m)</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${diaRowsHTML}
+            <tr class="bg-total">
+              <td>TOTAL SELURUH DIAMETER BESI</td>
+              <td class="text-center">-</td>
+              <td class="text-right">${f2(totalLenProj)} m</td>
+              <td class="text-right">${f1(totalWProj)} kg</td>
+              <td class="text-right">${totalBtgProj} btg (12m)</td>
+            </tr>
+          </tbody>
+        </table>
 
-          <div style="margin-top: 20px; padding: 12px; border: 1px solid #c3c6d7; border-radius: 6px; background: #f9f9ff; font-size: 10px; line-height: 1.5; color: #434655;">
-            <b>Catatan Pelaksanaan Pekerjaan Struktur:</b>
-            <ol style="margin: 5px 0 0 15px; padding: 0;">
-              <li>Seluruh perhitungan telah memperhitungkan penyerapan beton netto (dikurangi tebal pelat & penopang) dan pembulatan kait standar.</li>
-              <li>Jumlah kebutuhan batang 12m menggunakan pembulatan ke atas (*CEIL*) untuk menjamin pemenuhan stok di lapangan.</li>
-              <li>Dokumen ini diterbitkan oleh SIPILCALC System untuk analisis estimasi biaya dan pengadaan material proyek.</li>
-            </ol>
-          </div>
 
-        </div>
-      </div>
       `;
+      addBlock(rekap2HTML, 30 + (sortedDias.length * 7.5) + 35, rekapTitle);
+
+      // Final flush
+      flushPage();
 
       // Inject into Live Preview Modal Container
       const previewTarget = document.getElementById('pdf-preview-content');

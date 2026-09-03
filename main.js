@@ -3,8 +3,8 @@ const path = require('path');
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
-    width: 1366,
-    height: 850,
+    width: 1440,
+    height: 900,
     minWidth: 1024,
     minHeight: 700,
     title: 'SIPILCALC Engineering System',
