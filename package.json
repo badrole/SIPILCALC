@@ -6,7 +6,7 @@
   "scripts": {
     "start": "electron .",
     "dev": "npx http-server -o",
-    "build": "electron-builder --win"
+    "build:exe": "electron-builder --win"
   },
   "build": {
     "appId": "com.sipilcalc.app",
